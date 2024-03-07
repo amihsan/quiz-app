@@ -90,6 +90,6 @@ jobs:
 
             docker-compose -f ${{ secrets.EC2_TARGET_DIR }}/docker-compose-dev.yml down 
 
-            docker-compose -f ${{ secrets.EC2_TARGET_DIR }}/docker-compose-dev.yml up -d
+            docker-compose -f ${{ secrets.EC2_TARGET_DIR }}/docker-compose-dev.yml up --build -d
 
             docker ps -a
