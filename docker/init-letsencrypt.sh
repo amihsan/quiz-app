@@ -1,23 +1,25 @@
 # !/bin/bash
 
-# # Navigate to the frontend directory
-# cd "$(dirname "$0")"/../frontend || exit
+# Navigate to the frontend directory
+cd "$(dirname "$0")"/../frontend || exit
 
-# # Define the path to the frontend/.env file
-# ENV_FILE=".env"
+# Define the path to the frontend/.env file
+ENV_FILE=".env"
 
-# # Load variables from .env file
-# if [ -f "$ENV_FILE" ]; then
-#     export $(grep -v '^#' "$ENV_FILE" | xargs)
-# fi
+# Load variables from .env file
+if [ -f "$ENV_FILE" ]; then
+    export $(grep -v '^#' "$ENV_FILE" | xargs)
+fi
 
 
 #!/bin/bash
 
-# Load variables from project root dir .env file
-if [ -f .env ]; then
-    export $(grep -v '^#' .env | xargs)
-fi
+# # Load variables from project root dir .env file
+# if [ -f .env ]; then
+#     export $(grep -v '^#' .env | xargs)
+# fi
+
+
 # Use the variables
 echo "DOMAIN: $DOMAIN"
 echo "EMAIL: $EMAIL"
@@ -34,12 +36,28 @@ data_path="./docker/nginx/certbot"
 email="$EMAIL" # Adding a valid address is strongly recommended
 staging=1 # Set to 1 if you're testing your setup to avoid hitting request limits
 
+# if [ -d "$data_path" ]; then
+#   read -p "Existing data found for $domains. Continue and replace existing certificate? (y/N) " decision
+#   if [ "$decision" != "Y" ] && [ "$decision" != "y" ]; then
+#     exit
+#   fi
+# fi
+
+
+###################
+
 if [ -d "$data_path" ]; then
-  read -p "Existing data found for $domains. Continue and replace existing certificate? (y/N) " decision
-  if [ "$decision" != "Y" ] && [ "$decision" != "y" ]; then
-    exit
-  fi
+  decision="n" # Auto choose "No" if directory exists
+else
+  decision="y" # Auto choose "Yes" if directory doesn't exist
 fi
+
+if [ "$decision" != "Y" ] && [ "$decision" != "y" ]; then
+  exit
+fi
+
+
+#############################
 
 
 if [ ! -e "$data_path/conf/options-ssl-nginx.conf" ] || [ ! -e "$data_path/conf/ssl-dhparams.pem" ]; then
@@ -100,4 +118,11 @@ docker-compose run --rm --entrypoint "\
 echo
 
 echo "### Reloading nginx ..."
-docker-compose exec nginx nginx -s reload
+
+
+
+
+
+
+
+
