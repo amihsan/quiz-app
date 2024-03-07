@@ -50,7 +50,7 @@ jobs:
             else
                 # If the directory is not a git repository, clone the repository
                 echo "Cloning repository..."
-                git clone https://github.com/amihsan/react-flask-quiz.git ${{ secrets.EC2_TARGET_DIR }}
+                git clone https://github.com/amihsan/quiz-app.git ${{ secrets.EC2_TARGET_DIR }}
             fi
 
             # Update known_hosts to prevent SSH connection issues
