@@ -32,7 +32,7 @@ FROM nginx:alpine
 COPY --from=build /app/frontend/build /usr/share/nginx/html
 
 # Copy entrypoint script
-COPY ./nginx/docker-entrypoint.sh /docker-entrypoint.sh
+COPY ./docker/nginx/docker-entrypoint.sh /docker-entrypoint.sh
 
 # Grant execute permission to the script
 RUN chmod +x /docker-entrypoint.sh
