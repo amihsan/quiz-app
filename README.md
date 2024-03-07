@@ -8,7 +8,7 @@ This is the main repository of the Einbürgerungstest quiz app which includes bo
 
 http://einbürgerungstest.online
 
-http://ec2-51-20-146-211.eu-north-1.compute.amazonaws.com
+http://ec2-18-158-125-116.eu-central-1.compute.amazonaws.com
 
 ### 🧱 Built With
 
