@@ -2,11 +2,16 @@
 FROM python:3.9.12-alpine
 
 WORKDIR /app/backend
+
 COPY ./backend/requirements.txt /app/backend/
+
 COPY ./backend /app/backend
+
 RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
-COPY ./docker /app/docker
+
+
+# COPY ./docker /app/docker
 
 
 EXPOSE 5000
