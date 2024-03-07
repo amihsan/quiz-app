@@ -23,6 +23,5 @@ services:
       - 5000:5000
     env_file:
       - ./backend/.env
-
-volumes:
-  static_volume: {}
+# volumes:
+#   static_volume: {}
