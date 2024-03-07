@@ -21,9 +21,9 @@ jobs:
 
       # - name: Build and Push Docker Images
       #   run: |
-      #     docker build -t ${{ secrets.DOCKER_USERNAME }}/quiz-frontend:latest client/
+      #     docker build -t ${{ secrets.DOCKER_USERNAME }}/quiz-frontend:latest frontend/
       #     docker push ${{ secrets.DOCKER_USERNAME }}/quiz-frontend:latest
-      #     docker build -t ${{ secrets.DOCKER_USERNAME }}/quiz-backend:latest server/
+      #     docker build -t ${{ secrets.DOCKER_USERNAME }}/quiz-backend:latest backend/
       #     docker push ${{ secrets.DOCKER_USERNAME }}/quiz-backend:latest
 
       - name: SSH into EC2 Instance and deploy with Docker Compose
@@ -77,12 +77,6 @@ jobs:
             else
               echo "Docker is already installed."
             fi
-
-            # # Replace placeholders in docker-compose.yml
-            # echo "Replacing placeholders in docker-compose.yml..."
-            # sed -i "s|\${DOCKER_USERNAME}|${{ secrets.DOCKER_USERNAME }}|g" ${{ secrets.EC2_TARGET_DIR }}/docker-compose.yml
-            # sed -i "s|\${DOMAIN}|${{ secrets.DOMAIN }}|g" ${{ secrets.EC2_TARGET_DIR }}/docker-compose.yml
-            # sed -i "s|\${EMAIL}|${{ secrets.EMAIL }}|g" ${{ secrets.EC2_TARGET_DIR }}/docker-compose.yml
 
 
             # Deploy containers using Docker Compose
