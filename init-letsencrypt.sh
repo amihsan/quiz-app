@@ -6,18 +6,18 @@ if [ -f .env ]; then
 fi
 
 # Use the variables
+echo "DOMAIN: $DOMAIN"
 echo "EMAIL: $EMAIL"
-echo "DOMAI: $DOMAIN"
 
 if ! [ -x "$(command -v docker-compose)" ]; then
   echo 'Error: docker-compose is not installed.' >&2
   exit 1
 fi
 
-domains=($EMAIL www.$EMAIL)
+domains=($DOMAIN www.$DOMAIN)
 rsa_key_size=4096
 data_path="./docker/nginx/certbot"
-email="$DOMAIN" # Adding a valid address is strongly recommended
+email="$EMAIL" # Adding a valid address is strongly recommended
 staging=1 # Set to 1 if you're testing your setup to avoid hitting request limits
 
 if [ -d "$data_path" ]; then
