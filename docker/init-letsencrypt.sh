@@ -18,10 +18,10 @@
 if [ -f .env ]; then
     export $(grep -v '^#' .env | xargs)
 fi
-
 # Use the variables
 echo "DOMAIN: $DOMAIN"
 echo "EMAIL: $EMAIL"
+
 
 if ! [ -x "$(command -v docker-compose)" ]; then
   echo 'Error: docker-compose is not installed.' >&2
@@ -32,7 +32,7 @@ domains=($DOMAIN www.$DOMAIN)
 rsa_key_size=4096
 data_path="./docker/nginx/certbot"
 email="$EMAIL" # Adding a valid address is strongly recommended
-staging=0 # Set to 1 if you're testing your setup to avoid hitting request limits
+staging=1 # Set to 1 if you're testing your setup to avoid hitting request limits
 
 if [ -d "$data_path" ]; then
   read -p "Existing data found for $domains. Continue and replace existing certificate? (y/N) " decision
@@ -40,18 +40,6 @@ if [ -d "$data_path" ]; then
     exit
   fi
 fi
-
-# if [ -d "$data_path" ]; then
-#   decision="n" # Auto choose "No" if directory exists
-# else
-#   decision="y" # Auto choose "Yes" if directory doesn't exist
-# fi
-
-# if [ "$decision" != "Y" ] && [ "$decision" != "y" ]; then
-#   exit
-# fi
-
-
 
 
 if [ ! -e "$data_path/conf/options-ssl-nginx.conf" ] || [ ! -e "$data_path/conf/ssl-dhparams.pem" ]; then
