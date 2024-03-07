@@ -1,0 +1,45 @@
+.vscode/
+.idea/
+# /mongo-entrypoint.sh
+/mongodb/
+/.env
+.env
+data/
+mongo_dump/
+mongodb_data/
+/backend/server.env
+/frontend/client.env
+/backend/.env
+/frontend/.env
+/https/.env
+/frontend/Profile.js
+/frontend/Quiz.js
+/frontend/Results.js
+/frontend/ProfileInfo.js
+/backend/venv
+/backend/data_entry.py
+/backend/questions_db.py
+/backend/question_img.py
+/backend/questions_updated.txt
+/backend/questions.txt
+/backend/app/avatars
+/backend/combined_quiz_questions.json
+/backend/all_questions.py
+/backend/help
+/backend/help/support.py
+/server/app/quiz_img
+/frontend/node_modules
+/frontend/build
+/backend/**/__pycache__/
+/Dockerfile
+# /frontend/Dockerfile 
+# /server/Dockerfile 
+# /docker-compose.yml
+/.dockerignore
+# /backend/.dockerignore
+/deploy_script.sh
+
+
+
+
+

@@ -1,0 +1,7 @@
+./backend/venv/
+./backend/.env
+./backend/help/
+./backend/app/avatars/
+./backend/.env.server
+./backend/README.md
+./backend/template.env
