@@ -78,18 +78,23 @@ jobs:
               echo "Docker is already installed."
             fi
 
-            # Replace placeholders in docker-compose.yml
-            echo "Replacing placeholders in docker-compose.yml..."
-            sed -i "s|\${DOCKER_USERNAME}|${{ secrets.DOCKER_USERNAME }}|g" ${{ secrets.EC2_TARGET_DIR }}/docker-compose.yml
-            sed -i "s|\${DOMAIN}|${{ secrets.DOMAIN }}|g" ${{ secrets.EC2_TARGET_DIR }}/docker-compose.yml
-            sed -i "s|\${EMAIL}|${{ secrets.EMAIL }}|g" ${{ secrets.EC2_TARGET_DIR }}/docker-compose-dev.yml
+            # # Replace placeholders in docker-compose.yml
+            # echo "Replacing placeholders in docker-compose.yml..."
+            # sed -i "s|\${DOCKER_USERNAME}|${{ secrets.DOCKER_USERNAME }}|g" ${{ secrets.EC2_TARGET_DIR }}/docker-compose.yml
+            # sed -i "s|\${DOMAIN}|${{ secrets.DOMAIN }}|g" ${{ secrets.EC2_TARGET_DIR }}/docker-compose.yml
+            # sed -i "s|\${EMAIL}|${{ secrets.EMAIL }}|g" ${{ secrets.EC2_TARGET_DIR }}/docker-compose-dev.yml
 
 
             # Deploy containers using Docker Compose
             echo "Deploying containers with Docker Compose..."
 
-            docker-compose -f ${{ secrets.EC2_TARGET_DIR }}/docker-compose-dev.yml down 
+            # docker-compose -f ${{ secrets.EC2_TARGET_DIR }}/docker-compose-dev.yml down 
 
-            docker-compose -f ${{ secrets.EC2_TARGET_DIR }}/docker-compose-dev.yml up --build -d
+            # docker-compose -f ${{ secrets.EC2_TARGET_DIR }}/docker-compose-dev.yml up --build -d
+
+            docker-compose build
+            ./init-letsencrypt.sh 
+            docker-compose down
+            docker-compose up --d
 
             docker ps -a
