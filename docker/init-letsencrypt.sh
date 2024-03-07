@@ -1,9 +1,23 @@
 #!/bin/bash
 
+# Navigate to the frontend directory
+cd "$(dirname "$0")"/../frontend || exit
+
+# Define the path to the .env file
+ENV_FILE=".env"
+
 # Load variables from .env file
-if [ -f .env ]; then
-    export $(grep -v '^#' .env | xargs)
+if [ -f "$ENV_FILE" ]; then
+    export $(grep -v '^#' "$ENV_FILE" | xargs)
 fi
+
+
+# #!/bin/bash
+
+# # Load variables from .env file
+# if [ -f .env ]; then
+#     export $(grep -v '^#' .env | xargs)
+# fi
 
 # Use the variables
 echo "DOMAIN: $DOMAIN"
