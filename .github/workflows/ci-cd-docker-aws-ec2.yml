@@ -92,6 +92,7 @@ jobs:
 
             # docker-compose -f ${{ secrets.EC2_TARGET_DIR }}/docker-compose.yml up --build -d
 
+            docker-compose down
             docker-compose build
             chmod +x ./init-letsencrypt.sh
             ./init-letsencrypt.sh 
