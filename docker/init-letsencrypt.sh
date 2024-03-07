@@ -20,15 +20,23 @@ data_path="./docker/nginx/certbot"
 email="$EMAIL" # Adding a valid address is strongly recommended
 staging=0 # Set to 1 if you're testing your setup to avoid hitting request limits
 
+# if [ -d "$data_path" ]; then
+#   read -p "Existing data found for $domains. Continue and replace existing certificate? (y/N) " decision
+#   if [ "$decision" != "Y" ] && [ "$decision" != "y" ]; then
+#     exit
+#   fi
+# fi
+
 if [ -d "$data_path" ]; then
-  decision="y" # Set decision to "y" to automatically continue and replace existing certificate
+  decision="n" # Auto choose "No" if directory exists
 else
-  read -p "Existing data not found for $domains. Create new certificate? (y/N) " decision
+  decision="y" # Auto choose "Yes" if directory doesn't exist
 fi
 
 if [ "$decision" != "Y" ] && [ "$decision" != "y" ]; then
   exit
 fi
+
 
 
 
