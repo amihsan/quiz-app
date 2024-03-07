@@ -20,4 +20,9 @@ FROM nginx:alpine
 
 COPY --from=build /app/frontend/build /usr/share/nginx/html
 
+COPY ./docker/nginx/production/default.template.conf /etc/nginx/conf.d/default.template.conf
+
+COPY nginx-entrypoint.sh /
+ENTRYPOINT ["/nginx-entrypoint.sh"]
+
 CMD ["nginx", "-g", "daemon off;"]
