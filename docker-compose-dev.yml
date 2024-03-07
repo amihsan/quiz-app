@@ -1,4 +1,4 @@
-version: "2"
+version: "3"
 
 services:
   nginx:
@@ -23,5 +23,3 @@ services:
       - 5000:5000
     env_file:
       - ./backend/.env
-# volumes:
-#   static_volume: {}
