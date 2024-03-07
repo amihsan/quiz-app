@@ -12,10 +12,10 @@ services:
     env_file:
       - ./frontend/.env
     volumes:
-      # - ./docker/nginx/production:/etc/nginx/conf.d
+      - ./docker/nginx/production:/etc/nginx/conf.d
       - ./docker/nginx/certbot/conf:/etc/letsencrypt
       - ./docker/nginx/certbot/www:/var/www/certbot
-      - ./docker/nginx/templates:/etc/nginx/templates
+      # - ./docker/nginx/templates:/etc/nginx/templates
     depends_on:
       - backend
 
