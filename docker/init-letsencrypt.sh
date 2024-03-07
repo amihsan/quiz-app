@@ -3,7 +3,7 @@
 # Navigate to the frontend directory
 cd "$(dirname "$0")"/../frontend || exit
 
-# Define the path to the .env file
+# Define the path to the frontend/.env file
 ENV_FILE=".env"
 
 # Load variables from .env file
@@ -14,7 +14,7 @@ fi
 
 # #!/bin/bash
 
-# # Load variables from .env file
+# # Load variables from project root dir .env file
 # if [ -f .env ]; then
 #     export $(grep -v '^#' .env | xargs)
 # fi
