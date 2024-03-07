@@ -1,4 +1,4 @@
-[![Deploy to EC2](https://github.com/amihsan/react-flask-quiz/actions/workflows/main.yml/badge.svg)](https://github.com/amihsan/react-flask-quiz/actions/workflows/main.yml)
+[![Deploy to EC2](https://github.com/amihsan/quiz-app/actions/workflows/main.yml/badge.svg)](https://github.com/amihsan/quiz-app/actions/workflows/main.yml)
 
 ## 💡 About
 
