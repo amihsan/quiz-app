@@ -82,16 +82,23 @@ jobs:
             echo "Docker Compose version:"
             docker-compose version
 
-            # Check if Docker is installed, if not, install it
+            # Check if Docker is installed
             if ! command -v docker &> /dev/null; then
-              echo "Docker is not installed. Installing Docker..."
-              sudo yum update -y
-              sudo yum install -y docker
-              sudo service docker start
-              sudo usermod -a -G docker $USER
-              sudo chkconfig docker on
+                echo "Docker is not installed. Installing Docker..."
+                sudo yum update -y
+                sudo yum install -y docker
+                sudo service docker start
+                sudo usermod -a -G docker $USER
+                # Apply group membership changes
+                newgrp docker
             else
-              echo "Docker is already installed."
+                echo "Docker is already installed."
+            fi
+
+            # Check if the Docker service is running
+            if ! sudo systemctl is-active --quiet docker; then
+                echo "Docker is installed but not running. Starting Docker..."
+                sudo service docker start
             fi
 
 
