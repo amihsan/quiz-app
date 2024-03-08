@@ -86,6 +86,8 @@ docker-compose -f docker-compose-dev.yml up --build -d
 
 ##### For Production:
 
+For production (Let's Encrypt) certbot is used to apply ssl/tls.
+
 ```bash
 docker-compose.yml up --build -d
 ```
