@@ -35,6 +35,8 @@ jobs:
           script: |
             set -e  # Exit immediately if a command exits with a non-zero status
 
+            sudo yum update
+
             # Check if the target directory is already a git repository
             if [ -d "${{ secrets.EC2_TARGET_DIR }}/.git" ]; then
                 # If the directory is a git repository, navigate to it
@@ -88,8 +90,8 @@ jobs:
 
 
             # # For Production
-            docker-compose down
-            docker-compose build
+            # docker-compose down
+            # docker-compose build
             chmod +x ./docker/init-letsencrypt.sh
             # sudo ./docker/init-letsencrypt.sh 
             # sudo docker-compose down
