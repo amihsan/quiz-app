@@ -1,3 +1,11 @@
+#!/bin/bash
+
+# # Load variables from project root dir .env file
+# if [ -f .env ]; then
+#     export $(grep -v '^#' .env | xargs)
+# fi
+
+
 # !/bin/bash
 
 # Navigate to the frontend directory
@@ -10,14 +18,6 @@ ENV_FILE=".env"
 if [ -f "$ENV_FILE" ]; then
     export $(grep -v '^#' "$ENV_FILE" | xargs)
 fi
-
-
-#!/bin/bash
-
-# # Load variables from project root dir .env file
-# if [ -f .env ]; then
-#     export $(grep -v '^#' .env | xargs)
-# fi
 
 
 # Use the variables
