@@ -1,4 +1,5 @@
-[![Deploy to EC2](https://github.com/amihsan/quiz-app/actions/workflows/main.yml/badge.svg)](https://github.com/amihsan/quiz-app/actions/workflows/main.yml)
+[![CI/CD for Quiz App](https://github.com/amihsan/quiz-app/actions/workflows/ci-cd-docker-aws-ec2.yml/badge.svg)](https://github.com/amihsan/quiz-app/actions/workflows/ci-cd-docker-aws-ec2.yml)
+[![Docker](https://img.shields.io/badge/Docker-Ready-blue?logo=docker)](https://www.docker.com/)
 
 ## 💡 About
 
@@ -13,7 +14,7 @@ http://ec2-18-158-125-116.eu-central-1.compute.amazonaws.com
 ### 🧱 Built With
 
 1. React
-2. Python 
+2. Python
 3. Flask
 4. npm
 5. MongoDB
@@ -26,13 +27,13 @@ http://ec2-18-158-125-116.eu-central-1.compute.amazonaws.com
 
 2. Clone Git Repository, both client and server.
 
-3. Setup npm in client root:
+3. Setup npm in frontend root:
 
    ```shell
    npm install
    ```
 
-4. Setup virtual env in server root:
+4. Setup virtual env in backend root:
    ```shell
    python -m venv venv
    ```
@@ -62,13 +63,29 @@ http://ec2-18-158-125-116.eu-central-1.compute.amazonaws.com
 
 1. Run local MongoDB
 
-2. Run client:
+2. Run frontend:
 
    ```bash
    npm start
    ```
 
-3. Run server: after activate venv:
+3. Run backend: after activate venv:
    ```bash
    flask run
    ```
+
+### ⛴️ Docker Usage
+
+For Docker MongoDB atlas is used. Nginx is used used to serve react build and proxy to backend flask api.
+
+##### For local development:
+
+```bash
+docker-compose -f docker-compose-dev.yml up --build -d
+```
+
+##### For Production:
+
+```bash
+docker-compose.yml up --build -d
+```
