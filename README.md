@@ -7,9 +7,9 @@ This is the main repository of the Einbürgerungstest quiz app which includes bo
 
 ## View Demo (Deployed on AWS EC2)
 
-http://einbürgerungstest.online
+http://lebentest.online
 
-http://ec2-18-158-125-116.eu-central-1.compute.amazonaws.com
+http://ec2-18-198-190-227.eu-central-1.compute.amazonaws.com
 
 ### 🧱 Built With
 
