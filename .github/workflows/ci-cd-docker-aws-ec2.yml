@@ -111,11 +111,12 @@ jobs:
 
             # # For Production
             docker-compose down
-            docker-compose up --build -d
+            docker-compose build
+            # docker-compose up --build -d
 
 
             # # Only first time (to collect ssl/tls)
-            # chmod +x ./init-letsencrypt.sh
+            chmod +x ./init-letsencrypt.sh
             # sudo ./init-letsencrypt.sh   
             # docker-compose down
             # docker-compose up --build -d
