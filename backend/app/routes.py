@@ -90,7 +90,7 @@ def send_reset_email(email, token):
     smtp_server= os.getenv('SMTP_SERVER')
     smtp_port= os.getenv('SMTP_PORT')
 
-    sender_name = "Enbürgerungstest"
+    # sender_name = "Enbürgerungstest"
 
 
     message = MIMEMultipart()
