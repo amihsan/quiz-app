@@ -10,16 +10,15 @@ This is the Frontend part of the Quiz App . So no business logic is here.
 
 ### ⚙️ Local Setup
 
-1. Setup npm in client root:
-    ```shell
-    npm install
-    ```
-
+1. Setup npm in frontend root:
+   ```shell
+   npm install
+   ```
 
 ## 👟 Usage
 
 ### 🏠 Local Usage
-   
+
 1.  Run client:
     ```bash
     npm start
