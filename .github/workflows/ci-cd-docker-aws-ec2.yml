@@ -35,7 +35,20 @@ jobs:
           script: |
             set -e  # Exit immediately if a command exits with a non-zero status
 
-            sudo yum update
+            # Check if Git is installed
+            if ! command -v git &> /dev/null; then
+                echo "Git is not installed."
+                INSTALL_GIT=true
+            else
+                echo "Git is already installed."
+                INSTALL_GIT=false
+            fi
+
+            # Install Git if not already installed
+            if [ "$INSTALL_GIT" = true ]; then
+                sudo yum update
+                sudo yum install -y git
+            fi
 
             # Check if the target directory is already a git repository
             if [ -d "${{ secrets.EC2_TARGET_DIR }}/.git" ]; then
@@ -54,6 +67,7 @@ jobs:
                 echo "Cloning repository..."
                 git clone https://github.com/amihsan/quiz-app.git ${{ secrets.EC2_TARGET_DIR }}
             fi
+
 
             # Update known_hosts to prevent SSH connection issues
             echo "Updating known_hosts..."
