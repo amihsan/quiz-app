@@ -88,9 +88,8 @@ jobs:
                 sudo yum update -y
                 sudo yum install -y docker
                 sudo service docker start
-                # sudo usermod -a -G docker $USER
-                # # Apply group membership changes
-                # newgrp docker
+                sudo usermod -aG docker ec2-user
+
             else
                 echo "Docker is already installed."
             fi
