@@ -104,8 +104,8 @@ jobs:
 
 
             # # For Production
-            # docker-compose down
-            # docker-compose build
+            docker-compose down
+            docker-compose build
             chmod +x ./docker/init-letsencrypt.sh
             # sudo ./docker/init-letsencrypt.sh 
             # sudo docker-compose down
