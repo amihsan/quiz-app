@@ -116,7 +116,7 @@ const UpdateQuestionForm = () => {
       {showForm && (
         <div className="w-full p-8 rounded-md shadow-lg bg-white">
           <h2 className="text-3xl text-indigo-600 font-bold mb-6">
-            Update Question
+            Edit Question
           </h2>
 
           <form onSubmit={handleSubmit}>

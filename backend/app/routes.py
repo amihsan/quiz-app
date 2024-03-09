@@ -741,6 +741,6 @@ def login_admin_user():
             return jsonify({"error": "Invalid credentials. Please try again."}), 401
 
 
-@app.route('/api/test' , methods=['GET'])
+@app.route('/api' )
 def hello():
-    return "Hello, World!"
+    return 'Hello, World!'

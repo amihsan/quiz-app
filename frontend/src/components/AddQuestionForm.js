@@ -113,8 +113,8 @@ const AddQuestionForm = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="p-8 bg-white rounded-md shadow-lg w-96">
+    <div className="min-h-screen flex flex-col  items-center justify-center bg-gray-100">
+      <div className="p-8 bg-white rounded-md  w-full">
         {isLoading && (
           <div className="flex items-center bg-white rounded-lg p-12">
             <FontAwesomeIcon
