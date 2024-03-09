@@ -1,53 +1,33 @@
-# #!/bin/bash
+# !/bin/bash
 
-# # # Load variables from project root dir .env file
-# # if [ -f .env ]; then
-# #     export $(grep -v '^#' .env | xargs)
-# # fi
+# Navigate to the frontend directory
+cd "$(dirname "$0")"/frontend || exit
 
+# Define the path to the frontend/.env file
+ENV_FILE=".env"
 
-# # !/bin/bash
-
-# # Navigate to the frontend directory
-# cd "$(dirname "$0")"/../frontend || exit
-
-# # Define the path to the frontend/.env file
-# ENV_FILE=".env"
-
-# # Load variables from .env file
-# if [ -f "$ENV_FILE" ]; then
-#     export $(grep -v '^#' "$ENV_FILE" | xargs)
-# fi
+# Load variables from .env file
+if [ -f "$ENV_FILE" ]; then
+    export $(grep -v '^#' "$ENV_FILE" | xargs)
+fi
 
 
-# # Use the variables
-# echo "DOMAIN: $DOMAIN"
-# echo "EMAIL: $EMAIL"
+# Use the variables
+echo "DOMAIN: $DOMAIN"
+echo "EMAIL: $EMAIL"
 
-
-# if ! [ -x "$(command -v docker-compose)" ]; then
-#   echo 'Error: docker-compose is not installed.' >&2
-#   exit 1
-# fi
-
-# domains=($DOMAIN www.$DOMAIN)
-# rsa_key_size=4096
-# data_path="./docker/nginx/certbot"
-# email="$EMAIL" # Adding a valid address is strongly recommended
-# staging=1 # Set to 1 if you're testing your setup to avoid hitting request limits
-
-#!/bin/bash
 
 if ! [ -x "$(command -v docker-compose)" ]; then
   echo 'Error: docker-compose is not installed.' >&2
   exit 1
 fi
 
-domains=(lebentest.online www.lebentest.online)
+domains=($DOMAIN www.$DOMAIN)
 rsa_key_size=4096
 data_path="./docker/nginx/certbot"
-email="" # Adding a valid address is strongly recommended
-staging=0 # Set to 1 if you're testing your setup to avoid hitting request limits
+email="$EMAIL" # Adding a valid address is strongly recommended
+staging=1 # Set to 1 if you're testing your setup to avoid hitting request limits
+
 
 if [ -d "$data_path" ]; then
   read -p "Existing data found for $domains. Continue and replace existing certificate? (y/N) " decision
