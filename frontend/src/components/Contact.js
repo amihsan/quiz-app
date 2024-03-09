@@ -15,7 +15,7 @@ const Contact = () => {
           href="mailto:contact@einbürgerungstest.online"
           className="text-blue-500 font-semibold hover:underline block mb-6"
         >
-          contact@einbürgerungstest.online
+          contact@lebentest.online
         </a>
         <p className="text-sm text-gray-500">
           We typically respond within 24 hours. Your feedback is valuable to us.
