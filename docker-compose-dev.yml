@@ -11,10 +11,10 @@ services:
     env_file:
       - ./frontend/.env
     volumes:
-      # - ./docker/nginx/development:/etc/nginx/conf.d
       - ./docker/nginx/templates:/etc/nginx/templates
     depends_on:
       - backend
+
   backend:
     restart: unless-stopped
     build:
