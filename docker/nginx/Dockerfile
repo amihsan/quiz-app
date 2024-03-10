@@ -4,10 +4,9 @@ FROM node:18.4.0-alpine as build
 
 WORKDIR /app/frontend
 
-COPY ./frontend/package.json ./
+COPY ./frontend/package.json /app/frontend/
 
-COPY ./frontend/package-lock.json ./
-
+COPY ./frontend/package-lock.json /app/frontend/
 RUN npm install --silent
 
 # COPY ./frontend/ ./
