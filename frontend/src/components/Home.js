@@ -24,7 +24,7 @@ const Home = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="p-8 rounded-md shadow-lg bg-white text-center">
         <h3 className="text-3xl font-extrabold mb-4 text-blue-600">
-          Welcome to <span className="text-green-500">"Einbürgerungstest"</span>
+          Welcome to <span className="text-green-500">"Lebentest"</span>
           Quiz
         </h3>
         {!isLoggedIn && (
