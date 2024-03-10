@@ -10,7 +10,9 @@ COPY ./frontend/package-lock.json ./
 
 RUN npm install --silent
 
-COPY ./frontend/ ./
+# COPY ./frontend/ ./
+COPY ./frontend/ /app/frontend/
+
 
 RUN npm run build
 
