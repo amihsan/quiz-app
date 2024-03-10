@@ -740,8 +740,3 @@ def login_admin_user():
         return jsonify({"message": "Login successful"}), 200
     else:
             return jsonify({"error": "Invalid credentials. Please try again."}), 401
-
-
-@app.route('/api/test' )
-def hello():
-    return 'Hello, World!'
