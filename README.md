@@ -88,7 +88,9 @@ docker-compose -f docker-compose-dev.yml up --build -d
 
 For production (Let's Encrypt) certbot is used to apply ssl/tls.
 
-1. Run init-letsencrypt to get ssl certificate from Let's Encrypt (Only one time before deployment. Then certbot auto renews)
+1. Run init-letsencrypt to get ssl certificate from Let's Encrypt (Only one time before 1st time deployment. Then certbot auto renews from later.)
+    The script is from: article [Nginx and Let’s Encrypt with Docker in Less Than 5 Minutes](https://pentacent.medium.com/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71))
+
 
 ```bash
 chmod +x ./init-letsencrypt.sh
