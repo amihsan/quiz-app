@@ -93,7 +93,7 @@ def send_reset_email(email, token):
     sender_name = "Lebentest"
 
     message = MIMEMultipart()
-    message["From"] = f"{sender_name}"
+    message["From"] = sender_name
     message["To"] = email
     message["Subject"] = "Password Reset"
 
