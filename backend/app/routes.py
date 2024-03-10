@@ -91,9 +91,11 @@ def send_reset_email(email, token):
     smtp_port= os.getenv('SMTP_PORT')
 
     sender_name = "Lebentest"
+    sender_address = os.getenv('CUSTOM_DOMAIN_EMAIL')
 
     message = MIMEMultipart()
-    message["From"] = sender_name
+    # Set the sender with name and email address
+    message["From"] = f"{sender_name} <{sender_address}>"
     message["To"] = email
     message["Subject"] = "Password Reset"
 
