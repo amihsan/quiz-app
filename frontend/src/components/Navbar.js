@@ -42,7 +42,7 @@ const Navbar = () => {
       <div className="container mx-auto flex justify-between items-center">
         <Link to="/" className="text-xl font-bold text-white flex items-center">
           <img src="/favicon.ico" alt="Favicon" className="w-6 h-6 mr-2" />
-          Einbürgerungstest
+          Lebentest
         </Link>
 
         <div className="lg:hidden relative" ref={menuRef}>
