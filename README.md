@@ -70,9 +70,12 @@ http://ec2-18-198-190-227.eu-central-1.compute.amazonaws.com
    ```
 
 3. Run backend: after activate venv:
+
    ```bash
    flask run
    ```
+
+4. Create two seperate .env files inside frontend and backend directory. Follow template.env and replace with necessary values.
 
 ### ⛴️ Docker Usage
 
