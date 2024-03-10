@@ -26,6 +26,9 @@ jobs:
           docker build -t ${{ secrets.DOCKER_USERNAME }}/quiz-backend:latest -f docker/backend/Dockerfile .
           docker push ${{ secrets.DOCKER_USERNAME }}/quiz-backend:latest
 
+          # Clean up dangling images
+          docker image prune -f
+
       - name: SSH into EC2 Instance and deploy with Docker Compose
         uses: appleboy/ssh-action@master
         with:
