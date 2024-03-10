@@ -97,7 +97,6 @@ def send_reset_email(email, token):
     message["To"] = email
     message["Subject"] = "Password Reset"
 
-
     # Construct the reset link
     password_link_domain = os.getenv('RESET_PASSWORD_URL')
     reset_link = f"{password_link_domain}/reset-password/{token}"
