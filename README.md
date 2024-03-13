@@ -3,7 +3,7 @@
 
 ## 💡 About
 
-This is the main repository of the Einbürgerungstest quiz app which includes both the frontend and backend logic of the application.
+This is the main repository of the Lebentest quiz app which includes both the frontend and backend logic of the application.
 
 ## View Demo (Deployed on AWS EC2)
 
