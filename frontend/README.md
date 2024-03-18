@@ -14,6 +14,7 @@ This is the Frontend part of the Quiz App . So no business logic is here.
    ```shell
    npm install
    ```
+2. Create a .env in frontend root. Follow template.env
 
 ## 👟 Usage
 

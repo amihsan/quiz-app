@@ -36,6 +36,8 @@ This is the Backend of the Quiz App. So all the application logic is here.
    pip install -r requirements.txt
    ```
 
+4. Create a .env in backend root. Follow template.env
+
 ## 👟 Usage
 
 ### 🏠 Local Usage
