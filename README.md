@@ -25,7 +25,7 @@ http://ec2-18-198-190-227.eu-central-1.compute.amazonaws.com
 
 1. Install MongoDB
 
-2. Clone Git Repository, both client and server.
+2. Clone Git Repository, both frontend and backend.
 
 3. Setup npm in frontend root:
 
