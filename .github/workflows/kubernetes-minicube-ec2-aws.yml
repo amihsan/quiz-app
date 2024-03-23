@@ -1,4 +1,4 @@
-name: CI/CD for Quiz App Kubernetes
+name: CI/CD for Quiz App
 
 on:
   push:
@@ -19,12 +19,12 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # - name: Build and Push Docker Images
-      #   run: |
-      #     docker build -t ${{ secrets.DOCKER_USERNAME }}/quiz-frontend:latest -f docker/nginx/Dockerfile .
-      #     docker push ${{ secrets.DOCKER_USERNAME }}/quiz-frontend:latest
-      #     docker build -t ${{ secrets.DOCKER_USERNAME }}/quiz-backend:latest -f docker/backend/Dockerfile .
-      #     docker push ${{ secrets.DOCKER_USERNAME }}/quiz-backend:latest
+      - name: Build and Push Docker Images
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/quiz-frontend:latest -f docker/nginx/Dockerfile .
+          docker push ${{ secrets.DOCKER_USERNAME }}/quiz-frontend:latest
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/quiz-backend:latest -f docker/backend/Dockerfile .
+          docker push ${{ secrets.DOCKER_USERNAME }}/quiz-backend:latest
 
       - name: SSH into EC2 Instance and deploy with Docker Compose
         uses: appleboy/ssh-action@master
@@ -35,61 +35,95 @@ jobs:
           script: |
             set -e  # Exit immediately if a command exits with a non-zero status
 
+            # Check if Git is installed
+            if ! command -v git &> /dev/null; then
+                echo "Git is not installed."
+                INSTALL_GIT=true
+            else
+                echo "Git is already installed."
+                INSTALL_GIT=false
+            fi
+
+            # Install Git if not already installed
+            if [ "$INSTALL_GIT" = true ]; then
+                sudo yum update
+                sudo yum install -y git
+            fi
+
+            # Check if the target directory is already a git repository
+            if [ -d "${{ secrets.EC2_TARGET_DIR }}/.git" ]; then
+                # If the directory is a git repository, navigate to it
+                cd ${{ secrets.EC2_TARGET_DIR }}
+                
+                # Stash any local changes
+                echo "Stashing local changes..."
+                git stash
+                
+                # Pull the latest changes from the main branch
+                echo "Pulling latest changes..."
+                git pull origin main
+            else
+                # If the directory is not a git repository, clone the repository
+                echo "Cloning repository..."
+                git clone https://github.com/amihsan/quiz-app.git ${{ secrets.EC2_TARGET_DIR }}
+            fi
+
+
             # Update known_hosts to prevent SSH connection issues
             echo "Updating known_hosts..."
             ssh-keyscan -H ${{ secrets.EC2_HOST_DNS }} >> ~/.ssh/known_hosts
 
-            # Remove existing Docker installation
-            echo "Removing existing Docker installation..."
-            sudo yum remove -y docker docker-ce docker-engine docker.io containerd runc
-            sudo yum remove -y docker-ce docker-ce-cli
-            sudo yum remove docker-ce docker-ce-cli containerd.io
-            sudo rm -rf /var/lib/docker
+            # Check if Docker Compose is installed, if not, install it
+            if ! command -v docker-compose &> /dev/null; then
+              echo "Installing Docker Compose..."
+              sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+              sudo chmod +x /usr/local/bin/docker-compose
+            fi
+            echo "Docker Compose version:"
+            docker-compose version
 
-            # Install Docker
-            echo "Installing Docker..."
-            sudo yum update -y
-            sudo yum install -y docker
-            sudo usermod -a -G docker ${{ secrets.EC2_USERNAME }}
-            sudo chmod 666 /var/run/docker.sock
-            sudo systemctl enable docker
-            sudo service docker start
-            docker version
+            # Check if Docker is installed
+            if ! command -v docker &> /dev/null; then
+                echo "Docker is not installed. Installing Docker..."
+                sudo yum update -y
+                sudo yum install -y docker
+                sudo service docker start
+                sudo usermod -aG docker ${{ secrets.EC2_USERNAME }}
 
-            # Remove existing Docker Compose installation
-            echo "Removing existing Docker Compose installation..."
-            sudo rm /usr/local/bin/docker-compose
+            else
+                echo "Docker is already installed."
+            fi
 
-            # Install Docker Compose
-            echo "Installing Docker Compose..."
-            sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-            sudo chmod +x /usr/local/bin/docker-compose
+            # Check if the Docker service is running
+            if ! sudo systemctl is-active --quiet docker; then
+                echo "Docker is installed but not running. Starting Docker..."
+                sudo service docker start
+            fi
 
-            # Remove existing kubectl installation
-            echo "Removing existing kubectl installation..."
-            sudo rm /usr/local/bin/kubectl
 
-            # Install kubectl
-            echo "Installing kubectl..."
-            sudo curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-            sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+            # Deploy containers using Docker Compose
+            echo "Deploying containers with Docker Compose..."
 
-            # Remove existing Minikube installation
-            echo "Removing existing Minikube installation..."
-            sudo rm /usr/local/bin/minikube
+            # # # For Development
+            # docker-compose -f docker-compose-dev.yml down
+            # docker-compose -f docker-compose-dev.yml up --build -d
 
-            # Install Minikube
-            echo "Installing Minikube..."
-            sudo curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
-            sudo chmod +x minikube
-            sudo mv minikube /usr/local/bin/
 
-            # Start Minikube
-            echo "Starting Minikube..."
-            minikube start --driver=docker
+            # # For Production
+            docker-compose down
+            docker-compose up --build -d
+            chmod +x ./init-letsencrypt.sh
 
-            # Verify installation
-            echo "kubectl version:"
-            kubectl version --short
-            echo "Minikube status:"
-            minikube status
+            # # Clean up dangling images
+            docker image prune -f
+
+
+            # # Only first time (to collect ssl/tls)
+            # chmod +x ./init-letsencrypt.sh
+            # sudo ./init-letsencrypt.sh   
+            # docker-compose down
+            # docker-compose up --build -d
+
+
+            docker images
+            docker ps -a
