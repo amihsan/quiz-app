@@ -1,4 +1,4 @@
-name: CI/CD for Quiz App
+name: CI/CD for Quiz App Kubernetes
 
 on:
   push:
