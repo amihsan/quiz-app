@@ -101,8 +101,8 @@ jobs:
             fi
 
 
-            # Deploy containers using Docker Compose
-            echo "Deploying containers with Docker Compose..."
+            # # Deploy containers using Docker Compose
+            # echo "Deploying containers with Docker Compose..."
 
             # # # For Development
             # docker-compose -f docker-compose-dev.yml down
@@ -110,9 +110,9 @@ jobs:
 
 
             # # For Production
-            docker-compose down
-            docker-compose up --build -d
-            chmod +x ./init-letsencrypt.sh
+            # docker-compose down
+            # docker-compose up --build -d
+            # chmod +x ./init-letsencrypt.sh
 
             # # Clean up dangling images
             docker image prune -f
@@ -125,5 +125,5 @@ jobs:
             # docker-compose up --build -d
 
 
-            docker images
-            docker ps -a
+            # docker images
+            # docker ps -a

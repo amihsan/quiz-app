@@ -1,0 +1,30 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: certbot
+spec:
+  schedule: "0 */12 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: certbot
+              image: certbot/certbot
+              volumeMounts:
+                - name: nginx-certbot-conf
+                  mountPath: /etc/letsencrypt
+                - name: nginx-certbot-www
+                  mountPath: /var/www/certbot
+              command: ["/bin/sh", "-c"]
+              args:
+                [
+                  "trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;",
+                ]
+          volumes:
+            - name: nginx-certbot-conf
+              hostPath:
+                path: docker/nginx/certbot/conf
+            - name: nginx-certbot-www
+              hostPath:
+                path: docker/nginx/certbot/www
