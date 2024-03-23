@@ -42,6 +42,9 @@ jobs:
             # Remove existing Docker installation
             echo "Removing existing Docker installation..."
             sudo yum remove -y docker docker-ce docker-engine docker.io containerd runc
+            sudo yum remove -y docker-ce docker-ce-cli
+            sudo yum remove docker-ce docker-ce-cli containerd.io
+            sudo rm -rf /var/lib/docker
 
             # Install Docker
             echo "Installing Docker..."
