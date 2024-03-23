@@ -39,38 +39,51 @@ jobs:
             echo "Updating known_hosts..."
             ssh-keyscan -H ${{ secrets.EC2_HOST_DNS }} >> ~/.ssh/known_hosts
 
-            # Check if Docker is installed
-            if ! command -v docker &> /dev/null; then
-                echo "Docker is not installed. Installing Docker..."
-                sudo yum update -y
-                sudo yum install -y docker
-                sudo service docker start
-                sudo usermod -aG docker ${{ secrets.EC2_USERNAME }}
-            else
-                echo "Docker is already installed."
-            fi
+            # Remove existing Docker installation
+            echo "Removing existing Docker installation..."
+            sudo yum remove -y docker docker-ce docker-engine docker.io containerd runc
 
-            # Check if Docker Compose is installed, if not, install it
-            if ! command -v docker-compose &> /dev/null; then
-              echo "Installing Docker Compose..."
-              sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-              sudo chmod +x /usr/local/bin/docker-compose
-            fi
-            echo "Docker Compose version:"
-            docker-compose version
+            # Install Docker
+            echo "Installing Docker..."
+            sudo yum update -y
+            sudo yum install -y docker
+            sudo service docker start
+            sudo usermod -aG docker ${{ secrets.EC2_USERNAME }}
+
+            # Remove existing Docker Compose installation
+            echo "Removing existing Docker Compose installation..."
+            sudo rm /usr/local/bin/docker-compose
+
+            # Install Docker Compose
+            echo "Installing Docker Compose..."
+            sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+            sudo chmod +x /usr/local/bin/docker-compose
+
+            # Remove existing kubectl installation
+            echo "Removing existing kubectl installation..."
+            sudo rm /usr/local/bin/kubectl
 
             # Install kubectl
+            echo "Installing kubectl..."
             sudo curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
             sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
+            # Remove existing Minikube installation
+            echo "Removing existing Minikube installation..."
+            sudo rm /usr/local/bin/minikube
+
             # Install Minikube
+            echo "Installing Minikube..."
             sudo curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
             sudo chmod +x minikube
             sudo mv minikube /usr/local/bin/
 
             # Start Minikube
+            echo "Starting Minikube..."
             minikube start --driver=docker
 
             # Verify installation
+            echo "kubectl version:"
             kubectl version --short
+            echo "Minikube status:"
             minikube status
