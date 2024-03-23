@@ -44,9 +44,9 @@ This is the Backend of the Quiz App. So all the application logic is here.
 
 1. Run local MongoDB
 
-2. Run server: after activate venv:
+2. Run backend: after activate venv:
 
-   and then in server root:
+   and then in backend root:
 
    ```bash
    flask run
