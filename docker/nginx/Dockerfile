@@ -20,5 +20,6 @@ RUN npm run build
 FROM nginx:alpine
 
 COPY --from=build /app/frontend/build /usr/share/nginx/html
+COPY ./docker/nginx/templates /etc/nginx/templates
 
 CMD ["nginx", "-g", "daemon off;"]

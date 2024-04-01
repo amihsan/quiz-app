@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: amihsan/quiz-frontend
+        ports:
+        - containerPort: 80
+        env:
+          - name: REACT_APP_API_URL
+            value: "http://backend-service"
+        volumeMounts:
+        - name: nginx-templates
+          mountPath: /etc/nginx/templates
+      volumes:
+      - name: nginx-templates
+        hostPath:
+          path: /docker/nginx/templates
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    app: nginx
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: NodePort
+

@@ -32,7 +32,9 @@ mongodb_data/
 /frontend/build
 /backend/**/__pycache__/
 /Dockerfile
-# /frontend/Dockerfile 
+/frontend/client.env
+/kubernetes/backend-secret.yaml 
+/kubernetes/nginx-secret.yaml 
 # /server/Dockerfile 
 # /docker-compose.yml
 /.dockerignore
