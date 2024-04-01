@@ -17,9 +17,9 @@ RUN npm run build
 
 # The second stage
 # Copy React static files and start nginx
-FROM nginx:alpine
+# FROM nginx:alpine
 
-COPY --from=build /app/frontend/build /usr/share/nginx/html
-COPY ./docker/nginx/templates /etc/nginx/templates
+# COPY --from=build /app/frontend/build /usr/share/nginx/html
+# COPY ./docker/nginx/templates /etc/nginx/templates
 
-CMD ["nginx", "-g", "daemon off;"]
+# CMD ["nginx", "-g", "daemon off;"]
