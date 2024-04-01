@@ -15,6 +15,17 @@ COPY ./frontend/ /app/frontend/
 
 RUN npm run build
 
+## For render deployment
+# Install serve globally to serve static files
+RUN npm install -g serve
+
+# Expose port 3000
+EXPOSE 3000
+
+# Start serve to serve the built React app
+CMD ["serve", "-s", "build", "-l", "3000"]
+
+# For AWS (nginx)
 # The second stage
 # Copy React static files and start nginx
 # FROM nginx:alpine
