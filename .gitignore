@@ -34,7 +34,6 @@ mongodb_data/
 /Dockerfile
 /frontend/client.env
 /kubernetes/backend-secret.yaml 
-/kubernetes/backend-deployment.yaml 
 /kubernetes/nginx-secret.yaml 
 # /server/Dockerfile 
 # /docker-compose.yml
@@ -42,8 +41,5 @@ mongodb_data/
 # /backend/.dockerignore
 /deploy_script.sh
 help.txt
-
-
-
-
-
+/kubernetes/backend-config.yaml
+# /kubernetes/backend-deployment.yaml 
