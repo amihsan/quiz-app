@@ -34,6 +34,7 @@ mongodb_data/
 /Dockerfile
 /frontend/client.env
 /kubernetes/backend-secret.yaml 
+/kubernetes/backend-deployment.yaml 
 /kubernetes/nginx-secret.yaml 
 # /server/Dockerfile 
 # /docker-compose.yml
