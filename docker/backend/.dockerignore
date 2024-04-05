@@ -5,3 +5,5 @@
 ./backend/.env.server
 ./backend/README.md
 ./backend/template.env
+./backend/Dockerfile
+./backend/.dockerignore
