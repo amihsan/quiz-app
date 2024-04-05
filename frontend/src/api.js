@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
-// const API_BASE_URL = ""; # Kubernetes
+// const API_BASE_URL = "";  // Kubernetes
 console.log(`${API_BASE_URL}/api/login`)
 
 // Function to log in a user

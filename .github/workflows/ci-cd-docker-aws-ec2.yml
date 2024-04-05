@@ -26,104 +26,104 @@ jobs:
           docker build -t ${{ secrets.DOCKER_USERNAME }}/quiz-backend:latest -f docker/backend/Dockerfile .
           docker push ${{ secrets.DOCKER_USERNAME }}/quiz-backend:latest
 
-      # - name: SSH into EC2 Instance and deploy with Docker Compose
-      #   uses: appleboy/ssh-action@master
-      #   with:
-      #     host: ${{ secrets.EC2_HOST_DNS }}
-      #     username: ${{ secrets.EC2_USERNAME }}
-      #     key: ${{ secrets.EC2_SSH_KEY }}
-      #     script: |
-      #       set -e  # Exit immediately if a command exits with a non-zero status
+      - name: SSH into EC2 Instance and deploy with Docker Compose
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST_DNS }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            set -e  # Exit immediately if a command exits with a non-zero status
 
-      #       # Check if Git is installed
-      #       if ! command -v git &> /dev/null; then
-      #           echo "Git is not installed."
-      #           INSTALL_GIT=true
-      #       else
-      #           echo "Git is already installed."
-      #           INSTALL_GIT=false
-      #       fi
+            # Check if Git is installed
+            if ! command -v git &> /dev/null; then
+                echo "Git is not installed."
+                INSTALL_GIT=true
+            else
+                echo "Git is already installed."
+                INSTALL_GIT=false
+            fi
 
-      #       # Install Git if not already installed
-      #       if [ "$INSTALL_GIT" = true ]; then
-      #           sudo yum update
-      #           sudo yum install -y git
-      #       fi
+            # Install Git if not already installed
+            if [ "$INSTALL_GIT" = true ]; then
+                sudo yum update
+                sudo yum install -y git
+            fi
 
-      #       # Check if the target directory is already a git repository
-      #       if [ -d "${{ secrets.EC2_TARGET_DIR }}/.git" ]; then
-      #           # If the directory is a git repository, navigate to it
-      #           cd ${{ secrets.EC2_TARGET_DIR }}
+            # Check if the target directory is already a git repository
+            if [ -d "${{ secrets.EC2_TARGET_DIR }}/.git" ]; then
+                # If the directory is a git repository, navigate to it
+                cd ${{ secrets.EC2_TARGET_DIR }}
                 
-      #           # Stash any local changes
-      #           echo "Stashing local changes..."
-      #           git stash
+                # Stash any local changes
+                echo "Stashing local changes..."
+                git stash
                 
-      #           # Pull the latest changes from the main branch
-      #           echo "Pulling latest changes..."
-      #           git pull origin main
-      #       else
-      #           # If the directory is not a git repository, clone the repository
-      #           echo "Cloning repository..."
-      #           git clone https://github.com/amihsan/quiz-app.git ${{ secrets.EC2_TARGET_DIR }}
-      #       fi
+                # Pull the latest changes from the main branch
+                echo "Pulling latest changes..."
+                git pull origin main
+            else
+                # If the directory is not a git repository, clone the repository
+                echo "Cloning repository..."
+                git clone https://github.com/amihsan/quiz-app.git ${{ secrets.EC2_TARGET_DIR }}
+            fi
 
 
-      #       # Update known_hosts to prevent SSH connection issues
-      #       echo "Updating known_hosts..."
-      #       ssh-keyscan -H ${{ secrets.EC2_HOST_DNS }} >> ~/.ssh/known_hosts
+            # Update known_hosts to prevent SSH connection issues
+            echo "Updating known_hosts..."
+            ssh-keyscan -H ${{ secrets.EC2_HOST_DNS }} >> ~/.ssh/known_hosts
 
-      #       # Check if Docker Compose is installed, if not, install it
-      #       if ! command -v docker-compose &> /dev/null; then
-      #         echo "Installing Docker Compose..."
-      #         sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-      #         sudo chmod +x /usr/local/bin/docker-compose
-      #       fi
-      #       echo "Docker Compose version:"
-      #       docker-compose version
+            # Check if Docker Compose is installed, if not, install it
+            if ! command -v docker-compose &> /dev/null; then
+              echo "Installing Docker Compose..."
+              sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+              sudo chmod +x /usr/local/bin/docker-compose
+            fi
+            echo "Docker Compose version:"
+            docker-compose version
 
-      #       # Check if Docker is installed
-      #       if ! command -v docker &> /dev/null; then
-      #           echo "Docker is not installed. Installing Docker..."
-      #           sudo yum update -y
-      #           sudo yum install -y docker
-      #           sudo service docker start
-      #           sudo usermod -aG docker ${{ secrets.EC2_USERNAME }}
+            # Check if Docker is installed
+            if ! command -v docker &> /dev/null; then
+                echo "Docker is not installed. Installing Docker..."
+                sudo yum update -y
+                sudo yum install -y docker
+                sudo service docker start
+                sudo usermod -aG docker ${{ secrets.EC2_USERNAME }}
 
-      #       else
-      #           echo "Docker is already installed."
-      #       fi
+            else
+                echo "Docker is already installed."
+            fi
 
-      #       # Check if the Docker service is running
-      #       if ! sudo systemctl is-active --quiet docker; then
-      #           echo "Docker is installed but not running. Starting Docker..."
-      #           sudo service docker start
-      #       fi
-
-
-      #       # Deploy containers using Docker Compose
-      #       echo "Deploying containers with Docker Compose..."
-
-      #       # # # For Development
-      #       # docker-compose -f docker-compose-dev.yml down
-      #       # docker-compose -f docker-compose-dev.yml up --build -d
+            # Check if the Docker service is running
+            if ! sudo systemctl is-active --quiet docker; then
+                echo "Docker is installed but not running. Starting Docker..."
+                sudo service docker start
+            fi
 
 
-      #       # # For Production
-      #       docker-compose down
-      #       docker-compose up --build -d
-      #       chmod +x ./init-letsencrypt.sh
+            # Deploy containers using Docker Compose
+            echo "Deploying containers with Docker Compose..."
 
-      #       # # Clean up dangling images
-      #       docker image prune -f
-
-
-      #       # # Only first time (to collect ssl/tls)
-      #       # chmod +x ./init-letsencrypt.sh
-      #       # sudo ./init-letsencrypt.sh   
-      #       # docker-compose down
-      #       # docker-compose up --build -d
+            # # # For Development
+            # docker-compose -f docker-compose-dev.yml down
+            # docker-compose -f docker-compose-dev.yml up --build -d
 
 
-      #       docker images
-      #       docker ps -a
+            # # For Production
+            docker-compose down
+            docker-compose up --build -d
+            chmod +x ./init-letsencrypt.sh
+
+            # # Clean up dangling images
+            docker image prune -f
+
+
+            # # Only first time (to collect ssl/tls)
+            # chmod +x ./init-letsencrypt.sh
+            # sudo ./init-letsencrypt.sh   
+            # docker-compose down
+            # docker-compose up --build -d
+
+
+            docker images
+            docker ps -a
