@@ -4,3 +4,5 @@
 ./frontend/.gitignore
 ./frontend/README.md
 ./frontend/.env.template
+./frontend/Dockerfile
+./frontend/.dockerignore
