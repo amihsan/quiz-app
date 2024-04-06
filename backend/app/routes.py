@@ -61,6 +61,20 @@ category_to_collection = {
 bcrypt = Bcrypt()
 serializer = URLSafeTimedSerializer(os.getenv('SECRET_KEY'))
 
+# Default Route: Hello From Lebentest
+@app.route('/')
+def index(): 
+    try:
+        return '<b><big>Hello From Lebentest Quiz App</big></b>'
+    except Exception as e:
+        error_message = f'An error occurred: {str(e)}'
+        return error_message
+    
+# Default Route: Test Server
+@app.route("/api")
+def index_again():
+    return render_template('index.html')
+
 # Function to request password reset link in email
 @app.route('/api/reset-password', methods=['POST'])
 def reset_password_link_email():
