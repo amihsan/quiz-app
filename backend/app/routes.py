@@ -15,6 +15,8 @@ from email.mime.multipart import MIMEMultipart
 from app import app
 import os
 from werkzeug.utils import secure_filename
+from flask_login import login_required, current_user
+
 
 #*************************#
 # Set the allowed file extensions for image uploads
@@ -189,7 +191,6 @@ def reset_password_profile():
 @app.route('/api/register', methods=['POST'])
 def register_user():
     data = request.get_json()
-    # print(data)
 
     username = data.get('username')
     email = data.get('email')
@@ -198,17 +199,25 @@ def register_user():
     if not username or not email or not password:
         return jsonify({"error": "Missing fields"}), 400
 
+    # Check if a user with the same username or email already exists in the database
+    existing_user = db.users.find_one({"$or": [{"username": username}, {"email": email}]})
+    if existing_user:
+        return jsonify({"message": "User already exists."}), 409
+
+    # Hash the password
     hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
 
+    # Prepare user data for insertion
     user_data = {
         'username': username,
         'email': email,
         'password': hashed_password
     }
 
+    # Insert the user data into the database
     user_id = db.users.insert_one(user_data).inserted_id
-    # print(user_id)
 
+    # Return success message and user ID
     return jsonify({"message": "Registration successful", "user_id": str(user_id)}), 201
 
 # Function to log in a user
@@ -754,3 +763,9 @@ def login_admin_user():
         return jsonify({"message": "Login successful"}), 200
     else:
             return jsonify({"error": "Invalid credentials. Please try again."}), 401
+
+
+@app.route('/api/protected_route')
+@login_required
+def protected_route():
+    return jsonify({"message": "Access granted for user: " + current_user.username})

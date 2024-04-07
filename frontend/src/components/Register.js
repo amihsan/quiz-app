@@ -72,27 +72,32 @@ const Register = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-
+  
     if (!validateForm()) {
       return;
     }
-
+  
     setLoading(true);
-
+  
     try {
       // Call the registerUser function from the API
       await registerUser(formData);
       setError("");
-
+  
       // Use the navigate function to go to the /login route after successful registration
       navigate("/login");
     } catch (error) {
-      setError("Registration failed. Please try again.");
-      console.error("Registration error:", error);
+      if (error.message) {
+        setError(error.message);
+      } else {
+        setError("Registration failed. Please try again.");
+        console.error("Registration error:", error);
+      }
     } finally {
       setLoading(false);
     }
   };
+  
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);

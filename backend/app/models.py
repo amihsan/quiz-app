@@ -4,7 +4,8 @@ from bson import ObjectId
 
 class User(UserMixin):
     def __init__(self, user_data):
-        self.id = str(user_data['_id'])
-        self.username = user_data['username']
-        self.email = user_data['email']
-        self.password = user_data['password']
+        self.id = str(user_data.get('_id', ''))  # Provide a default value if '_id' is missing
+        self.username = user_data.get('username', '')
+        self.email = user_data.get('email', '')
+        self.password = user_data.get('password', '')
+
