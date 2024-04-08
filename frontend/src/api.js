@@ -300,7 +300,13 @@ export const getQuizQuestionsByCategory = async (selectedCategory) => {
 // Function to get mongodb collections based on category
 export const getCategories = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/api/categories`);
+    const response = await axios.get(`${API_BASE_URL}/api/categories`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
     return response.data.categories;
   } catch (error) {
     throw error.response.data;
