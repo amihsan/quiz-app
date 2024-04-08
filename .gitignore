@@ -43,3 +43,4 @@ mongodb_data/
 help.txt
 /kubernetes/backend-config.yaml
 # /kubernetes/backend-deployment.yaml 
+/frontend/help.js
