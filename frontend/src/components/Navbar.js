@@ -38,7 +38,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-indigo-600 p-4 relative">
+    <nav className="bg-blue-600 p-4 relative">
       <div className="container mx-auto flex justify-between items-center">
         <Link to="/" className="text-xl font-bold text-white flex items-center">
           <img src="/favicon.ico" alt="Favicon" className="w-6 h-6 mr-2" />
