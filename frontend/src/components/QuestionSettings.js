@@ -156,29 +156,31 @@ const QuestionSettings = () => {
               Add New Question
             </Link>
           </div>
-
+          
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {questions.map((question, index) => (
-              <div key={question._id} className="bg-gray-200 rounded-lg p-4">
-                <p className="font-bold mb-2">Question No: {index + 1}</p>
-                <p className="mb-2">{question.text}</p>
-                <ul className="list-disc pl-6">
-                  {question.options.map((option, index) => (
-                    <li key={index}>{option}</li>
-                  ))}
-                </ul>
-                <p className="mt-2">Correct Answer: {question.correctAnswer}</p>
-                <div className="text-center mb-1">
-                  {question.picture_link && (
-                    <img
-                      src={question.picture_link}
-                      alt="Question"
-                      className="mx-auto mb-4 max-w-full h-auto"
-                    />
-                  )}
+              <div key={question._id} className="bg-gray-200 rounded-lg p-4 flex flex-col h-full">
+                <div className="question-content flex-grow">
+                  <p className="font-bold mb-2">Question No: {index + 1}</p>
+                  <p className="mb-2">{question.text}</p>
+                  <ul className="list-disc pl-6">
+                    {question.options.map((option, index) => (
+                      <li key={index}>{option}</li>
+                    ))}
+                  </ul>
+                  <p className="mt-2">Correct Answer: {question.correctAnswer}</p>
+                  <div className="text-center mb-1">
+                    {question.picture_link && (
+                      <img
+                        src={question.picture_link}
+                        alt="Question"
+                        className="mx-auto mb-4 max-w-full h-auto"
+                      />
+                    )}
+                  </div>
                 </div>
                 {selectedCategory && (
-                  <div className="mt-4 flex justify-between">
+                  <div className="mt-auto flex justify-between">
                     <Link
                       to={`/update/${selectedCategory}/${question._id}`}
                       className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded inline-block"

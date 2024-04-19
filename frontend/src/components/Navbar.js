@@ -1,4 +1,4 @@
-// // src/components/Navbar.js
+// src/components/Navbar.js
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -170,6 +170,17 @@ const Navbar = () => {
                 )}
                 {state.isAuthenticated && (
                   <li>
+                    <Link
+                      to="/admin"
+                      className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-indigo-200 transition-colors duration-300"
+                      onClick={handleClick}
+                    >
+                      Admin
+                    </Link>
+                  </li>
+                )}
+                {state.isAuthenticated && (
+                  <li>
                     <button
                       onClick={handleLogout}
                       className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-indigo-200 transition-colors duration-300"
@@ -177,7 +188,7 @@ const Navbar = () => {
                       Logout
                     </button>
                   </li>
-                )}
+                )}               
               </ul>
             </div>
           )}
@@ -207,12 +218,16 @@ const Navbar = () => {
               <Link to="/contact" className="text-white hover:text-gray-300">
                 Contact
               </Link>
+              <Link to="/admin" className="text-white hover:text-gray-300">
+                Admin
+              </Link>
               <button
                 onClick={handleLogout}
                 className="text-white hover:text-gray-300 cursor-pointer"
               >
                 Logout
               </button>
+              
             </>
           ) : (
             <>
