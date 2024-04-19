@@ -4,7 +4,7 @@
 
 ## 💡 About
 
-This is the main repository of the Lebentest quiz app which includes both the frontend and backend logic of the application.
+This is the main repository of the Lebentest quiz app which includes both the frontend and backend logic of the application. It is a free online learning platform for individuals preparing for German integration tests, offering a range of quizzes to enhance their language skills and cultural knowledge.
 
 ## View Demo (Deployed on AWS EC2)
 
