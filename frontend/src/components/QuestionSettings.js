@@ -156,10 +156,13 @@ const QuestionSettings = () => {
               Add New Question
             </Link>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {questions.map((question, index) => (
-              <div key={question._id} className="bg-gray-200 rounded-lg p-4 flex flex-col h-full">
+              <div
+                key={question._id}
+                className="bg-gray-200 rounded-lg p-4 flex flex-col h-full"
+              >
                 <div className="question-content flex-grow">
                   <p className="font-bold mb-2">Question No: {index + 1}</p>
                   <p className="mb-2">{question.text}</p>
@@ -168,7 +171,11 @@ const QuestionSettings = () => {
                       <li key={index}>{option}</li>
                     ))}
                   </ul>
-                  <p className="mt-2">Correct Answer: {question.correctAnswer}</p>
+                  <p className="mt-2 text-indigo-600">
+                    Correct Answer:{" "}
+                    <span className="text-black">{question.correctAnswer}</span>
+                  </p>
+
                   <div className="text-center mb-1">
                     {question.picture_link && (
                       <img
