@@ -1,7 +1,6 @@
 [![CI/CD for Quiz App](https://github.com/amihsan/quiz-app/actions/workflows/ci-cd-docker-aws-ec2.yml/badge.svg)](https://github.com/amihsan/quiz-app/actions/workflows/ci-cd-docker-aws-ec2.yml)
 [![Docker](https://img.shields.io/badge/Docker-Ready-blue?logo=docker)](https://www.docker.com/)
 
-
 ## 💡 About
 
 This is the main repository of the Lebentest quiz app which includes both the frontend and backend logic of the application. It is a free online learning platform for individuals preparing for German integration tests, offering a range of quizzes to enhance their language skills and cultural knowledge.
@@ -76,7 +75,7 @@ http://ec2-18-198-190-227.eu-central-1.compute.amazonaws.com
    flask run
    ```
 
-4. Create two seperate .env files inside frontend and backend directory. Follow template.env and replace with necessary values.
+4. Create two seperate .env files inside both frontend and backend directory. Follow template.env and replace with necessary values.
 
 ### ⛴️ Docker Usage
 
