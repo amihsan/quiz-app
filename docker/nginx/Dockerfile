@@ -15,6 +15,8 @@ COPY ./frontend/ /app/frontend/
 
 RUN npm run build
 
+RUN npx update-browserslist-db@latest
+
 # The second stage
 # Copy React static files and start nginx
 FROM nginx:alpine
