@@ -9,12 +9,16 @@ COPY ./frontend/package.json /app/frontend/
 COPY ./frontend/package-lock.json /app/frontend/
 RUN npm install --silent
 
+# update npm
+RUN npm install -g npm@latest
+
 # COPY ./frontend/ ./
 COPY ./frontend/ /app/frontend/
 
 
 RUN npm run build
 
+# update Browserslist: caniuse-lite
 RUN npx update-browserslist-db@latest
 
 # The second stage
