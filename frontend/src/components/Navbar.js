@@ -39,7 +39,7 @@ const Navbar = () => {
 
   return (
     <nav className="bg-blue-600 p-4 relative">
-      <div className="container mx-auto flex justify-between items-center">
+      <div className="w-full flex justify-between items-center">
         <Link to="/" className="text-xl font-bold text-white flex items-center">
           <img src="/favicon.ico" alt="Favicon" className="w-6 h-6 mr-2" />
           Lebentest
@@ -71,7 +71,7 @@ const Navbar = () => {
             </svg>
           </button>
           {showMenu && (
-            <div className="absolute top-full right-0 mt-4 bg-white shadow-lg rounded-md w-40 z-10 ">
+            <div className="absolute top-full right-0 mt-4 bg-white shadow-lg rounded-md w-40 z-10">
               <ul>
                 <li>
                   <Link
@@ -188,7 +188,7 @@ const Navbar = () => {
                       Logout
                     </button>
                   </li>
-                )}               
+                )}
               </ul>
             </div>
           )}
@@ -227,7 +227,6 @@ const Navbar = () => {
               >
                 Logout
               </button>
-              
             </>
           ) : (
             <>

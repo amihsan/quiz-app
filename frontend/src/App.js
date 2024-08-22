@@ -24,38 +24,40 @@ const App = () => {
     <AuthProvider>
       <Router>
         <Navbar />
-        <div className="container mx-auto mt-8 p-4">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/quiz" element={<Quiz />} />
-            <Route
-              path="/quiz/questions/category/:categoryName"
-              element={<Quiz />}
-            />
-            <Route
-              path="/reset-password"
-              element={<PasswordReset isEmailLink={!isEmailLink} />}
-            />
-            <Route
-              path="/reset-password/:token"
-              element={<PasswordReset isEmailLink={isEmailLink} />}
-            />
-            <Route path="/results" element={<Results />} />
-            <Route path="/add" element={<AddQuestionForm />} />
-            <Route path="/question" element={<QuestionsList />} />
-            <Route
-              path="/update/:category/:id"
-              element={<UpdateQuestionForm />}
-            />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/admin" element={<AdminPanel />} />
-            <Route path="/question/settings" element={<QuestionSettings />} />
-          </Routes>
+        <div className="min-h-screen w-full flex flex-col">
+          <div className="flex-grow">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/quiz" element={<Quiz />} />
+              <Route
+                path="/quiz/questions/category/:categoryName"
+                element={<Quiz />}
+              />
+              <Route
+                path="/reset-password"
+                element={<PasswordReset isEmailLink={!isEmailLink} />}
+              />
+              <Route
+                path="/reset-password/:token"
+                element={<PasswordReset isEmailLink={isEmailLink} />}
+              />
+              <Route path="/results" element={<Results />} />
+              <Route path="/add" element={<AddQuestionForm />} />
+              <Route path="/question" element={<QuestionsList />} />
+              <Route
+                path="/update/:category/:id"
+                element={<UpdateQuestionForm />}
+              />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/admin" element={<AdminPanel />} />
+              <Route path="/question/settings" element={<QuestionSettings />} />
+            </Routes>
+          </div>
+          <Footer />
         </div>
-        <Footer />
       </Router>
     </AuthProvider>
   );
