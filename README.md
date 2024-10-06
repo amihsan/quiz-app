@@ -105,3 +105,11 @@ sudo ./init-letsencrypt.sh
 ```bash
 docker-compose.yml up --build -d
 ```
+## 🖥️ Local Deployment with Kubernetes and Minikube
+
+For local deployment using Minikube and Kubernetes, follow the steps below:
+
+### Install Required Tools
+
+- Minikube
+- Kubectl
