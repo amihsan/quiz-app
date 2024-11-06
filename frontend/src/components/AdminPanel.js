@@ -4,8 +4,10 @@ import { loginAdminUser } from "../api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { useAuth } from "../context/AuthContext";
 
-function AdminPanel() {
+const AdminPanel = ({ role }) => {
+  const { login } = useAuth();
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -41,10 +43,13 @@ function AdminPanel() {
         return;
       }
 
-      const userData = await loginAdminUser({ username, password });
-      console.log("Logged in as:", userData);
-      navigate("/question/settings");
+      const response = await loginAdminUser({ username, password });
+
+      // Use the login function from context
+      login(response.token, response.role);
+      navigate("/admin/dashboard");
     } catch (error) {
+      console.log(error);
       setError("Invalid username or password.");
     } finally {
       setLoading(false);
@@ -107,6 +112,6 @@ function AdminPanel() {
       </div>
     </div>
   );
-}
+};
 
 export default AdminPanel;

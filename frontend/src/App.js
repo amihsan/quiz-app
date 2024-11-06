@@ -12,10 +12,10 @@ import Quiz from "./components/Quiz";
 import PasswordReset from "./components/PasswordReset";
 import Results from "./components/Results";
 import AddQuestionForm from "./components/AddQuestionForm";
-import QuestionsList from "./components/QuestionsList";
 import UpdateQuestionForm from "./components/UpdateQuestionForm";
 import Contact from "./components/Contact";
 import AdminPanel from "./components/AdminPanel";
+import AdminDashboard from "./components/AdminDashboard";
 import QuestionSettings from "./components/QuestionSettings";
 
 const App = () => {
@@ -46,13 +46,14 @@ const App = () => {
               />
               <Route path="/results" element={<Results />} />
               <Route path="/add" element={<AddQuestionForm />} />
-              <Route path="/question" element={<QuestionsList />} />
+              <Route path="/question" element={<QuestionSettings />} />
               <Route
                 path="/update/:category/:id"
                 element={<UpdateQuestionForm />}
               />
               <Route path="/contact" element={<Contact />} />
               <Route path="/admin" element={<AdminPanel />} />
+              <Route path="/admin/dashboard" element={<AdminDashboard />} />
               <Route path="/question/settings" element={<QuestionSettings />} />
             </Routes>
           </div>

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { useAuth } from "../context/AuthContext";
 import {
   getCategories,
   getQuizQuestionsByCategory,
@@ -10,6 +11,7 @@ import {
 } from "../api";
 
 const QuestionSettings = () => {
+  const { role } = useAuth();
   const location = useLocation();
   const categoryFromLocation = location.state?.category || "";
   const [selectedCategory, setSelectedCategory] = useState(
@@ -149,12 +151,14 @@ const QuestionSettings = () => {
                 ))}
               </select>
             </div>
-            <Link
-              to="/add"
-              className="bg-green-600 text-white px-4 py-2 rounded inline-block hover:bg-green-700"
-            >
-              Add New Question
-            </Link>
+            {role === "admin" && selectedCategory && (
+              <Link
+                to="/add"
+                className="bg-green-600 text-white px-4 py-2 rounded inline-block hover:bg-green-700"
+              >
+                Add New Question
+              </Link>
+            )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -186,7 +190,7 @@ const QuestionSettings = () => {
                     )}
                   </div>
                 </div>
-                {selectedCategory && (
+                {selectedCategory && role === "admin" && (
                   <div className="mt-auto flex justify-between">
                     <Link
                       to={`/update/${selectedCategory}/${question._id}`}

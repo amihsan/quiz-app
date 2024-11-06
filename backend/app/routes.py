@@ -1,13 +1,12 @@
 import json
-from re import S
 from flask import jsonify, request, render_template, send_file, send_from_directory, url_for
 from flask_bcrypt import Bcrypt
-from flask_jwt_extended import get_jwt_identity, jwt_required, create_access_token
+from flask_jwt_extended import  get_jwt_identity, jwt_required, create_access_token, verify_jwt_in_request
 from bson import ObjectId
 from app.models import User
 from app.database import db
 from bson.json_util import dumps
-from datetime import datetime, timedelta
+from datetime import datetime
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
 import smtplib
 from email.mime.text import MIMEText
@@ -16,6 +15,7 @@ from app import app
 import os
 from werkzeug.utils import secure_filename
 from flask_login import login_required, current_user
+
 
 
 #*************************#
@@ -192,14 +192,17 @@ def reset_password_profile():
 def register_user():
     data = request.get_json()
 
+    # Retrieve user data from the request
     username = data.get('username')
     email = data.get('email')
     password = data.get('password')
+    role = data.get('role', 'user')  # Default role is 'user'
 
+    # Check for missing fields
     if not username or not email or not password:
         return jsonify({"error": "Missing fields"}), 400
 
-    # Check if a user with the same username or email already exists in the database
+    # Check if user already exists
     existing_user = db.users.find_one({"$or": [{"username": username}, {"email": email}]})
     if existing_user:
         return jsonify({"message": "User already exists."}), 409
@@ -211,7 +214,8 @@ def register_user():
     user_data = {
         'username': username,
         'email': email,
-        'password': hashed_password
+        'password': hashed_password,
+        'role': role
     }
 
     # Insert the user data into the database
@@ -224,7 +228,7 @@ def register_user():
 @app.route('/api/login', methods=['POST'])
 def login_user():
     data = request.get_json()
-
+    # print(data)
     username_or_email = data.get('username_or_email')
     password = data.get('password')
 
@@ -236,9 +240,47 @@ def login_user():
     if user_data:
         if user_data and bcrypt.check_password_hash(user_data['password'], password):
             user = User(user_data)
-            access_token = create_access_token(identity=str(user.id))
             
-            return jsonify({"message": "Login successful", "token": access_token}), 200
+            ########
+          
+            access_token = create_access_token(identity=str(user.id))
+
+            
+            # print(access_token)
+            print("#######")
+            print(access_token)
+            
+            return jsonify({"message": "Login successful", "token": access_token, "role": "user"}), 200
+        else:
+            return jsonify({"error": "Invalid credentials"}), 401
+        
+    else:
+        return jsonify({"error": "User not found. Please register."}), 404
+
+@app.route('/api/admin/login', methods=['POST'])
+@jwt_required()
+def admin_login():
+    data = request.get_json()
+    # print(data)
+
+    username = data.get('username')
+    password = data.get('password')
+    
+    # from mongodb 
+    user_data = db.users.find_one({"username": username})
+
+    if user_data:
+        if user_data and bcrypt.check_password_hash(user_data['password'], password):
+            user = User(user_data)
+            
+            ########
+            access_token = create_access_token(identity=str(user.id))
+
+            # print(access_token)
+            print("#######")
+            print(access_token)
+            
+            return jsonify({"message": "Logged in as Admin", "token": access_token, "role": "admin"}), 200
         else:
             return jsonify({"error": "Invalid credentials"}), 401
         
@@ -250,6 +292,9 @@ def login_user():
 @jwt_required()
 def get_user_profile():
     try:
+        data = request.get_json()
+
+        print(data)
         # Extract user ID from JWT token
         current_user_id = get_jwt_identity()
 
@@ -493,6 +538,59 @@ def get_categories():
     ]
     return jsonify({"categories": category_mapping})
 
+# Function to get quiz question by ID
+@app.route('/api/quiz/questions/<string:category_name>/<string:question_id>', methods=['GET'])
+@jwt_required()
+def get_question_by_id(category_name, question_id):
+    try:
+
+        # Get the collection name corresponding to the provided category
+        collection_name = category_to_collection.get(category_name)
+        
+            
+        # Query the database to find the question by its ID in the specified collection
+        question = db[collection_name].find_one({'_id': ObjectId(question_id)})
+            
+        # Check if the question exists
+        if question:
+            # Convert ObjectId to string
+            question['_id'] = str(question['_id'])
+            
+            # Optionally, check if the image file exists for the question and include the URL
+
+            # Include the collection name in the response data
+            question['category'] = collection_name
+
+            
+
+            # Check if the image file exists for the question
+            image_path = os.path.join(question_image_dir,  f"{category_name}_{question['question_no']}.png")
+
+            if os.path.exists(image_path):
+                # If the image file exists, include the URL for serving the image
+                picture_link = url_for('get_question_img', filename=f"{category_name}_{question['question_no']}.png", _external=True)
+                question['picture_link'] = picture_link
+            else:
+                # If the image file doesn't exist, set picture_link to an empty string
+                question['picture_link'] = ""
+
+            print(question)
+            
+            # Return the question as JSON response
+            return jsonify(question), 200
+        else:
+            # If the question with the specified ID is not found, return a 404 error
+            print("Question not found")
+            return jsonify({"error": "Question not found"}), 404
+        
+
+      
+    except Exception as e:
+        # If an exception occurs during the execution of the route handler, return a 500 error
+        print(f"Error: {e}")
+        return jsonify({"error": str(e)}), 500
+
+
 # Function to add quiz questions and store to mongodb collections based on category
 @app.route('/api/quiz/questions/add', methods=['POST'])
 @jwt_required()
@@ -576,59 +674,6 @@ def add_quiz_question():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
-# Function to get quiz question by ID
-@app.route('/api/quiz/questions/<string:category_name>/<string:question_id>', methods=['GET'])
-@jwt_required()
-def get_question_by_id(category_name, question_id):
-    try:
-
-        # Get the collection name corresponding to the provided category
-        collection_name = category_to_collection.get(category_name)
-        
-            
-        # Query the database to find the question by its ID in the specified collection
-        question = db[collection_name].find_one({'_id': ObjectId(question_id)})
-            
-        # Check if the question exists
-        if question:
-            # Convert ObjectId to string
-            question['_id'] = str(question['_id'])
-            
-            # Optionally, check if the image file exists for the question and include the URL
-
-            # Include the collection name in the response data
-            question['category'] = collection_name
-
-            
-
-            # Check if the image file exists for the question
-            image_path = os.path.join(question_image_dir,  f"{category_name}_{question['question_no']}.png")
-
-            if os.path.exists(image_path):
-                # If the image file exists, include the URL for serving the image
-                picture_link = url_for('get_question_img', filename=f"{category_name}_{question['question_no']}.png", _external=True)
-                question['picture_link'] = picture_link
-            else:
-                # If the image file doesn't exist, set picture_link to an empty string
-                question['picture_link'] = ""
-
-            print(question)
-            
-            # Return the question as JSON response
-            return jsonify(question), 200
-        else:
-            # If the question with the specified ID is not found, return a 404 error
-            print("Question not found")
-            return jsonify({"error": "Question not found"}), 404
-        
-
-      
-    except Exception as e:
-        # If an exception occurs during the execution of the route handler, return a 500 error
-        print(f"Error: {e}")
-        return jsonify({"error": str(e)}), 500
-
 
 # Function to update quiz question 
 @app.route('/api/quiz/questions/update', methods=['POST'])
@@ -745,24 +790,6 @@ def delete_quiz_question():
             return jsonify({"error": "Invalid category"}), 400
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
-
-# Function to log in as a admin
-@app.route('/api/admin', methods=['POST'])
-@jwt_required()
-def login_admin_user():
-    data = request.get_json()
-
-    username = data.get('username')
-    password = data.get('password')
-
-    admin_username = os.getenv('ADMIN_USERNAME')
-    admin_password = os.getenv('ADMIN_PASSWORD')
-
-    if( username==admin_username and password==admin_password):
-        return jsonify({"message": "Login successful"}), 200
-    else:
-            return jsonify({"error": "Invalid credentials. Please try again."}), 401
 
 
 @app.route('/api/protected_route')

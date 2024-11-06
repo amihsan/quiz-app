@@ -5,6 +5,7 @@ const API_BASE_URL = process.env.REACT_APP_API_URL;
 // const API_BASE_URL = "";  // Kubernetes
 // console.log(`${API_BASE_URL}/api/login`)
 
+
 // Function to log in a user
 export const loginUser = async (credentials) => {
   try {
@@ -23,7 +24,7 @@ export const loginUser = async (credentials) => {
 export const loginAdminUser = async (credentials) => {
   try {
     const response = await axios.post(
-      `${API_BASE_URL}/api/admin`,
+      `${API_BASE_URL}/api/admin/login`,
       credentials,
       {
         headers: {

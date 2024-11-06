@@ -9,8 +9,8 @@ import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import PasswordResetEmail from "./PasswordResetEmail";
 import backgroundImage from "../assets/background.jpg"; // Import your background image
 
-const Login = () => {
-  const { dispatch } = useAuth();
+const Login = ({ role }) => {
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -68,8 +68,9 @@ const Login = () => {
       const response = await loginUser(formData);
       setError(""); // Clear any previous errors
 
-      // Update authentication state using the dispatch function from useAuth
-      dispatch({ type: "LOGIN", payload: response.token });
+
+      // Use the login function from context
+      login(response.token, response.role);
 
       // If "Remember Me" is selected, store the token securely in a cookie
       if (formData.rememberMe) {
@@ -81,7 +82,7 @@ const Login = () => {
         }; expires=${expirationDate.toUTCString()}; secure; path=/; samesite=strict; httponly`;
       }
 
-      // Use the navigate function to go to the /profile route
+      // Use the navigate function to go to home page
       navigate("/");
     } catch (error) {
       console.log(error.data);

@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
-  const { state, dispatch } = useAuth();
+  const { role, isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef(null);
@@ -24,7 +24,7 @@ const Navbar = () => {
   }, []);
 
   const handleLogout = () => {
-    dispatch({ type: "LOGOUT" });
+    logout();
     handleClick();
     navigate("/login");
   };
@@ -82,7 +82,7 @@ const Navbar = () => {
                     Home
                   </Link>
                 </li>
-                {state.isAuthenticated ? (
+                {isAuthenticated ? (
                   <li>
                     <Link
                       to="/quiz"
@@ -104,7 +104,7 @@ const Navbar = () => {
                   </li>
                 )}
 
-                {state.isAuthenticated ? (
+                {isAuthenticated ? (
                   <>
                     <li>
                       <Link
@@ -146,40 +146,29 @@ const Navbar = () => {
                         Register
                       </Link>
                     </li>
-                    <li>
-                      <Link
-                        to="/contact"
-                        className="block px-4 py-2 text-gray-800 hover:bg-indigo-200 transition-colors duration-300"
-                        onClick={handleClick}
-                      >
-                        Contact
-                      </Link>
-                    </li>
                   </>
                 )}
-                {state.isAuthenticated && (
-                  <li>
-                    <Link
-                      to="/contact"
-                      className="block px-4 py-2 text-gray-800 hover:bg-indigo-200 transition-colors duration-300"
-                      onClick={handleClick}
-                    >
-                      Contact
-                    </Link>
-                  </li>
+
+                {isAuthenticated && role === "user" && (
+                  <Link
+                    to="/admin"
+                    className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-indigo-200 transition-colors duration-300"
+                    onClick={handleClick}
+                  >
+                    Admin
+                  </Link>
                 )}
-                {state.isAuthenticated && (
-                  <li>
-                    <Link
-                      to="/admin"
-                      className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-indigo-200 transition-colors duration-300"
-                      onClick={handleClick}
-                    >
-                      Admin
-                    </Link>
-                  </li>
+                {isAuthenticated && role === "admin" && (
+                  <Link
+                    to="/admin/dashboard"
+                    className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-indigo-200 transition-colors duration-300"
+                    onClick={handleClick}
+                  >
+                    Admin Dashboard
+                  </Link>
                 )}
-                {state.isAuthenticated && (
+
+                {isAuthenticated && (
                   <li>
                     <button
                       onClick={handleLogout}
@@ -189,6 +178,15 @@ const Navbar = () => {
                     </button>
                   </li>
                 )}
+                <li>
+                  <Link
+                    to="/contact"
+                    className="block px-4 py-2 text-gray-800 hover:bg-indigo-200 transition-colors duration-300"
+                    onClick={handleClick}
+                  >
+                    Contact
+                  </Link>
+                </li>
               </ul>
             </div>
           )}
@@ -197,7 +195,7 @@ const Navbar = () => {
           <Link to="/" className="text-white hover:text-gray-300">
             Home
           </Link>
-          {state.isAuthenticated ? (
+          {isAuthenticated ? (
             <Link to="/quiz" className="text-white hover:text-gray-300">
               Quiz
             </Link>
@@ -207,7 +205,7 @@ const Navbar = () => {
             </Link>
           )}
 
-          {state.isAuthenticated ? (
+          {isAuthenticated ? (
             <>
               <Link to="/question" className="text-white hover:text-gray-300">
                 Quiz Questions
@@ -215,12 +213,7 @@ const Navbar = () => {
               <Link to="/profile" className="text-white hover:text-gray-300">
                 Profile
               </Link>
-              <Link to="/contact" className="text-white hover:text-gray-300">
-                Contact
-              </Link>
-              <Link to="/admin" className="text-white hover:text-gray-300">
-                Admin
-              </Link>
+
               <button
                 onClick={handleLogout}
                 className="text-white hover:text-gray-300 cursor-pointer"
@@ -238,11 +231,29 @@ const Navbar = () => {
               </Link>
             </>
           )}
-          {!state.isAuthenticated && (
-            <Link to="/contact" className="text-white hover:text-gray-300">
-              Contact
+
+          {isAuthenticated && role === "user" && (
+            <Link
+              to="/admin"
+              className="text-white hover:text-gray-300"
+              onClick={handleClick}
+            >
+              Admin
             </Link>
           )}
+          {isAuthenticated && role === "admin" && (
+            <Link
+              to="/admin/dashboard"
+              className="text-white hover:text-gray-300"
+              onClick={handleClick}
+            >
+              Admin Dashboard
+            </Link>
+          )}
+
+          <Link to="/contact" className="text-white hover:text-gray-300">
+            Contact
+          </Link>
         </div>
       </div>
     </nav>

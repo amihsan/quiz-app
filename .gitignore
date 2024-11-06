@@ -26,6 +26,7 @@ mongodb_data/
 /backend/combined_quiz_questions.json
 /backend/all_questions.py
 /backend/help
+/frontend/help
 /backend/help/support.py
 /server/app/quiz_img
 /frontend/node_modules
