@@ -228,7 +228,6 @@ def register_user():
 @app.route('/api/login', methods=['POST'])
 def login_user():
     data = request.get_json()
-    # print(data)
     username_or_email = data.get('username_or_email')
     password = data.get('password')
 
@@ -239,21 +238,12 @@ def login_user():
 
     if user_data:
         if user_data and bcrypt.check_password_hash(user_data['password'], password):
-            user = User(user_data)
-            
-            ########
-          
-            access_token = create_access_token(identity=str(user.id))
-
-            
-            # print(access_token)
-            print("#######")
-            print(access_token)
-            
-            return jsonify({"message": "Login successful", "token": access_token, "role": "user"}), 200
+            user = User(user_data) 
+            if user.role == 'user':
+                access_token = create_access_token(identity=str(user.id))
+                return jsonify({"message": "Login successful", "token": access_token, "role": user.role}), 200
         else:
-            return jsonify({"error": "Invalid credentials"}), 401
-        
+            return jsonify({"error": "Invalid credentials"}), 401    
     else:
         return jsonify({"error": "User not found. Please register."}), 404
 
@@ -262,31 +252,26 @@ def login_user():
 @jwt_required()
 def admin_login():
     data = request.get_json()
-    # print(data)
+    print(data)
 
     username = data.get('username')
     password = data.get('password')
     
-    # from mongodb 
+    # from mongodb find the user
     user_data = db.users.find_one({"username": username})
 
     if user_data:
-        if user_data and bcrypt.check_password_hash(user_data['password'], password):
+        if user_data and bcrypt.check_password_hash(user_data['password'], password) :
             user = User(user_data)
-            
-            ########
-            access_token = create_access_token(identity=str(user.id))
-
-            # print(access_token)
-            print("#######")
-            print(access_token)
-            
-            return jsonify({"message": "Logged in as Admin", "token": access_token, "role": "admin"}), 200
+            if user.role == 'admin':
+                access_token = create_access_token(identity=str(user.id))
+                return jsonify({"message": "Logged in as Admin", "token": access_token, "role": user.role}), 200
+            else:
+                return jsonify({"error": "Invalid credentials. You are not an admin"}), 401
         else:
-            return jsonify({"error": "Invalid credentials"}), 401
-        
+            return jsonify({"error": "Invalid credentials"}), 401      
     else:
-        return jsonify({"error": "User not found. Please register."}), 404
+        return jsonify({"error": "Admin not found."}), 404
 
 # Define the route handler for fetching user profile
 @app.route('/api/profile', methods=['GET'])
