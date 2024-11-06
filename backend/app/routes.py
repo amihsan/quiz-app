@@ -252,8 +252,6 @@ def login_user():
 @jwt_required()
 def admin_login():
     data = request.get_json()
-    print(data)
-
     username = data.get('username')
     password = data.get('password')
     
