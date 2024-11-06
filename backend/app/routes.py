@@ -257,6 +257,7 @@ def login_user():
     else:
         return jsonify({"error": "User not found. Please register."}), 404
 
+# Function to log in as an admin 
 @app.route('/api/admin/login', methods=['POST'])
 @jwt_required()
 def admin_login():
