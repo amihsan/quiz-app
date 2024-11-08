@@ -8,13 +8,16 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm install --silent
 
 # Copy the rest of the application code
 COPY . .
 
 # Build the React application
 RUN npm run build
+
+# update Browserslist: caniuse-lite
+RUN npx update-browserslist-db@latest
 
 # Use a separate lightweight web server image for serving the static files
 FROM nginx:alpine
