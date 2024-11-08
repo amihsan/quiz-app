@@ -1,7 +1,7 @@
-// // src/components/Home.js
+// src/components/Home.js
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import backgroundImage from "../assets/background.jpg"; // Import your background image
+import backgroundImage from "../assets/background.jpg"; // Your local background image
 
 const Home = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -18,56 +18,74 @@ const Home = () => {
     };
   }, []);
 
-  const renderIntroParagraph = () => {
-    return (
-      <p className="text-lg font-semibold mb-4">
-        If you are planning to take the German Integration Test, this is the
-        right place. There are different question categories available. Each
-        category has a different number of questions. You can start learning
-        easily by choosing any categories of your choice. You will get instant
-        feedback with your answer. You will also get the final result after
-        completing the quiz.
-      </p>
-    );
-  };
-
   return (
     <div
-      className="min-h-screen flex items-center justify-center"
+      className="relative min-h-screen flex items-center justify-center bg-cover bg-center"
       style={{
         backgroundImage: `url(${backgroundImage})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        color: "white",
-        opacity: imageLoaded ? 1 : 0, // Show only when image is loaded
-        transition: "opacity 0.5s ease-in-out", // Smooth transition
+        opacity: imageLoaded ? 1 : 0, // Smooth fade-in effect once image is loaded
+        transition: "opacity 0.5s ease-in-out", // Smooth transition for image loading
       }}
     >
-      <div className="p-8 rounded-md shadow-lg bg-opacity-50 bg-black text-center">
-        <h3 className="text-3xl font-extrabold mb-4 text-blue-400">
-          Welcome to <span className="text-green-400">"Lebentest"</span> Quiz
-        </h3>
+      {/* Gradient Overlay for text contrast */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-50"></div>
 
-        {renderIntroParagraph()}
+      <div className="relative z-10 p-8 md:p-16 max-w-lg mx-auto rounded-3xl shadow-xl bg-white bg-opacity-80 text-center">
+        <h1 className="text-3xl md:text-4xl font-extrabold text-indigo-600 mb-4 transform transition-transform duration-300 hover:scale-105">
+          Welcome to <span className="text-green-500">Lebentest</span> Quiz
+        </h1>
 
-        <p className="text-lg font-semibold mb-8">
-          {isLoggedIn
-            ? "Get started now!"
-            : "To take part in the quiz, please log in."}
+        <p className="text-lg md:text-xl text-gray-800 mb-8">
+          This is a free online learning platform for the German Integration (
+          <strong>Einbürgerung</strong>) Test. Take the quiz to test your
+          knowledge! We offer different categories to help you learn and
+          prepare. Choose a category and start learning today!
         </p>
 
-        {isLoggedIn ? (
-          <Link to="/quiz">
-            <button className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 focus:outline-none transform transition-transform duration-300 hover:scale-105">
-              Start Quiz
-            </button>
-          </Link>
-        ) : (
-          <Link to="/login">
-            <button className="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 focus:outline-none transform transition-transform duration-300 hover:scale-105">
-              Login
-            </button>
-          </Link>
+        <p className="text-lg md:text-xl text-gray-600 mb-8">
+          {isLoggedIn
+            ? "Ready to begin? Start now!"
+            : "To participate in the quiz, please log in."}
+        </p>
+
+        {/* Call to Action Buttons */}
+        <div className="flex flex-col md:flex-row justify-center gap-4">
+          {isLoggedIn ? (
+            <Link to="/quiz">
+              <button className="w-full md:w-40 bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 text-white py-3 px-6 rounded-xl text-lg font-semibold transform transition-transform duration-300 hover:scale-105 hover:shadow-lg focus:outline-none">
+                Start Quiz
+              </button>
+            </Link>
+          ) : (
+            <>
+              <Link to="/login">
+                <button className="w-full md:w-40 bg-gradient-to-r from-green-600 via-green-500 to-green-400 text-white py-3 px-6 rounded-xl text-lg font-semibold transform transition-transform duration-300 hover:scale-105 hover:shadow-lg focus:outline-none">
+                  Login
+                </button>
+              </Link>
+              <Link to="/register">
+                <button className="w-full md:w-40 bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-400 text-white py-3 px-6 rounded-xl text-lg font-semibold transform transition-transform duration-300 hover:scale-105 hover:shadow-lg focus:outline-none">
+                  Register
+                </button>
+              </Link>
+            </>
+          )}
+        </div>
+
+        {/* Optional Information Section */}
+        {!isLoggedIn && (
+          <div className="mt-8 text-center text-gray-700">
+            <p className="text-lg">
+              Don't have an account?{" "}
+              <Link
+                to="/register"
+                className="text-blue-600 hover:text-blue-700 font-semibold transition duration-300"
+              >
+                Register now
+              </Link>{" "}
+              and join the quiz fun!
+            </p>
+          </div>
         )}
       </div>
     </div>

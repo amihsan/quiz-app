@@ -6,17 +6,14 @@ const AuthContext = createContext();
 
 // AuthProvider component
 export const AuthProvider = ({ children }) => {
-  const [token, setToken] = useState(localStorage.getItem("token") || null);
-  const [role, setRole] = useState(localStorage.getItem("role") || null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  // Initialize state from localStorage to maintain session persistence
+  const [token, setToken] = useState(() => localStorage.getItem("token"));
+  const [role, setRole] = useState(() => localStorage.getItem("role"));
+  const [isAuthenticated, setIsAuthenticated] = useState(!!token);
 
   useEffect(() => {
-    // Check if the token exists to determine if user is authenticated
-    if (token) {
-      setIsAuthenticated(true);
-    } else {
-      setIsAuthenticated(false);
-    }
+    // Ensure isAuthenticated is set based on token state
+    setIsAuthenticated(!!token);
   }, [token]);
 
   const login = (jwtToken, userRole) => {

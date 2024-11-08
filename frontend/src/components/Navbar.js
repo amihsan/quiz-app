@@ -71,7 +71,7 @@ const Navbar = () => {
             </svg>
           </button>
           {showMenu && (
-            <div className="absolute top-full right-0 mt-4 bg-white shadow-lg rounded-md w-40 z-10">
+            <div className="absolute top-full right-0 mt-4 bg-white shadow-lg rounded-md w-40 z-20">
               <ul>
                 <li>
                   <Link
@@ -95,7 +95,7 @@ const Navbar = () => {
                 ) : (
                   <li>
                     <Link
-                      to="/"
+                      to="/quiz-prompt"
                       className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-indigo-200 transition-colors duration-300"
                       onClick={handleClick}
                     >
@@ -200,7 +200,7 @@ const Navbar = () => {
               Quiz
             </Link>
           ) : (
-            <Link to="/" className="text-white hover:text-gray-300">
+            <Link to="/quiz-prompt" className="text-white hover:text-gray-300">
               Quiz
             </Link>
           )}

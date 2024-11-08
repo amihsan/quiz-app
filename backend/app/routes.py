@@ -1,3 +1,4 @@
+from functools import wraps
 import json
 from flask import jsonify, request, render_template, send_file, send_from_directory, url_for
 from flask_bcrypt import Bcrypt
@@ -270,6 +271,27 @@ def admin_login():
             return jsonify({"error": "Invalid credentials"}), 401      
     else:
         return jsonify({"error": "Admin not found."}), 404
+
+# Admin required decorator
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        # Ensure that the request has a valid JWT
+        verify_jwt_in_request()
+        current_user_id = get_jwt_identity()
+        # print(current_user_id)
+
+        # Fetch the user from MongoDB
+        user_data = db.users.find_one({"_id": ObjectId(current_user_id)})
+        # print(user_data)
+    
+
+        # Check if user exists and has admin role
+        if not user_data or user_data.get("role") != "admin":
+            return jsonify({"error": "Access denied. Admins only."}), 403
+
+        return f(*args, **kwargs)
+    return decorated_function
 
 # Define the route handler for fetching user profile
 @app.route('/api/profile', methods=['GET'])
@@ -578,6 +600,7 @@ def get_question_by_id(category_name, question_id):
 # Function to add quiz questions and store to mongodb collections based on category
 @app.route('/api/quiz/questions/add', methods=['POST'])
 @jwt_required()
+@admin_required
 def add_quiz_question():
     try:
         # Extract JSON data from the form fields
@@ -662,6 +685,7 @@ def add_quiz_question():
 # Function to update quiz question 
 @app.route('/api/quiz/questions/update', methods=['POST'])
 @jwt_required()
+@admin_required
 def update_quiz_question():
     try:
         
@@ -741,6 +765,7 @@ def update_quiz_question():
 # Function to delete quiz question
 @app.route('/api/quiz/questions/delete', methods=['POST'])
 @jwt_required()
+@admin_required
 def delete_quiz_question():
     try:
         # Extract JSON data from the form fields
@@ -774,9 +799,3 @@ def delete_quiz_question():
             return jsonify({"error": "Invalid category"}), 400
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
-
-@app.route('/api/protected_route')
-@login_required
-def protected_route():
-    return jsonify({"message": "Access granted for user: " + current_user.username})

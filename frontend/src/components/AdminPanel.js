@@ -5,8 +5,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../context/AuthContext";
+import backgroundImage from "../assets/background.jpg";
 
 const AdminPanel = ({ role }) => {
+  // Added backgroundImage as a prop
   const { login } = useAuth();
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
@@ -61,9 +63,16 @@ const AdminPanel = ({ role }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="w-96 p-8 bg-gray-200 rounded shadow">
-        <h2 className="text-2xl font-bold mb-4 text-center">
+    <div
+      className="relative min-h-screen flex items-center justify-center bg-cover bg-center-"
+      style={{
+        backgroundImage: `url(${backgroundImage})`, // Using dynamic background image
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      <div className="relative z-10 p-8 md:p-16 max-w-lg mx-auto rounded-3xl shadow-2xl bg-white bg-opacity-70">
+        <h2 className="text-4xl font-bold mb-6 text-center text-black-600">
           Admin Panel Login
         </h2>
         <input

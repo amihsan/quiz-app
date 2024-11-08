@@ -4,10 +4,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { loginUser } from "../api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEye,
+  faEyeSlash,
+  faSpinner,
+} from "@fortawesome/free-solid-svg-icons";
 import PasswordResetEmail from "./PasswordResetEmail";
-import backgroundImage from "../assets/background.jpg"; // Import your background image
+import backgroundImage from "../assets/background.jpg";
 
 const Login = ({ role }) => {
   const { login } = useAuth();
@@ -57,42 +60,34 @@ const Login = ({ role }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    // Basic client-side form validation
-    if (!validateForm()) {
-      return;
-    }
+    if (!validateForm()) return;
 
     setLoading(true);
 
     try {
       const response = await loginUser(formData);
-      setError(""); // Clear any previous errors
+      setError("");
 
-
-      // Use the login function from context
       login(response.token, response.role);
 
-      // If "Remember Me" is selected, store the token securely in a cookie
       if (formData.rememberMe) {
         const expirationDate = new Date();
-        expirationDate.setDate(expirationDate.getDate() + 7); // Example: Token expires in 7 days
+        expirationDate.setDate(expirationDate.getDate() + 7);
 
         document.cookie = `authToken=${
           response.token
         }; expires=${expirationDate.toUTCString()}; secure; path=/; samesite=strict; httponly`;
       }
 
-      // Use the navigate function to go to home page
       navigate("/");
     } catch (error) {
-      console.log(error.data);
       if (error.message === "User not found. Please register.") {
         setError("User not found. Please register.");
       } else {
         setError("Invalid credentials. Please try again.");
       }
     } finally {
-      setLoading(false); // Ensure loading state is reset
+      setLoading(false);
     }
   };
 
@@ -103,123 +98,119 @@ const Login = ({ role }) => {
   const handleResetModalToggle = () => {
     setShowResetModal(!showResetModal);
   };
+
   const handleResetModalClose = () => {
     setShowResetModal(false);
   };
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center bg-gray-100"
+      className="relative min-h-screen flex items-center justify-center bg-cover bg-center-"
       style={{
         backgroundImage: `url(${backgroundImage})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
     >
-      <div className="flex items-center justify-center bg-gray-100">
-        <div className="p-8 bg-white rounded-md shadow-lg w-96">
-          <h2 className="text-3xl font-bold mb-4 text-center text-indigo-600">
-            Login
-          </h2>
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div>
-              <label
-                htmlFor="username_or_email"
-                className="block text-sm font-medium text-gray-600"
-              >
-                Username or Email:
-              </label>
-              <input
-                type="text"
-                id="username_or_email"
-                name="username_or_email"
-                value={formData.username_or_email}
-                onChange={handleInputChange}
-                className={`mt-1 p-2 w-full border rounded-md focus:outline-none focus:border-indigo-600 ${
-                  usernameError ? "border-red-500" : ""
-                }`}
-              />
-              {usernameError && (
-                <p className="text-red-500 mt-1">{usernameError}</p>
-              )}
-            </div>
-            <div className="relative">
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-600"
-              >
-                Password:
-              </label>
-              <input
-                type={showPassword ? "text" : "password"}
-                id="password"
-                name="password"
-                value={formData.password}
-                onChange={handleInputChange}
-                className={`mt-1 p-2 w-full border rounded-md focus:outline-none focus:border-indigo-600 ${
-                  passwordError ? "border-red-500" : ""
-                }`}
-              />
-              <span
-                className="absolute top-8 right-3 text-indigo-600 cursor-pointer"
-                onClick={togglePasswordVisibility}
-              >
-                <FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} />
-              </span>
-              {passwordError && (
-                <p className="text-red-500 mt-1">{passwordError}</p>
-              )}
-            </div>
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="rememberMe"
-                name="rememberMe"
-                checked={formData.rememberMe}
-                onChange={handleCheckboxChange}
-                className="mr-2"
-              />
-              <label htmlFor="rememberMe" className="text-sm text-gray-600">
-                Remember Me
-              </label>
-            </div>
-            {error && <p className="text-red-500 mt-2">{error}</p>}
-            <div>
-              <button
-                type="submit"
-                className="w-full bg-indigo-600 text-white p-2 rounded-md hover:bg-indigo-700 focus:outline-none"
-                disabled={loading}
-              >
-                {loading ? (
-                  <>
-                    <FontAwesomeIcon icon={faSpinner} spin className="mr-2" />
-                    Logging in...
-                  </>
-                ) : (
-                  "Login"
-                )}
-              </button>
-            </div>
-          </form>
-          <div className="mt-4 text-gray-600 text-center">
-            <span
-              className="text-indigo-600 cursor-pointer hover:underline"
-              onClick={handleResetModalToggle}
+      <div className="relative z-10 p-8 md:p-16 max-w-lg mx-auto rounded-3xl shadow-2xl bg-white bg-opacity-70">
+        <h2 className="text-4xl font-extrabold mb-6 text-center text-indigo-700">
+          Login
+        </h2>
+        <form onSubmit={handleLogin} className="space-y-6">
+          <div>
+            <label
+              htmlFor="username_or_email"
+              className="block text-sm font-medium text-gray-700"
             >
-              Forgot Password?
-            </span>
+              Username or Email:
+            </label>
+            <input
+              type="text"
+              id="username_or_email"
+              name="username_or_email"
+              value={formData.username_or_email}
+              onChange={handleInputChange}
+              className={`mt-2 p-3 w-full border ${
+                usernameError ? "border-red-500" : "border-gray-300"
+              } rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+            />
+            {usernameError && (
+              <p className="text-red-500 text-xs mt-2">{usernameError}</p>
+            )}
           </div>
-          <p className="mt-4 text-gray-600 text-center">
-            Don't have an account?{" "}
-            <Link
-              to="/register"
-              className="text-indigo-600 hover:underline ml-1"
+          <div className="relative">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700"
             >
-              Register here
-            </Link>
-            .
-          </p>
+              Password:
+            </label>
+            <input
+              type={showPassword ? "text" : "password"}
+              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleInputChange}
+              className={`mt-2 p-3 w-full border ${
+                passwordError ? "border-red-500" : "border-gray-300"
+              } rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+            />
+            <span
+              className="absolute top-10 right-3 text-indigo-500 cursor-pointer"
+              onClick={togglePasswordVisibility}
+            >
+              <FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} />
+            </span>
+            {passwordError && (
+              <p className="text-red-500 text-xs mt-2">{passwordError}</p>
+            )}
+          </div>
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="rememberMe"
+              name="rememberMe"
+              checked={formData.rememberMe}
+              onChange={handleCheckboxChange}
+              className="mr-2 text-indigo-500 focus:ring-indigo-500 rounded"
+            />
+            <label htmlFor="rememberMe" className="text-sm text-gray-700">
+              Remember Me
+            </label>
+          </div>
+          {error && <p className="text-red-500 mt-4 text-center">{error}</p>}
+          <div>
+            <button
+              type="submit"
+              className="w-full bg-green-600 hover:bg-green-700 text-white p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-transform transform hover:scale-105"
+              disabled={loading}
+            >
+              {loading ? (
+                <>
+                  <FontAwesomeIcon icon={faSpinner} spin className="mr-2" />
+                  Logging in...
+                </>
+              ) : (
+                "Login"
+              )}
+            </button>
+          </div>
+        </form>
+        <div className="mt-4 text-center">
+          <span
+            className="text-indigo-600 hover:underline cursor-pointer"
+            onClick={handleResetModalToggle}
+          >
+            Forgot Password?
+          </span>
         </div>
+        <p className="mt-4 text-center text-gray-500">
+          Don't have an account?{" "}
+          <Link to="/register" className="text-indigo-700 hover:underline ml-1">
+            <strong>Register here</strong>
+          </Link>
+          .
+        </p>
         {showResetModal && (
           <PasswordResetEmail onCancel={handleResetModalClose} />
         )}
