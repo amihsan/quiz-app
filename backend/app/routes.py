@@ -35,6 +35,7 @@ question_image_dir = os.path.join(absolute_path, relative_path)
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+##### storage in AWS S3  ##############
 # Define your S3 bucket name and folder
 S3_BUCKET = os.getenv('S3_BUCKET')
 S3_QUESTION_FOLDER = os.getenv('S3_QUESTION_FOLDER')
@@ -60,7 +61,7 @@ def upload_file_to_s3(file, bucket_name, key):
 # Function to generate S3 URL for an object
 def get_s3_object_url(bucket_name, key):
     return f"https://{bucket_name}.s3.{AWS_REGION}.amazonaws.com/{key}"
-
+##################################################################
 
 
 # Map category names to collection names
@@ -330,13 +331,14 @@ def admin_required(f):
 def get_user_profile():
     try:
         data = request.get_json()
+        # print(data)
 
-        print(data)
         # Extract user ID from JWT token
         current_user_id = get_jwt_identity()
 
         # Fetch user data from the database
         user_data = db.users.find_one({"_id": ObjectId(current_user_id)})
+        # print(user_data)
 
         if user_data:
             # Construct profile data response
@@ -349,14 +351,22 @@ def get_user_profile():
                 "phoneNumber": user_data.get('phoneNumber', ''),
             }
 
+            ### using local storage ##########
             # # Include avatar URL if available
             # if 'avatar_url' in user_data:
             #     avatar_url = url_for('get_avatar', filename=os.path.basename(user_data['avatar_url']), _external=True)
             #     profile_data['avatar_url'] = avatar_url
-             # Include avatar URL if available
+
+            ###### Using s3 bucket ########
+            # Include avatar URL if available
             if 'avatar_url' in user_data:
                 avatar_url = get_s3_object_url(S3_BUCKET, f"{S3_AVATAR_FOLDER}/{os.path.basename(user_data['avatar_url'])}")
                 profile_data['avatar_url'] = avatar_url
+
+                # print(f"avatar_url: {avatar_url}")
+            
+            # print(f"profile data: {profile_data}")
+
 
             return jsonify(profile_data), 200
         else:
@@ -364,7 +374,7 @@ def get_user_profile():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
-
+### using local storage ##########
 # # Define the route handler for retrieving avatars
 # @app.route('/api/avatars/<filename>', methods=['GET'])
 # def get_avatar(filename):
@@ -406,7 +416,7 @@ def update_user_profile():
         # Update address if provided
         if 'address' in data:
             user_data['address'] = data['address']
-            print(data)
+            # print(data)
 
         # Update user data in the database
         db.users.update_one({"_id": ObjectId(current_user_id)}, {"$set": user_data})
@@ -431,6 +441,7 @@ def upload_avatar():
 
         avatar_file = request.files['avatar']
 
+        ### using local storage for avatar ##########         
         # # Customize the file upload directory and filename
         # upload_folder = os.path.join(app.root_path, "avatars")
         # if not os.path.exists(upload_folder):
@@ -447,7 +458,9 @@ def upload_avatar():
 
         # # Construct full URL for the avatar
         # avatar_url = url_for('get_avatar', filename=avatar_filename, _external=True)
+        ###################################################
 
+        ### using s3 bucket for avatar ##########
         # Customize the S3 key for the avatar
         s3_key = f"{S3_AVATAR_FOLDER}/user_{current_user_id}.png"
 
@@ -455,6 +468,11 @@ def upload_avatar():
         if upload_file_to_s3(avatar_file, S3_BUCKET, s3_key):
             # Construct full URL for the avatar
             avatar_url = get_s3_object_url(S3_BUCKET, s3_key)
+        
+        ###############################################
+
+        # Update the user's avatar URL in the database
+        db.users.update_one({"_id": ObjectId(current_user_id)}, {"$set": {"avatar_url": avatar_url}})
 
         return jsonify({"message": "Avatar uploaded successfully", "avatar_url": avatar_url}), 200
     except Exception as e:
@@ -519,12 +537,14 @@ def get_quiz_responses():
 
     return jsonify({"responses": dumps(responses)}), 200    
 
+### using local storage for question image ########## 
 # Function to serve question image with url    
 # @app.route('/api/quiz/images/<path:filename>')
 # def get_question_img(filename):
 #     # Serve the image file from the specified directory
 #     return send_from_directory(question_image_dir, filename)
 
+### using s3 bucket for question image ########## 
 @app.route('/api/quiz/images/<path:filename>')
 @jwt_required()
 def get_question_img(filename):
@@ -542,7 +562,7 @@ def get_question_img(filename):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# Function to get quiz questions from mongodb collections based on category
+# Function to get quiz questions based on category using local storage for image
 # @app.route('/api/quiz/questions/category/<category_name>', methods=['GET'])
 # @jwt_required()
 # def get_quiz_questions_by_category(category_name):
@@ -579,6 +599,9 @@ def get_question_img(filename):
 #             return jsonify({"error": f"No collection found for category '{category_name}'"}), 404
 #     except Exception as e:
 #         return jsonify({"error": str(e)}), 500
+
+
+# Function to get quiz questions based on category using s3 bucket for image
 @app.route('/api/quiz/questions/category/<category_name>', methods=['GET'])
 @jwt_required()
 def get_quiz_questions_by_category(category_name):
@@ -737,7 +760,7 @@ def add_quiz_question():
                     # Construct the new filename dynamically using category and question number
                     filename = f"{category_name}_{question_no}.png"  # Remove spaces from category name
 
-                    # # Save the file to the upload folder with the new filename
+                    # # Save the file to the upload folder with the new filename(local storage)
                     # file.save(os.path.join(question_image_dir, secure_filename(filename)))
 
                      # Save the file to the s3 bucket with the new filename
