@@ -722,7 +722,6 @@ def get_question_by_id(category_name, question_id):
         print(f"Error: {e}")
         return jsonify({"error": str(e)}), 500
 
-
 # Function to add quiz questions and store to mongodb collections based on category
 @app.route('/api/quiz/questions/add', methods=['POST'])
 @jwt_required()
@@ -889,7 +888,6 @@ def update_quiz_question():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
 
 # Function to delete quiz question
 @app.route('/api/quiz/questions/delete', methods=['POST'])
