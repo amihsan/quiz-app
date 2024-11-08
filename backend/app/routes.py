@@ -20,8 +20,6 @@ import boto3
 from flask import send_file
 from botocore.exceptions import ClientError 
 
-
-
 #*************************#
 # Set the allowed file extensions for image uploads
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
@@ -63,7 +61,6 @@ def get_s3_object_url(bucket_name, key):
     return f"https://{bucket_name}.s3.{AWS_REGION}.amazonaws.com/{key}"
 ##################################################################
 
-
 # Map category names to collection names
 category_to_collection = {
     "Category1": "Verfassungsorgane",
@@ -90,7 +87,6 @@ category_to_collection = {
     # Add more mappings for other categories as needed
 }
 #*************************#
-
 
 # Initialize Bcrypt and URLSafeTimedSerializer
 bcrypt = Bcrypt()
@@ -128,7 +124,6 @@ def reset_password_link_email():
         return jsonify({"message": "Password reset instructions sent to your email"}), 200
     else:
         return jsonify({"error": "User not found"}), 404
-
 
 # Function to send reset password email
 def send_reset_email(email, token):
