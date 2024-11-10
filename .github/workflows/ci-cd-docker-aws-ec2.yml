@@ -111,22 +111,22 @@ jobs:
             # docker-compose -f docker-compose-dev.yml up --build -d
 
 
-            # # For Production
-            # docker-compose down
-            # docker images -a
-            # docker rmi -f $(docker images -aq)
-            # docker-compose up --build -d
+            # For Production
+            docker-compose down
+            docker images -a
+            docker rmi -f $(docker images -aq)
+            docker-compose up --build -d
             # chmod +x ./init-letsencrypt.sh
 
             # # Clean up dangling images
             docker image prune -f
 
 
-            # Only first time (to collect ssl/tls)
-            chmod +x ./init-letsencrypt.sh
-            sudo ./init-letsencrypt.sh   
-            docker-compose down
-            docker-compose up --build -d
+            # # Only first time (to collect ssl/tls)
+            # chmod +x ./init-letsencrypt.sh
+            # sudo ./init-letsencrypt.sh   
+            # docker-compose down
+            # docker-compose up --build -d
 
 
             docker images
