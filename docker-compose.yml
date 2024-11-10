@@ -16,8 +16,6 @@ services:
       - ./certbot/www:/var/www/certbot
     env_file:
       - ./frontend/.env
-    depends_on:
-      - backend
 
   # Flask Backend Service
   backend:
