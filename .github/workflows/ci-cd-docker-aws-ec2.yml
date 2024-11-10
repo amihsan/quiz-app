@@ -108,13 +108,11 @@ jobs:
             # For Production
             # stop all running containers
             docker-compose down
+            # Clean up dangling images
+            docker image prune -f
             # build and run the application
             docker-compose up --build -d
             # show all images
-            docker images -a
-            # Clean up dangling images
-            docker image prune -a
-            # show all image
             docker images -a
             # show all container
             docker ps -a
