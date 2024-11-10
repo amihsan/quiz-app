@@ -4,8 +4,8 @@ services:
   nginx:
     restart: unless-stopped
     build:
-      context: ./frontend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./frontend/Dockerfile
     ports:
       - 80:80
       - 443:443
@@ -21,8 +21,8 @@ services:
   backend:
     restart: unless-stopped
     build:
-      context: ./backend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./backend/Dockerfile
     ports:
       - 5000:5000
     env_file:
