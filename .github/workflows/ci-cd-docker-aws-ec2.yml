@@ -106,15 +106,15 @@ jobs:
             # Deploy containers using Docker Compose
             echo "Deploying containers with Docker Compose..."
             # For Production
+            chmod +x ./init-letsencrypt.sh
+            sudo ./init-letsencrypt.sh 
             docker-compose down
             # show all images
             docker images -a
             # Clean up dangling images
             docker image prune -a
-            # run the application
-            docker-compose up -d
-            # # build and run the application
-            # docker-compose up --build -d
+            # build and run the application
+            docker-compose up --build -d
 
             ################################
             # Only one time before first deployment (to collect ssl/tls)
@@ -123,7 +123,11 @@ jobs:
             # docker-compose down
             # docker-compose up --build -d
             ##################################
+            # show all images
+            docker images -a
+            # Clean up dangling images
+            docker image prune -a
             # show all image
-            docker images
+            docker images -a
             # show all container
             docker ps -a

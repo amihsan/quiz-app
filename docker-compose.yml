@@ -4,7 +4,9 @@ services:
   # React Frontend Service via nginx
   nginx:
     restart: unless-stopped
-    image: amihsan/quiz-frontend
+    build:
+      context: .
+      dockerfile: ./docker/frontend/Dockerfile
     ports:
       - 80:80
       - 443:443
@@ -19,7 +21,9 @@ services:
   # Flask Backend Service
   backend:
     restart: unless-stopped
-    image: amihsan/quiz-backend
+    build:
+      context: .
+      dockerfile: ./docker/backend/Dockerfile
     ports:
       - 5000:5000
     env_file:
