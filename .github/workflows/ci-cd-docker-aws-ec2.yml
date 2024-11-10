@@ -116,7 +116,6 @@ jobs:
             docker images -a
             docker rmi -f $(docker images -aq)
             docker-compose up --build -d
-            chmod +x ./init-letsencrypt.sh
 
             # # Clean up dangling images
             docker image prune -f
