@@ -100,7 +100,7 @@ jobs:
 
             # Request SSL certificate with Certbot
             echo "Requesting SSL certificate with Certbot..."
-            docker-compose run --rm certbot certonly --webroot --webroot-path=/var/www/certbot -d lebentest.online -d www.lebentest.online --agree-tos --email rumi.others@gmail.com
+            docker-compose run --rm certbot certonly --webroot --webroot-path=/var/www/certbot --staging -d lebentest.online -d www.lebentest.online
 
 
             # Restart Frontend (via Nginx) to apply SSL certificates
