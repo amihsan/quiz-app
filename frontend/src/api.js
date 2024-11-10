@@ -1,10 +1,12 @@
 // src/api.js
 import axios from "axios";
 
-const API_BASE_URL = process.env.REACT_APP_API_URL;
+// Access the API URL from environment variables
+const API_BASE_URL =
+  process.env.REACT_APP_API_URL || window._env_.REACT_APP_API_URL;
+console.log(`${API_BASE_URL}/api/login`); // debug api url
+// const API_BASE_URL = process.env.REACT_APP_API_URL;
 // const API_BASE_URL = "";  // Kubernetes
-// console.log(`${API_BASE_URL}/api/login`)
-
 
 // Function to log in a user
 export const loginUser = async (credentials) => {
@@ -301,13 +303,11 @@ export const getQuizQuestionsByCategory = async (selectedCategory) => {
 // Function to get mongodb collections based on category
 export const getCategories = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/api/categories`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    );
+    const response = await axios.get(`${API_BASE_URL}/api/categories`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
     return response.data.categories;
   } catch (error) {
     throw error.response.data;

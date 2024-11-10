@@ -1,38 +1,35 @@
-# Use a lightweight Node image as the base
+# Use the official Node.js image to build the React app
 FROM node:20.9.0-alpine as build
 
-# Set the working directory inside the container
+# Set working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json to install dependencies
-COPY package*.json ./
-
 # Install dependencies
-RUN npm install --silent
+COPY package.json ./
+COPY package-lock.json ./
+RUN npm install
 
-# Copy the rest of the application code
-COPY . .
-
-# Build the React application
+# Copy and build the React app
+COPY . ./
 RUN npm run build
 
-# update Browserslist: caniuse-lite
-RUN npx update-browserslist-db@latest
-
-# Use a separate lightweight web server image for serving the static files
+# Use Nginx to serve the built React app
 FROM nginx:alpine
 
-## Remove default nginx index pagec
-RUN rm -rf /usr/share/nginx/html/*
-
-# Copy the built static files from the previous stage to the NGINX image
+# Copy the build output to Nginx's default public directory
 COPY --from=build /app/build /usr/share/nginx/html
 
-# Expose port 80 (default port for HTTP)
-EXPOSE 80
+# COPY nginx.conf /etc/nginx/nginx.conf
 
-# Start NGINX to serve the static files
-CMD ["nginx", "-g", "daemon off;"]
+# Copy the entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# Set the entrypoint
+ENTRYPOINT ["/entrypoint.sh"]
+
+
+
 
 
 
