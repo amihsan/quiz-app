@@ -5,8 +5,8 @@ FROM node:20.9.0-alpine as build
 WORKDIR /app
 
 # Install dependencies
-COPY package.json ./
-COPY package-lock.json ./
+COPY frontend/package.json ./
+COPY frontend/package-lock.json ./
 RUN npm install
 
 # Copy and build the React app
