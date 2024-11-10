@@ -5,12 +5,14 @@ services:
   nginx:
     restart: unless-stopped
     build:
-      context: ./frontend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./docker/nginx/Dockerfile
     ports:
       - 80:80
     env_file:
       - ./frontend/.env # Load environment variables from .env file
+    volumes:
+      - ./docker/nginx/templates:/etc/nginx/templates
     depends_on:
       - backend # Ensure backend is started before frontend
 
@@ -18,8 +20,8 @@ services:
   backend:
     restart: unless-stopped
     build:
-      context: ./backend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./docker/backend/Dockerfile
     ports:
       - 5000:5000
     env_file:
@@ -28,26 +30,26 @@ services:
 # version: "3"
 
 # services:
+#   # Frontend service (React app served by Nginx)
 #   nginx:
 #     restart: unless-stopped
 #     build:
-#       context: .
-#       dockerfile: ./docker/nginx/Dockerfile
+#       context: ./frontend
+#       dockerfile: Dockerfile
 #     ports:
 #       - 80:80
 #     env_file:
-#       - ./frontend/.env
-#     volumes:
-#       - ./docker/nginx/templates:/etc/nginx/templates
+#       - ./frontend/.env # Load environment variables from .env file
 #     depends_on:
-#       - backend
+#       - backend # Ensure backend is started before frontend
 
+#   # Backend service (Flask app)
 #   backend:
 #     restart: unless-stopped
 #     build:
-#       context: .
-#       dockerfile: ./docker/backend/Dockerfile
+#       context: ./backend
+#       dockerfile: Dockerfile
 #     ports:
 #       - 5000:5000
 #     env_file:
-#       - ./backend/.env
+#       - ./backend/.env # Load environment variables from .env file
