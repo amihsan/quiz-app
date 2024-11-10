@@ -118,7 +118,7 @@ jobs:
             # docker-compose up --build -d
             # chmod +x ./init-letsencrypt.sh
 
-            # # Clean up dangling images
+            # Clean up dangling images
             docker image prune -f
 
 
