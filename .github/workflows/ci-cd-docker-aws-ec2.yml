@@ -121,13 +121,5 @@ jobs:
             # # Clean up dangling images
             docker image prune -f
 
-
-            # # Only first time (to collect ssl/tls)
-            # chmod +x ./init-letsencrypt.sh
-            # sudo ./init-letsencrypt.sh   
-            # docker-compose down
-            # docker-compose up --build -d
-
-
             docker images
             docker ps -a
