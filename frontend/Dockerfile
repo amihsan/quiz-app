@@ -5,8 +5,8 @@ FROM node:20.9.0-alpine as build
 WORKDIR /app
 
 # Install dependencies
-COPY frontend/package.json ./
-COPY frontend/package-lock.json ./
+COPY ./frontend/package.json ./
+COPY ./frontend/package-lock.json ./
 RUN npm install
 
 # Copy and build the React app
@@ -22,7 +22,7 @@ COPY --from=build /app/build /usr/share/nginx/html
 # COPY nginx.conf /etc/nginx/nginx.conf
 
 # Copy the entrypoint script
-COPY frontend/entrypoint.sh /entrypoint.sh
+COPY ./frontend/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 # Set the entrypoint

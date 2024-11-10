@@ -5,13 +5,13 @@ FROM python:3.9.12-alpine
 WORKDIR /app
 
 # Copy the requirements file into the container
-COPY backend/requirements.txt ./
+COPY ./backend/requirements.txt ./
 
 # Install the Python dependencies
 RUN pip install -r requirements.txt
 
 # Copy the Flask app code into the container
-COPY backend/. ./
+COPY ./backend/. ./
 
 # Expose the Flask app port
 
