@@ -4,7 +4,7 @@ services:
   # React Frontend Service via nginx
   nginx:
     restart: unless-stopped
-    image: ${{ secrets.DOCKER_USERNAME }}/quiz-frontend
+    image: ${DOCKER_USERNAME}/quiz-frontend
     ports:
       - 80:80
       - 443:443
@@ -19,7 +19,7 @@ services:
   # Flask Backend Service
   backend:
     restart: unless-stopped
-    image: ${{ secrets.DOCKER_USERNAME }}/quiz-backend
+    image: ${DOCKER_USERNAME}/quiz-backend
     ports:
       - 5000:5000
     env_file:
