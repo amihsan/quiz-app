@@ -10,7 +10,7 @@ COPY frontend/package-lock.json ./
 RUN npm install
 
 # Copy and build the React app
-COPY . ./
+COPY frontend/. ./
 RUN npm run build
 
 # Use Nginx to serve the built React app

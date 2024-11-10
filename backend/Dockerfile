@@ -5,7 +5,7 @@ FROM python:3.9.12-alpine
 WORKDIR /app
 
 # Copy the requirements file into the container
-COPY requirements.txt .
+COPY backend/requirements.txt .
 
 # Install the Python dependencies
 RUN pip install -r requirements.txt
