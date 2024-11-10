@@ -94,6 +94,7 @@ jobs:
 
             # Deploy containers using Docker Compose
             echo "Deploying containers with Docker Compose..."
+            docker-compose down
             cd ${{ secrets.EC2_TARGET_DIR }}
             docker-compose up --build -d frontend backend
 
