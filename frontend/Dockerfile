@@ -22,7 +22,7 @@ COPY --from=build /app/build /usr/share/nginx/html
 # COPY nginx.conf /etc/nginx/nginx.conf
 
 # Copy the entrypoint script
-COPY entrypoint.sh /entrypoint.sh
+COPY frontend/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 # Set the entrypoint
