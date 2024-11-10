@@ -4,9 +4,7 @@ services:
   # React Frontend Service via nginx
   nginx:
     restart: unless-stopped
-    build:
-      context: .
-      dockerfile: ./docker/frontend/Dockerfile
+    image: ${{ secrets.DOCKER_USERNAME }}/quiz-frontend
     ports:
       - 80:80
       - 443:443
@@ -21,9 +19,7 @@ services:
   # Flask Backend Service
   backend:
     restart: unless-stopped
-    build:
-      context: .
-      dockerfile: ./docker/backend/Dockerfile
+    image: ${{ secrets.DOCKER_USERNAME }}/quiz-backend
     ports:
       - 5000:5000
     env_file:
@@ -40,18 +36,24 @@ services:
 # version: "3"
 
 # services:
+#   # React Frontend Service via nginx
 #   nginx:
 #     restart: unless-stopped
 #     build:
 #       context: .
-#       dockerfile: ./docker/nginx/Dockerfile
+#       dockerfile: ./docker/frontend/Dockerfile
 #     ports:
 #       - 80:80
+#       - 443:443
 #     env_file:
 #       - ./frontend/.env
+#     volumes:
+#       - ./certbot/conf:/etc/letsencrypt
+#       - ./certbot/www:/var/www/certbot
+#       - ./nginx/templates:/etc/nginx/templates
 #     depends_on:
 #       - backend
-
+#   # Flask Backend Service
 #   backend:
 #     restart: unless-stopped
 #     build:
@@ -62,6 +64,12 @@ services:
 #     env_file:
 #       - ./backend/.env
 
-# React Frontend Service via nginx
-# Flask Backend Service
-# Certbot for SSL Certificates
+#   # Certbot for SSL Certificates
+#   certbot:
+#     image: certbot/certbot
+#     restart: unless-stopped
+#     volumes:
+#       - ./certbot/conf:/etc/letsencrypt
+#       - ./certbot/www:/var/www/certbot
+#     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+
