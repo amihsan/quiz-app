@@ -110,6 +110,20 @@ jobs:
             # docker-compose -f docker-compose-dev.yml down
             # docker-compose -f docker-compose-dev.yml up --build -d
 
+            # # # For Production
+            # docker-compose down
+            # docker images -a
+            # docker rmi -f $(docker images -aq)
+            # docker-compose up --build -d
+ 
+            # # # Clean up dangling images
+            # docker image prune -f
+
+            # docker images
+            # docker ps -a
+
+            # #################
+
             # Set up Docker Compose and start services
             - name: Set up Docker Compose
               run: |
@@ -128,16 +142,3 @@ jobs:
             docker images
             docker ps -a
 
-
-
-            # # # For Production
-            # docker-compose down
-            # docker images -a
-            # docker rmi -f $(docker images -aq)
-            # docker-compose up --build -d
-
-            # # # Clean up dangling images
-            # docker image prune -f
-
-            # docker images
-            # docker ps -a
