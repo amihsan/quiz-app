@@ -5,14 +5,12 @@ FROM node:20.9.0-alpine as build
 WORKDIR /app
 
 # Install dependencies
-COPY ./frontend/package.json ./
-COPY ./frontend/package-lock.json ./
+COPY package.json package-lock.json ./
 RUN npm install
 
 # Copy and build the React app
-COPY frontend/. ./
+COPY . ./
 RUN npm run build
-
 # Use Nginx to serve the built React app
 FROM nginx:alpine
 
