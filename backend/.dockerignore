@@ -1,7 +1,0 @@
-venv
-.env
-help/
-app/avatars/
-.env.server
-README.md
-template.env
