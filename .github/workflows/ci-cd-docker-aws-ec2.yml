@@ -48,7 +48,7 @@ jobs:
 
             # Install Git if not already installed
             if [ "$INSTALL_GIT" = true ]; then
-                sudo yum update
+                # sudo yum update
                 sudo yum install -y git
             fi
 
