@@ -1,20 +1,15 @@
-# Use Python base image
+# Use the official Python image as a base
 FROM python:3.9.12-alpine
 
-# Set the working directory in the container
-WORKDIR /app
+WORKDIR /app/backend
 
-# Copy the requirements file into the container
-COPY requirements.txt ./
+COPY ./backend/requirements.txt /app/backend/
 
-# Install the Python dependencies
-RUN pip install -r requirements.txt
+COPY ./backend /app/backend
 
-# Copy the Flask app code into the container
-COPY . ./
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
-# Expose the Flask app port
 EXPOSE 5000
 
-# Start the Flask app using Gunicorn
 CMD ["gunicorn", "-b", "0.0.0.0:5000", "run:app"]

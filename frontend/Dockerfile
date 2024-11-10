@@ -1,21 +1,28 @@
-# Use the official Node.js image to build the React app
-FROM node:20.9.0-alpine as build
+# The first stage
+# Build React static files
+FROM node:18.4.0-alpine as build
 
-# Set working directory
-WORKDIR /app
+WORKDIR /app/frontend
 
-# Install dependencies
-COPY package.json package-lock.json ./
-RUN npm install
+COPY ./frontend/package.json /app/frontend/
 
-# Copy and build the React app
-COPY . ./
+COPY ./frontend/package-lock.json /app/frontend/
+RUN npm install --silent
+
+# COPY ./frontend/ ./
+COPY ./frontend/ /app/frontend/
+
+
 RUN npm run build
-# Use Nginx to serve the built React app
+
+# update Browserslist: caniuse-lite
+RUN npx update-browserslist-db@latest
+
+# The second stage
+# Copy React static files and start nginx
 FROM nginx:alpine
 
-# Copy the build output to Nginx's default public directory
-COPY --from=build /app/build /usr/share/nginx/html
+COPY --from=build /app/frontend/build /usr/share/nginx/html
 
 # COPY nginx.conf /etc/nginx/nginx.conf
 
