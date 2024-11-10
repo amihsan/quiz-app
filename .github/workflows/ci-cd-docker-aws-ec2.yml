@@ -108,6 +108,8 @@ jobs:
             # For Production
             # stop all running containers
             docker-compose down
+            docker rmi $(docker images -q)
+
             # Clean up dangling images
             docker image prune -f
             # build and run the application
