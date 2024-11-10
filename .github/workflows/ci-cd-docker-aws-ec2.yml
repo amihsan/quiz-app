@@ -124,6 +124,7 @@ jobs:
 
 
             # Only first time (to collect ssl/tls)
+            docker-compose down
             chmod +x ./init-letsencrypt.sh
             sudo ./init-letsencrypt.sh   
             docker-compose down
