@@ -105,31 +105,22 @@ jobs:
 
             # Deploy containers using Docker Compose
             echo "Deploying containers with Docker Compose..."
-
-            # # # For Development
-            # docker-compose -f docker-compose-dev.yml down
-            # docker-compose -f docker-compose-dev.yml up --build -d
-
-
-            # # For Production
-            # docker-compose down
-            # docker images -a
-            # # Clean up dangling images
-            # docker image prune -a
-            # # docker rmi -f $(docker images -aq)
-            # docker-compose up --build -d
-            # chmod +x ./init-letsencrypt.sh
-
-
-
-
-            # Only first time (to collect ssl/tls)
+            # For Production
             docker-compose down
-            chmod +x ./init-letsencrypt.sh
-            sudo ./init-letsencrypt.sh   
-            docker-compose down
+            # show all images
+            docker images -a
+            # Clean up dangling images
+            docker image prune -a
+            # build and run the application
             docker-compose up --build -d
+  
+            # Only one time before first deployment (to collect ssl/tls)
+            # chmod +x ./init-letsencrypt.sh
+            # sudo ./init-letsencrypt.sh   
+            # docker-compose down
+            # docker-compose up --build -d
 
-
+            # show all image
             docker images
+            # show all container
             docker ps -a
