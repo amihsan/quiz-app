@@ -108,7 +108,7 @@ jobs:
             # For Production
             # stop all running containers
             docker-compose down
-            docker rmi $(docker images -q)
+
             # build and run the application
             docker-compose up --build -d
             # show all images
