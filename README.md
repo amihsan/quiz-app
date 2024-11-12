@@ -91,7 +91,7 @@ docker-compose -f docker-compose-dev.yml up --build -d
 
 For production (Let's Encrypt) certbot is used to apply ssl/tls. The app is deployed on EC2 AWS. You need a valid domain configured with Route 53. Follow the next steps bellow:
 
-First go inside the project root directory in ec2. Then
+First clone the github repository to ec2 instance and then go inside the project root directory in ec2. Need to create two seperate .env in frontend and backend directory.Then
 
 1. Run init-letsencrypt to get ssl certificate from Let's Encrypt (Only one time before the deployment. Then certbot auto renews from later.)
    The script is from: article [Nginx and Let’s Encrypt with Docker in Less Than 5 Minutes](https://pentacent.medium.com/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71)
@@ -108,7 +108,12 @@ sudo ./init-letsencrypt.sh
 docker-compose.yml up --build -d
 ```
 
-Or simply run the lets-encrypt-ssl.yml  workflow for the first time and then diasble the workflow. (valid email and domain required which needs to be set in frontend/.env)
+Or follow the bellow steps:
+
+1. First disable the ci-cd-docker-aws-ec2.yml workflow. (for deployment)
+2. Then run the lets-encrypt-ssl.yml workflow for the first time and then diasble the workflow. (valid email and domain required which needs to be set in frontend/.env).
+3. Then enable the ci-cd-docker-aws-ec2.yml workflow again.
+   Now whenever you push to github it will automatically renew ssl certificates from letsencrypt and deploy the application. Both the workflow run automatically when push to github. Thats why lets-encrypt-ssl.yml workflow only needs to be run onetime before first deployment and then disabled.
 
 ## 🖥️ Local Deployment with Kubernetes and Minikube
 
