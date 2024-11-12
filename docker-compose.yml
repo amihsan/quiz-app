@@ -9,13 +9,13 @@ services:
       - 80:80
       - 443:443
     env_file:
-      - ./frontend/.env
+      - ./frontend/.env # Load environment variables from .env file
     volumes:
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot
       - ./nginx/production/nginx.conf:/etc/nginx/nginx.conf
     depends_on:
-      - backend
+      - backend # Ensure backend is started before frontend
   # Flask Backend Service
   backend:
     restart: unless-stopped
@@ -25,7 +25,7 @@ services:
     ports:
       - 5000:5000
     env_file:
-      - ./backend/.env
+      - ./backend/.env # Load environment variables from .env file
 
   # Certbot for SSL Certificates
   certbot:
