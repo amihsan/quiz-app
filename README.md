@@ -77,7 +77,7 @@ http://ec2-18-198-190-227.eu-central-1.compute.amazonaws.com
 
 4. Create two seperate .env files inside both frontend and backend directory. Follow template.env and replace with necessary values.
 
-### ⛴️ Docker Usage
+## ⛴️ Docker Usage
 
 For Docker MongoDB atlas is used. Nginx is used used to serve react build and proxy to backend flask api.
 
@@ -87,9 +87,26 @@ For Docker MongoDB atlas is used. Nginx is used used to serve react build and pr
 docker-compose -f docker-compose-dev.yml up --build -d
 ```
 
-##### For Production:
+## 🌍 Cloud Deployment on AWS EC2
 
-For production (Let's Encrypt) certbot is used to apply ssl/tls. The app is deployed on EC2 AWS. You need a valid domain configured with Route 53. Follow the next steps bellow:
+This project is deployed using GitHub Actions for CI/CD. For production (Let's Encrypt) certbot is used to apply ssl/tls. The app is deployed on EC2 AWS. You need a valid domain configured with Route 53. Follow the next steps bellow:
+
+### Setting Up GitHub Secrets
+
+For continuous deployment via GitHub Actions, the following GitHub secrets must be configured in your repository:
+
+- `EC2_HOST_DNS`: Your AWS EC2 public ip.
+- `EC2_USERNAME`: Your EC2 user name.
+- `EC2_SSH_KEY`: The SSH private key (PEM file) to connect to your EC2 instance
+- `EC2_TARGET_DIR`: Your project directory in EC2
+- `DOCKER_USERNAME`: Your Docker Hub username
+- `DOCKER_PASSWORD`: Your Docker Hub password
+
+You can set these in the repository by navigating to **Settings > Secrets > Actions**.
+
+### Deployment Steps
+
+#### Manual Deployment
 
 First clone the github repository to ec2 instance and then go inside the project root directory in ec2. Need to create two seperate .env in frontend and backend directory.Then
 
@@ -108,12 +125,12 @@ sudo ./init-letsencrypt.sh
 docker-compose.yml up --build -d
 ```
 
-Or follow the bellow steps:
+#### CI/CD Deployment
 
 1. First disable the ci-cd-docker-aws-ec2.yml workflow. (for deployment)
 2. Then run the lets-encrypt-ssl.yml workflow for the first time and then diasble the workflow. (valid email and domain required which needs to be set in frontend/.env).
 3. Then enable the ci-cd-docker-aws-ec2.yml workflow again.
-   Now whenever you push to github it will automatically renew ssl certificates from letsencrypt and deploy the application. Both the workflow run automatically when push to github. Thats why lets-encrypt-ssl.yml workflow only needs to be run onetime before first deployment and then disabled.
+   Now whenever you push to the main branch, the GitHub Actions workflow automatically triggers deployment. Both the workflow run automatically when push to main branch. Thats why lets-encrypt-ssl.yml workflow only needs to be run onetime before first deployment to collect ssl certificates and then needs to be disabled.
 
 ## 🖥️ Local Deployment with Kubernetes and Minikube
 
