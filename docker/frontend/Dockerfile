@@ -24,8 +24,6 @@ FROM nginx:alpine
 
 COPY --from=build /app/frontend/build /usr/share/nginx/html
 
-# COPY ./frontend/nginx.conf /etc/nginx/nginx.conf
-
 # Copy the entrypoint script
 COPY ./frontend/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh

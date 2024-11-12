@@ -105,6 +105,7 @@ sudo ./init-letsencrypt.sh
 ```bash
 docker-compose.yml up --build -d
 ```
+
 ## 🖥️ Local Deployment with Kubernetes and Minikube
 
 For local deployment using Minikube and Kubernetes, follow the steps below:
@@ -113,7 +114,7 @@ For local deployment using Minikube and Kubernetes, follow the steps below:
 
 - **Minikube**: A tool to run Kubernetes locally.
 - **Kubectl**: The command-line tool for interacting with the Kubernetes cluster.
-  
+
 ### Deployment Steps
 
 Once you have the required tools installed, follow these steps to deploy your application:
@@ -131,9 +132,11 @@ Once you have the required tools installed, follow these steps to deploy your ap
    kubectl apply -f backend-deployment.yaml
    kubectl apply -f backend-service.yaml
    ```
-### Accessing the Application
-To access the frontend service, use the following command:
-   ```bash
-   minikube service frontend-service
-   ```
 
+### Accessing the Application
+
+To access the frontend service, use the following command:
+
+```bash
+minikube service frontend-service
+```
