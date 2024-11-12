@@ -24,7 +24,7 @@ domains=($DOMAIN www.$DOMAIN)
 rsa_key_size=4096
 data_path="./certbot"
 email="$EMAIL" # Adding a valid address is strongly recommended
-staging=1  # Set to 1 if you're testing your setup to avoid hitting request limits. Set to 0 for production environment
+staging=0  # Set to 1 if you're testing your setup to avoid hitting request limits. Set to 0 for production environment
 
 if [ -d "$data_path" ]; then
   # Automatically continue and replace the existing certificate
