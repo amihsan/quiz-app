@@ -19,40 +19,17 @@ server {
 server {
     listen 443 ssl;
     server_name lebentest.online;
-    server_tokens off;
 
-    # SSL certificates and settings
     ssl_certificate /etc/letsencrypt/live/lebentest.online-0001/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/lebentest.online-0001/privkey.pem;
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
-    # Increase max body size for file uploads if needed
     client_max_body_size 20M;
 
-    # Main location block for serving React app
     location / {
-        root /usr/share/nginx/html;  # Location of React build files
+        root /usr/share/nginx/html;
         index index.html index.htm;
-        try_files $uri $uri/ /index.html;  # For React routing (SPA fallback)
-    }
-
-    # Static files location (bundle.js, etc.)
-    location /static/ {
-        root /usr/share/nginx/html;  # Static files are served from the React build directory
-    }
-
-    # Proxy requests for API to the backend Flask server
-    location /api {
-        try_files $uri @proxy_api;
-    }
-
-    location @proxy_api {
-        proxy_set_header X-Forwarded-Proto https;
-        proxy_set_header X-Url-Scheme $scheme;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header Host $http_host;
-        proxy_redirect off;
-        proxy_pass http://backend:5000;  # Proxy to Flask app running in the backend container
+        try_files $uri $uri/ /index.html;
     }
 }
