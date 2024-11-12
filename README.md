@@ -89,7 +89,9 @@ docker-compose -f docker-compose-dev.yml up --build -d
 
 ##### For Production:
 
-For production (Let's Encrypt) certbot is used to apply ssl/tls.
+For production (Let's Encrypt) certbot is used to apply ssl/tls. The app is deployed on EC2 AWS. You need a valid domain configured with Route 53. Follow the next steps bellow:
+
+First go inside the project root directory in ec2. Then
 
 1. Run init-letsencrypt to get ssl certificate from Let's Encrypt (Only one time before the deployment. Then certbot auto renews from later.)
    The script is from: article [Nginx and Let’s Encrypt with Docker in Less Than 5 Minutes](https://pentacent.medium.com/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71)
@@ -105,6 +107,8 @@ sudo ./init-letsencrypt.sh
 ```bash
 docker-compose.yml up --build -d
 ```
+
+Or simply run the lets-encrypt-ssl.yml  workflow for the first time and then diasble the workflow. (valid email and domain required which needs to be set in frontend/.env)
 
 ## 🖥️ Local Deployment with Kubernetes and Minikube
 
