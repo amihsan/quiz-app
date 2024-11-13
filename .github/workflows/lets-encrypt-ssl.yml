@@ -98,5 +98,5 @@ jobs:
             # Deploy containers using Docker Compose
             echo "Deploying containers with Docker Compose..."
             # For Production
-            chmod +x ./init-letsencrypt.sh
-            sudo ./init-letsencrypt.sh
+            # chmod +x ./init-letsencrypt.sh
+            # sudo ./init-letsencrypt.sh
