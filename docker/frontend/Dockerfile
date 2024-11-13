@@ -24,8 +24,8 @@ FROM nginx:alpine
 
 COPY --from=build /app/frontend/build /usr/share/nginx/html
 
-# Copy the local custom Nginx configuration file to the container
-COPY ./frontend/nginx.conf /etc/nginx/nginx.conf
+# # Copy the local custom Nginx configuration file to the container
+# COPY ./nginx/production/nginx.conf /etc/nginx/nginx.conf
 
 # Copy the entrypoint script
 COPY ./frontend/entrypoint.sh /entrypoint.sh
