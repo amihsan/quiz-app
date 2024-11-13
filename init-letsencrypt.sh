@@ -82,23 +82,13 @@ fi
 
 docker-compose run --rm --entrypoint "\
   certbot certonly --webroot -w /var/www/certbot \
-    --account 18c3f8c8b684@2024-11-13T20:39:05Z \
-    --email $EMAIL \
-    -d $DOMAIN \
-    --rsa-key-size 4096 \
+    $staging_arg \
+    $email_arg \
+    $domain_args \
+    --rsa-key-size $rsa_key_size \
     --agree-tos \
     --force-renewal \
     --non-interactive" certbot
-
-# docker-compose run --rm --entrypoint "\
-#   certbot certonly --webroot -w /var/www/certbot \
-#     $staging_arg \
-#     $email_arg \
-#     $domain_args \
-#     --rsa-key-size $rsa_key_size \
-#     --agree-tos \
-#     --force-renewal \
-#     --non-interactive" certbot
 echo
 
 echo "### Reloading nginx ..."

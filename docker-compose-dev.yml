@@ -10,7 +10,7 @@ services:
     env_file:
       - ./frontend/.env # Load environment variables from .env file
     volumes:
-      - ./nginx/development/nginx.conf:/etc/nginx/nginx.conf
+       - ./docker/frontend/nginx/development:/etc/nginx/templates
     depends_on:
       - backend # Ensure backend is started before frontend
 

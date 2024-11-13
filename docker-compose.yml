@@ -13,7 +13,7 @@ services:
     volumes:
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot
-      - ./nginx/production/nginx.conf:/etc/nginx/nginx.conf
+      - ./docker/frontend/nginx/templates:/etc/nginx/templates
     depends_on:
       - backend # Ensure backend is started before frontend
   # Flask Backend Service
