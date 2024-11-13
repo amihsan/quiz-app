@@ -7,7 +7,7 @@ services:
       dockerfile: ./docker/frontend/Dockerfile
     ports:
       - 80:80
-      # - 443:443
+      - 443:443
     env_file:
       - ./frontend/.env # Load environment variables from .env file
     volumes:
