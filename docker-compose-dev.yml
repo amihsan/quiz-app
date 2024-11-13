@@ -1,5 +1,6 @@
+version: "3"
+
 services:
-  # Frontend service (React app served by Nginx)
   nginx:
     restart: unless-stopped
     build:
@@ -8,13 +9,12 @@ services:
     ports:
       - 80:80
     env_file:
-      - ./frontend/.env # Load environment variables from .env file
+      - ./frontend/.env
     volumes:
-       - ./docker/frontend/nginx/development:/etc/nginx/templates
+      - ./docker/nginx/templates:/etc/nginx/templates
     depends_on:
-      - backend # Ensure backend is started before frontend
+      - backend
 
-  # Backend service (Flask app)
   backend:
     restart: unless-stopped
     build:
@@ -23,4 +23,4 @@ services:
     ports:
       - 5000:5000
     env_file:
-      - ./backend/.env # Load environment variables from .env file
+      - ./backend/.env

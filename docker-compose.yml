@@ -1,22 +1,23 @@
+version: "3"
+
 services:
-  # React Frontend Service via nginx
   nginx:
     restart: unless-stopped
     build:
       context: .
-      dockerfile: ./docker/frontend/Dockerfile
+      dockerfile: ./docker/nginx/Dockerfile
     ports:
       - 80:80
       - 443:443
     env_file:
-      - ./frontend/.env # Load environment variables from .env file
+      - ./frontend/.env
     volumes:
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
-      - ./docker/frontend/nginx/templates:/etc/nginx/templates
+      - ./docker/nginx/certbot/conf:/etc/letsencrypt
+      - ./docker/nginx/certbot/www:/var/www/certbot
+      - ./docker/nginx/templates:/etc/nginx/templates
     depends_on:
-      - backend # Ensure backend is started before frontend
-  # Flask Backend Service
+      - backend
+
   backend:
     restart: unless-stopped
     build:
@@ -25,13 +26,12 @@ services:
     ports:
       - 5000:5000
     env_file:
-      - ./backend/.env # Load environment variables from .env file
+      - ./backend/.env
 
-  # Certbot for SSL Certificates
   certbot:
     image: certbot/certbot
     restart: unless-stopped
     volumes:
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
+      - ./docker/nginx/certbot/conf:/etc/letsencrypt
+      - ./docker/nginx/certbot/www:/var/www/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
