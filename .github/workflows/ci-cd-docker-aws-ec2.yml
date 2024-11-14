@@ -116,16 +116,22 @@ jobs:
             # stop all running containers
             docker-compose down
 
-            # run the application
-            docker-compose up -d
-            # # run the application
-            # docker-compose up --build -d
-            # show all images
+            # Run the application and force no-cache rebuild of Docker images
+            echo "Deploying containers with Docker Compose..."
+            docker-compose up -d --no-cache
+
+            # List all Docker images (useful to confirm the pulled and built images)
+            echo "Displaying all Docker images..."
             docker images -a
-            # Remove unused images (dangling and untagged)
-            echo "Removing unused images..."
+
+            # Remove unused images (dangling and untagged images)
+            echo "Removing unused Docker images..."
             docker image prune -af
-            # show all images
+
+            # List Docker images again to confirm the clean-up
+            echo "Displaying Docker images after cleanup..."
             docker images -a
-            # show all container
+
+            # List all Docker containers (useful to verify if containers are up and running)
+            echo "Displaying all Docker containers..."
             docker ps -a
