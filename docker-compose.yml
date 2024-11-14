@@ -12,8 +12,9 @@ services:
     volumes:
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot
-      # - ./docker/frontend/templates:/etc/nginx/templates
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      # - ./docker/frontend/templates:/etc/nginx/templates
+      
     depends_on:
       - backend
 
