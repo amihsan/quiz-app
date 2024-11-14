@@ -36,9 +36,11 @@ jobs:
 
             set -e  # Exit immediately if a command exits with a non-zero status
 
-            # Pass Docker Hub username to EC2 instance as an environment variable
-            echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> $HOME/.bashrc
-            source $HOME/.bashrc
+            # Directly export DOCKER_USERNAME in the SSH session
+            export DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
+
+            # Check if DOCKER_USERNAME is set correctly
+            echo "DOCKER_USERNAME is: $DOCKER_USERNAME"
 
             sudo yum update
 
