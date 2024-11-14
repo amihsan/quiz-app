@@ -19,15 +19,12 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and Push Docker Images with unique tags based on GITHUB_SHA (commit hash)
+      - name: Build and Push Docker Images
         run: |
-          # Build frontend Docker image and push to Docker Hub with the commit hash tag
-          docker build --no-cache -t ${{ secrets.DOCKER_USERNAME }}/quiz-frontend:${GITHUB_SHA} -f docker/frontend/Dockerfile .
-          docker push ${{ secrets.DOCKER_USERNAME }}/quiz-frontend:${GITHUB_SHA}
-
-          # Build backend Docker image and push to Docker Hub with the commit hash tag
-          docker build --no-cache -t ${{ secrets.DOCKER_USERNAME }}/quiz-backend:${GITHUB_SHA} -f docker/backend/Dockerfile .
-          docker push ${{ secrets.DOCKER_USERNAME }}/quiz-backend:${GITHUB_SHA}
+          docker build --no-cache -t ${{ secrets.DOCKER_USERNAME }}/quiz-frontend:latest -f docker/frontend/Dockerfile .
+          docker push ${{ secrets.DOCKER_USERNAME }}/quiz-frontend:latest
+          docker build --no-cache -t ${{ secrets.DOCKER_USERNAME }}/quiz-backend:latest -f docker/backend/Dockerfile .
+          docker push ${{ secrets.DOCKER_USERNAME }}/quiz-backend:latest
 
       - name: SSH into EC2 Instance and deploy with Docker Compose
         uses: appleboy/ssh-action@master
@@ -38,9 +35,6 @@ jobs:
           script: |
 
             set -e  # Exit immediately if a command exits with a non-zero status
-            # Set the GITHUB_SHA as an environment variable for Docker Compose
-            echo "GITHUB_SHA=${GITHUB_SHA}" >> $HOME/.bashrc
-            source $HOME/.bashrc
             sudo yum update
 
             # Check if Git is installed
