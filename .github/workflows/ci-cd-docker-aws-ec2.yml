@@ -109,7 +109,7 @@ jobs:
             # stop all running containers
             docker-compose down
 
-            # build and run the application
+            # run the application
             docker-compose up -d
             # show all images
             docker images -a
