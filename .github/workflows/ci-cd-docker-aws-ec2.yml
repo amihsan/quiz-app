@@ -118,7 +118,7 @@ jobs:
 
             # Run the application and force no-cache rebuild of Docker images
             echo "Deploying containers with Docker Compose..."
-            docker-compose up -d --no-cache
+            docker-compose up -d 
 
             # List all Docker images (useful to confirm the pulled and built images)
             echo "Displaying all Docker images..."
