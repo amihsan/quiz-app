@@ -24,11 +24,9 @@ FROM nginx:alpine
 
 COPY --from=build /app/frontend/build /usr/share/nginx/html
 
-# # Copy the entrypoint script
-# COPY ./frontend/entrypoint.sh /entrypoint.sh
-# RUN chmod +x /entrypoint.sh
+# Copy the entrypoint script
+COPY ./frontend/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-# # Set the entrypoint
-# ENTRYPOINT ["/entrypoint.sh"]
-
-CMD ["nginx", "-g", "daemon off;"]
+# Set the entrypoint
+ENTRYPOINT ["/entrypoint.sh"]
