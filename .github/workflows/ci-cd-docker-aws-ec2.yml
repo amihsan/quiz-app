@@ -115,8 +115,9 @@ jobs:
             # docker-compose up --build -d
             # show all images
             docker images -a
-            # show all images
-            docker image prune -f
+            # Remove unused images (dangling and untagged)
+            echo "Removing unused images..."
+            docker image prune -af
             # show all images
             docker images -a
             # show all container
