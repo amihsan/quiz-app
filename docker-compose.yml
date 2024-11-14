@@ -1,9 +1,7 @@
 services:
   nginx:
     restart: unless-stopped
-    build:
-      context: .
-      dockerfile: ./docker/frontend/Dockerfile
+    image: amihsan/quiz-frontend:latest
     ports:
       - 80:80
       - 443:443
@@ -14,15 +12,13 @@ services:
       - ./certbot/www:/var/www/certbot
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       # - ./docker/frontend/templates:/etc/nginx/templates
-      
+
     depends_on:
       - backend
 
   backend:
     restart: unless-stopped
-    build:
-      context: .
-      dockerfile: ./docker/backend/Dockerfile
+    image: amihsan/quiz-backend:latest
     ports:
       - 5000:5000
     env_file:
