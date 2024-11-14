@@ -35,6 +35,11 @@ jobs:
           script: |
 
             set -e  # Exit immediately if a command exits with a non-zero status
+
+            # Pass Docker Hub username to EC2 instance as an environment variable
+            echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> $HOME/.bashrc
+            source $HOME/.bashrc
+
             sudo yum update
 
             # Check if Git is installed
