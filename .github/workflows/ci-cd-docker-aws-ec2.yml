@@ -38,6 +38,9 @@ jobs:
           script: |
 
             set -e  # Exit immediately if a command exits with a non-zero status
+            # Set the GITHUB_SHA as an environment variable for Docker Compose
+            echo "GITHUB_SHA=${GITHUB_SHA}" >> $HOME/.bashrc
+            source $HOME/.bashrc
             sudo yum update
 
             # Check if Git is installed
