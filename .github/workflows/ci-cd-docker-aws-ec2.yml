@@ -103,19 +103,19 @@ jobs:
             fi
 
 
-            # # Deploy containers using Docker Compose
-            # echo "Deploying containers with Docker Compose..."
-            # # For Production
-            # # stop all running containers
-            # docker-compose down
+            # Deploy containers using Docker Compose
+            echo "Deploying containers with Docker Compose..."
+            # For Production
+            # stop all running containers
+            docker-compose down
 
-            # # build and run the application
-            # docker-compose up --build -d
-            # # show all images
-            # docker images -a
-            # # show all images
-            # docker image prune -f
-            # # show all images
-            # docker images -a
-            # # show all container
-            # docker ps -a
+            # build and run the application
+            docker-compose up -d
+            # show all images
+            docker images -a
+            # show all images
+            docker image prune -f
+            # show all images
+            docker images -a
+            # show all container
+            docker ps -a
