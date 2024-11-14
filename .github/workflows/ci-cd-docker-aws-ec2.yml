@@ -110,7 +110,9 @@ jobs:
             docker-compose down
 
             # run the application
-            docker-compose up --build -d
+            docker-compose up -d
+            # # run the application
+            # docker-compose up --build -d
             # show all images
             docker images -a
             # show all images
