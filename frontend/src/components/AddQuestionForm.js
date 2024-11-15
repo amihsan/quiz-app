@@ -114,141 +114,133 @@ const AddQuestionForm = () => {
 
   return (
     <div className="min-h-screen flex flex-col  items-center justify-center bg-gray-100">
-      <div className="p-8 bg-white rounded-md  w-full">
-        {isLoading && (
-          <div className="flex items-center bg-white rounded-lg p-12">
-            <FontAwesomeIcon
-              icon={faSpinner}
-              spin
-              size="3x"
-              className="mr-4 text-indigo-600"
-            />
-            <span className="text-lg font-semibold">Adding ...</span>
-          </div>
-        )}
-        {successMessage && (
-          <div className="flex flex-col items-center bg-white rounded-lg p-12">
-            <p className="text-green-500">{successMessage}</p>
-            <button
-              className="text-blue-500 font-semibold mt-2"
-              onClick={handleSuccessMessageClick}
-            >
-              Go to Questions List
-            </button>
-          </div>
-        )}
-        {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6 w-full max-w-lg">
-            {error}
-          </div>
-        )}
-        {showForm && (
-          <div className="w-full p-8 rounded-md shadow-lg bg-white">
-            <h2 className="text-3xl text-indigo-600 font-bold mb-6">
-              Add New Question
-            </h2>
+      {isLoading && (
+        <div className="flex items-center bg-white rounded-lg p-12">
+          <FontAwesomeIcon
+            icon={faSpinner}
+            spin
+            size="3x"
+            className="mr-4 text-indigo-600"
+          />
+          <span className="text-lg font-semibold">Adding ...</span>
+        </div>
+      )}
+      {successMessage && (
+        <div className="flex flex-col items-center bg-white rounded-lg p-12">
+          <p className="text-green-500">{successMessage}</p>
+          <button
+            className="text-blue-500 font-semibold mt-2"
+            onClick={handleSuccessMessageClick}
+          >
+            Go to Questions List
+          </button>
+        </div>
+      )}
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6 w-full max-w-lg">
+          {error}
+        </div>
+      )}
+      {showForm && (
+        <div className="w-full p-8 rounded-md shadow-lg bg-white">
+          <h2 className="text-3xl text-indigo-600 font-bold mb-6">
+            Add New Question
+          </h2>
 
-            <form onSubmit={handleSubmit} className="space-y-6 ">
-              <div className="flex flex-col">
+          <form onSubmit={handleSubmit} className="space-y-6 ">
+            <div className="flex flex-col">
+              <label htmlFor="question" className="text-gray-700 font-semibold">
+                Question Text:
+              </label>
+              <input
+                id="question"
+                type="text"
+                name="text"
+                value={questionData.text}
+                onChange={handleChange}
+                required
+                className="mt-1 px-4 py-2 border rounded focus:outline-none focus:border-blue-500"
+              />
+            </div>
+            {[...Array(4)].map((_, index) => (
+              <div key={index} className="flex flex-col">
                 <label
-                  htmlFor="question"
+                  htmlFor={`option-${index + 1}`}
                   className="text-gray-700 font-semibold"
                 >
-                  Question Text:
+                  Option {index + 1}:
                 </label>
                 <input
-                  id="question"
+                  id={`option-${index + 1}`}
                   type="text"
-                  name="text"
-                  value={questionData.text}
-                  onChange={handleChange}
+                  value={questionData.options[index]}
+                  onChange={(e) => handleOptionChange(index, e.target.value)}
                   required
                   className="mt-1 px-4 py-2 border rounded focus:outline-none focus:border-blue-500"
                 />
               </div>
-              {[...Array(4)].map((_, index) => (
-                <div key={index} className="flex flex-col">
-                  <label
-                    htmlFor={`option-${index + 1}`}
-                    className="text-gray-700 font-semibold"
-                  >
-                    Option {index + 1}:
-                  </label>
-                  <input
-                    id={`option-${index + 1}`}
-                    type="text"
-                    value={questionData.options[index]}
-                    onChange={(e) => handleOptionChange(index, e.target.value)}
-                    required
-                    className="mt-1 px-4 py-2 border rounded focus:outline-none focus:border-blue-500"
-                  />
-                </div>
-              ))}
-              <div className="flex flex-col">
-                <label
-                  htmlFor="correctAnswer"
-                  className="text-gray-700 font-semibold"
-                >
-                  Correct Answer:
-                </label>
-                <input
-                  id="correctAnswer"
-                  type="text"
-                  name="correctAnswer"
-                  value={questionData.correctAnswer}
-                  onChange={handleChange}
-                  required
-                  className="mt-1 px-4 py-2 border rounded focus:outline-none focus:border-blue-500"
-                />
-              </div>
-              <div className="flex flex-col">
-                <label
-                  htmlFor="category"
-                  className="text-gray-700 font-semibold"
-                >
-                  Question Category:
-                </label>
-                <select
-                  id="category"
-                  name="category"
-                  value={questionData.category}
-                  onChange={handleChange}
-                  required
-                  className="mt-1 px-4 py-2 border rounded focus:outline-none focus:border-blue-500"
-                >
-                  <option value="">Select Category</option>
-                  {categories.map((category) => (
-                    <option key={category.name} value={category.name}>
-                      {category.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="flex flex-col">
-                <label htmlFor="image" className="text-gray-700 font-semibold">
-                  Upload Image:
-                </label>
-                <input
-                  id="image"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="mt-1 px-4 py-2 border rounded focus:outline-none focus:border-blue-500"
-                />
-                <span className="text-gray-500 text-sm mt-1">
-                  Optional: You can upload an image for this question.
-                </span>
-              </div>
-              <button
-                type="submit"
-                className="mt-8 bg-green-600 text-white px-4 py-2 rounded inline-block hover:bg-green-700"
+            ))}
+            <div className="flex flex-col">
+              <label
+                htmlFor="correctAnswer"
+                className="text-gray-700 font-semibold"
               >
-                Add Question
-              </button>
-            </form>
-          </div>
-        )}
-      </div>
+                Correct Answer:
+              </label>
+              <input
+                id="correctAnswer"
+                type="text"
+                name="correctAnswer"
+                value={questionData.correctAnswer}
+                onChange={handleChange}
+                required
+                className="mt-1 px-4 py-2 border rounded focus:outline-none focus:border-blue-500"
+              />
+            </div>
+            <div className="flex flex-col">
+              <label htmlFor="category" className="text-gray-700 font-semibold">
+                Question Category:
+              </label>
+              <select
+                id="category"
+                name="category"
+                value={questionData.category}
+                onChange={handleChange}
+                required
+                className="mt-1 px-4 py-2 border rounded focus:outline-none focus:border-blue-500"
+              >
+                <option value="">Select Category</option>
+                {categories.map((category) => (
+                  <option key={category.name} value={category.name}>
+                    {category.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex flex-col">
+              <label htmlFor="image" className="text-gray-700 font-semibold">
+                Upload Image:
+              </label>
+              <input
+                id="image"
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="mt-1 px-4 py-2 border rounded focus:outline-none focus:border-blue-500"
+              />
+              <span className="text-gray-500 text-sm mt-1">
+                Optional: You can upload an image for this question.
+              </span>
+            </div>
+            <button
+              type="submit"
+              className="mt-8 bg-green-600 text-white px-4 py-2 rounded inline-block hover:bg-green-700"
+            >
+              Add Question
+            </button>
+          </form>
+        </div>
+      )}
     </div>
   );
 };

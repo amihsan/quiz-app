@@ -116,20 +116,16 @@ jobs:
             # stop all running containers
             docker-compose down
 
+            # Remove all images 
+            echo "Removing all Docker images..."
+            docker rmi $(docker images -q) --force
+
             # Run the application and force no-cache rebuild of Docker images
             echo "Deploying containers with Docker Compose..."
             docker-compose up -d 
 
             # List all Docker images (useful to confirm the pulled and built images)
             echo "Displaying all Docker images..."
-            docker images -a
-
-            # Remove unused images (dangling and untagged images)
-            echo "Removing unused Docker images..."
-            docker image prune -af
-
-            # List Docker images again to confirm the clean-up
-            echo "Displaying Docker images after cleanup..."
             docker images -a
 
             # List all Docker containers (useful to verify if containers are up and running)
