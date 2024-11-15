@@ -112,7 +112,7 @@ const Register = () => {
               } rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500`}
             />
             {usernameError && (
-              <p className="text-red-500 mt-1 text-sm">{usernameError}</p>
+              <p className="text-red-500 text-xs mt-2">{usernameError}</p>
             )}
           </div>
           <div className="relative">
@@ -133,7 +133,7 @@ const Register = () => {
               } rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500`}
             />
             {emailError && (
-              <p className="text-red-500 mt-1 text-sm">{emailError}</p>
+              <p className="text-red-500 mt-2 text-xs">{emailError}</p>
             )}
           </div>
           <div className="relative">
@@ -160,7 +160,7 @@ const Register = () => {
               <FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} />
             </span>
             {passwordError && (
-              <p className="text-red-500 mt-1 text-sm">{passwordError}</p>
+              <p className="text-red-500 mt-2 text-xs">{passwordError}</p>
             )}
           </div>
           <div className="relative">
@@ -187,11 +187,11 @@ const Register = () => {
               <FontAwesomeIcon icon={showRetypePassword ? faEye : faEyeSlash} />
             </span>
             {retypePasswordError && (
-              <p className="text-red-500 mt-1 text-sm">{retypePasswordError}</p>
+              <p className="text-red-500 mt-2 text-xs">{retypePasswordError}</p>
             )}
           </div>
           {error && (
-            <p className="text-red-500 text-center mt-2 text-sm">{error}</p>
+            <p className="text-red-500 text-center mt-2 text-xs">{error}</p>
           )}
 
           <button
@@ -210,7 +210,7 @@ const Register = () => {
           </button>
         </form>
         <p className="mt-4 text-center text-gray-600">
-          Already have an account?{" "}
+          Already have an account ?{" "}
           <Link to="/login" className="text-indigo-700 hover:underline">
             <strong>Login here</strong>
           </Link>

@@ -206,7 +206,7 @@ const Login = ({ role }) => {
         </div>
         <p className="mt-4 text-center text-gray-500">
           Don't have an account?{" "}
-          <Link to="/register" className="text-indigo-700 hover:underline ml-1">
+          <Link to="/register" className="text-indigo-700 hover:underline">
             <strong>Register here</strong>
           </Link>
           .
