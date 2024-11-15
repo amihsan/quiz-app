@@ -208,7 +208,7 @@ const UpdateQuestionForm = () => {
             size="3x"
             className="mr-4 text-indigo-600"
           />
-          <span className="text-lg font-semibold">Updating Questions...</span>
+          <span className="text-lg font-semibold">Updating ...</span>
         </div>
       )}
     </div>

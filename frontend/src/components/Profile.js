@@ -76,7 +76,7 @@ const Profile = () => {
             size="3x"
             className="mr-4 text-indigo-600"
           />
-          <span className="text-lg font-semibold">Loading Profile...</span>
+          <span className="text-lg font-semibold">Loading ...</span>
         </div>
       ) : (
         <div className="p-8 bg-white rounded-md shadow-lg w-full ">

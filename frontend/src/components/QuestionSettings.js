@@ -91,13 +91,14 @@ const QuestionSettings = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
       {loadingQuestions && (
-        <div className="flex items-center bg-white rounded-lg p-4 md:p-12">
+        <div className="flex items-center bg-white rounded-lg p-12">
           <FontAwesomeIcon
             icon={faSpinner}
             spin
             size="3x"
-            className="text-indigo-600"
+            className="mr-4 text-indigo-600"
           />
+          <span className="text-lg font-semibold">Loading ...</span>
         </div>
       )}
 
@@ -122,7 +123,7 @@ const QuestionSettings = () => {
             size="3x"
             className="mr-4 text-indigo-600"
           />
-          <span className="text-lg font-semibold">Deleting Questions...</span>
+          <span className="text-lg font-semibold">Deleting ...</span>
         </div>
       )}
 

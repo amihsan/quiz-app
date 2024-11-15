@@ -31,7 +31,7 @@ const QuizPrompt = () => {
       <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60"></div>
 
       <div className="relative z-10 p-8 md:p-16 max-w-lg mx-auto rounded-3xl shadow-2xl bg-white bg-opacity-70">
-        <h2 className="text-4xl font-bold text-center text-indigo-700 mb-6 transform transition-transform duration-300 hover:scale-105">
+        <h2 className="text-4xl font-extrabold text-center text-indigo-700 mb-6 transform transition-transform duration-300 hover:scale-105">
           Ready to Start the Quiz?
         </h2>
 

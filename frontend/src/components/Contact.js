@@ -1,17 +1,31 @@
 // src/components/Contact.js
-import React from "react";
+import React, { useState, useEffect } from "react";
 import backgroundImage from "../assets/background.jpg"; // Your local background image
 
 const Contact = () => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  useEffect(() => {
+    const image = new Image();
+    image.src = backgroundImage;
+    image.onload = () => {
+      setImageLoaded(true);
+    };
+  }, []);
+
   return (
     <div
-      className="relative min-h-screen flex items-center justify-center bg-cover bg-center-"
+      className="relative min-h-screen flex items-center justify-center bg-cover bg-center"
       style={{
         backgroundImage: `url(${backgroundImage})`,
+        opacity: imageLoaded ? 1 : 0, // Smooth fade-in effect once image is loaded
+        transition: "opacity 0.5s ease-in-out", // Smooth transition for image loading
       }}
     >
+      {/* Gradient Overlay for text contrast */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60"></div>
       <div className="relative z-10 p-8 md:p-16 max-w-lg mx-auto rounded-3xl shadow-2xl bg-white bg-opacity-70">
-        <h2 className="text-3xl text-indigo-800 font-bold mb-4">
+        <h2 className="text-4xl font-extrabold text-center text-indigo-700 mb-6 transform transition-transform duration-300 hover:scale-105">
           Get in Touch
         </h2>
         <p className="text-gray-700 mb-6 leading-relaxed">
@@ -21,7 +35,7 @@ const Contact = () => {
         </p>
         <a
           href="mailto:contact@lebentest.online"
-          className="text-black-700 font-bold hover:text-black-800 transition-colors hover:underline focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 inline-block mb-8"
+          className="block text-black-700 font-bold text-center hover:text-black-800 transition-colors hover:underline focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 mb-8"
         >
           contact@lebentest.online
         </a>

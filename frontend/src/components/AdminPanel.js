@@ -66,14 +66,14 @@ const AdminPanel = ({ role }) => {
     <div
       className="relative min-h-screen flex items-center justify-center bg-cover bg-center-"
       style={{
-        backgroundImage: `url(${backgroundImage})`, // Using dynamic background image
+        backgroundImage: `url(${backgroundImage})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
     >
       <div className="relative z-10 p-8 md:p-16 max-w-lg mx-auto rounded-3xl shadow-2xl bg-white bg-opacity-70">
-        <h2 className="text-4xl font-bold mb-6 text-center text-black-600">
-          Admin Panel Login
+        <h2 className="text-4xl font-extrabold mb-6 text-center text-indigo-700">
+          Admin Panel
         </h2>
         <input
           type="text"

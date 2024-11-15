@@ -123,7 +123,7 @@ const AddQuestionForm = () => {
               size="3x"
               className="mr-4 text-indigo-600"
             />
-            <span className="text-lg font-semibold">Adding Questions...</span>
+            <span className="text-lg font-semibold">Adding ...</span>
           </div>
         )}
         {successMessage && (
