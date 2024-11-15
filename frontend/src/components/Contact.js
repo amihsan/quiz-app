@@ -28,7 +28,7 @@ const Contact = () => {
         <h2 className="text-4xl font-extrabold text-center text-indigo-700 mb-6 transform transition-transform duration-300 hover:scale-105">
           Get in Touch
         </h2>
-        <p className="text-gray-700 mb-6 leading-relaxed">
+        <p className="text-gray-800 mb-6 leading-relaxed text-lg">
           Have any questions, suggestions, or feedback? We’d love to hear from
           you! Reach out to us via email and we’ll get back to you as soon as
           possible.
@@ -39,7 +39,7 @@ const Contact = () => {
         >
           contact@lebentest.online
         </a>
-        <p className="text-sm text-gray-500">
+        <p className="text-xs text-gray-600">
           Typical response time: 24 hours. Your feedback helps us improve and
           serve you better.
         </p>
