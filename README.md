@@ -85,7 +85,7 @@ http://ec2-18-198-190-227.eu-central-1.compute.amazonaws.com
 
 For Docker MongoDB atlas is used. Nginx is used used to serve react build and proxy to backend flask api.
 
-##### For local development:
+#### For local development:
 
 ```bash
 docker-compose -f docker-compose-dev.yml up --build -d
@@ -136,90 +136,92 @@ docker-compose.yml up --build -d
 3. Then enable the ci-cd-docker-aws-ec2.yml workflow again.
    Now whenever you push to the main branch, the GitHub Actions workflow automatically triggers deployment. Both the workflow run automatically when push to main branch. Thats why lets-encrypt-ssl.yml workflow only needs to be run onetime before first deployment to collect ssl certificates and then needs to be disabled. -->
 
-## 🌍 Cloud Deployment on AWS EC2 with Let's Encrypt (Certbot) for SSL/TLS
+## 🌍 Cloud Deployment on AWS EC2 with SSL/TLS using Let's Encrypt (Certbot)
 
-This section covers the manual deployment of the application with SSL/TLS certificates provided by Let's Encrypt using Certbot.
+This guide covers the manual deployment of your application on AWS EC2 with SSL/TLS certificates provided by Let's Encrypt using Certbot.
 
 ### Setting Up GitHub Secrets
 
-For continuous deployment via GitHub Actions, the following GitHub secrets must be configured in your repository:
+For continuous deployment via GitHub Actions, configure the following GitHub secrets in your repository:
 
-- `EC2_HOST_DNS`: Your AWS EC2 public ip.
-- `EC2_USERNAME`: Your EC2 user name.
-- `EC2_SSH_KEY`: The SSH private key (PEM file) to connect to your EC2 instance
-- `EC2_TARGET_DIR`: Your project directory in EC2
-- `DOCKER_USERNAME`: Your Docker Hub username
-- `DOCKER_PASSWORD`: Your Docker Hub password
+- `EC2_HOST_DNS`: The public IP address of your AWS EC2 instance.
+- `EC2_USERNAME`: The EC2 username (e.g., `ec2-user` for Amazon Linux).
+- `EC2_SSH_KEY`: The SSH private key (PEM file) for connecting to your EC2 instance.
+- `EC2_TARGET_DIR`: The target directory on the EC2 instance where your project will reside.
+- `DOCKER_USERNAME`: Your Docker Hub username.
+- `DOCKER_PASSWORD`: Your Docker Hub password.
 
-You can set these in the repository by navigating to **Settings > Secrets > Actions**.
+To add these secrets, navigate to **Settings > Secrets > Actions** in your repository.
 
 ### Deployment Steps
 
-#### Manual Deployment:
+#### Manual Deployment
 
-1. **Clone Repository to EC2**:
+1. **Clone Repository to EC2:**
+   - SSH into your EC2 instance and clone your repository:
+   ```bash
+   git clone <your-repository-url>
+   cd <your-project-directory>
+   ```
 
-   - Clone the GitHub repository to your EC2 instance
-   - Navigate to the project root directory on EC2
+2. **Create Environment Files:**
+   - Create `.env` files in both the **frontend** and **backend** directories for environment-specific configurations.
 
-2. **Create Environment Files**:
-   - Create separate .env files in both the frontend and backend directories for environment configurations.
-3. **Run Let's Encrypt for SSL Certificates**:
-
-   - Run init-letsencrypt.sh to obtain the SSL certificate from Let's Encrypt (only needs to be done once).
+3. **Run Let's Encrypt for SSL Certificates:**
+   - Run the `init-letsencrypt.sh` script to obtain the SSL certificate from Let's Encrypt (this step is only required once).
    - The script used: [Nginx and Let’s Encrypt with Docker in Less Than 5 Minutes](https://pentacent.medium.com/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71)
-   - Run:
+   - Grant execution permissions and run the script:
+     ```bash
+     chmod +x ./init-letsencrypt.sh
+     sudo ./init-letsencrypt.sh
+     ```
 
-   ```bash
-   chmod +x ./init-letsencrypt.sh
-   ```
+4. **Build and Start Docker Containers:**
+   - Use Docker Compose to build and start your application containers:
+     ```bash
+     docker-compose up --build -d
+     ```
 
-   ```bash
-   sudo ./init-letsencrypt.sh
-   ```
+#### CI/CD Deployment
 
-4. **Build and Start Docker Containers:**:
-   - Run the following to start your application using Docker Compose
-   ```bash
-   docker-compose.yml up --build -d
-   ```
+1. **Disable CI/CD Workflow:**
+   - Temporarily disable the `ci-cd-docker-aws-ec2.yml` workflow to prevent automatic deployment during setup.
 
-#### CI/CD Deployment:
-
-1. **Disable CI/CD Workflow**:
-   - Temporarily disable the ci-cd-docker-aws-ec2.yml workflow to prevent automatic deployment during setup.
-2. **Run Let's Encrypt Workflow**:
-   - Run the lets-encrypt-ssl.yml workflow for the first time to collect SSL certificates.
-   - You will need a valid email and domain, which should be set in the frontend/.env file.
+2. **Run Let's Encrypt Workflow:**
+   - Execute the `lets-encrypt-ssl.yml` workflow to obtain SSL certificates.
+   - Ensure you have a valid email and domain configured in the **frontend/.env** file.
    - After the workflow completes, disable it.
-3. **Enable CI/CD Workflow**:
-   - Re-enable the ci-cd-docker-aws-ec2.yml workflow.
-   - Now, every time you push changes to the main branch, the GitHub Actions workflow will automatically trigger the deployment.
+
+3. **Enable CI/CD Workflow:**
+   - Re-enable the `ci-cd-docker-aws-ec2.yml` workflow.
+   - From this point onward, every time changes are pushed to the main branch, the GitHub Actions workflow will automatically deploy the application to your EC2 instance.
+
+---
 
 ## 🌍 Cloud Deployment on AWS with Load Balancer, CloudFront, ACM, Route 53, and CI/CD
 
-This project provides a fully automated deployment setup using **AWS EC2**, **Load Balancer**, **CloudFront**, **AWS Certificate Manager (ACM)**, **Route 53**, and **CI/CD with GitHub Actions**. The application is deployed securely with **SSL/TLS** certificates, and automatic deployment to AWS is handled by GitHub Actions.
+This section describes a fully automated deployment setup using **AWS EC2**, **Application Load Balancer (ALB)**, **CloudFront**, **AWS Certificate Manager (ACM)**, **Route 53**, and **CI/CD with GitHub Actions**.
 
 ### Prerequisites
 
-Before proceeding, ensure you have the following:
+Ensure you have the following before proceeding:
 
-1. **AWS Account**: You should have an AWS account and access to EC2, Route 53, CloudFront, ACM, and other necessary AWS services.
-2. **Valid Domain**: The domain you intend to use for your app should be managed via **Route 53**.
+1. **AWS Account**: Access to EC2, Route 53, CloudFront, ACM, and other necessary AWS services.
+2. **Valid Domain**: The domain you plan to use for your app should be managed via **Route 53**.
 3. **Docker Hub Account**: Required for storing and pulling Docker images.
 
 ### Setting Up GitHub Secrets
 
 For continuous deployment via GitHub Actions, configure the following GitHub secrets in your repository:
 
-- **EC2_HOST_DNS**: Your AWS EC2 public IP.
-- **EC2_USERNAME**: Your EC2 username (e.g., `ec2-user` for Amazon Linux).
-- **EC2_SSH_KEY**: The SSH private key (PEM file) to connect to your EC2 instance.
-- **EC2_TARGET_DIR**: The directory on your EC2 instance where the project is located.
-- **DOCKER_USERNAME**: Your Docker Hub username.
-- **DOCKER_PASSWORD**: Your Docker Hub password.
+- `EC2_HOST_DNS`: The public IP address of your EC2 instance.
+- `EC2_USERNAME`: The EC2 username (e.g., `ec2-user` for Amazon Linux).
+- `EC2_SSH_KEY`: The SSH private key (PEM file) to connect to your EC2 instance.
+- `EC2_TARGET_DIR`: The target directory on your EC2 instance where the project is located.
+- `DOCKER_USERNAME`: Your Docker Hub username.
+- `DOCKER_PASSWORD`: Your Docker Hub password.
 
-To add these secrets in GitHub, navigate to **Settings > Secrets > Actions** in your repository.
+To add these secrets, navigate to **Settings > Secrets > Actions** in your repository.
 
 ### Deployment Steps
 
@@ -229,12 +231,12 @@ To add these secrets in GitHub, navigate to **Settings > Secrets > Actions** in 
 - Install Docker and Docker Compose on the EC2 instance.
 - Clone your repository to the EC2 instance and navigate to the project root directory.
 
-#### 2. Create an Application Load Balancer (ALB)
+#### 2. Set Up Application Load Balancer (ALB)
 
 - In the **EC2 Console**, go to **Load Balancers** and create an **Application Load Balancer (ALB)**.
 - Choose **Internet-facing** and configure **HTTP/HTTPS** listeners.
 - Create a **Target Group** and add your EC2 instance to it.
-- Set up health checks to ensure that traffic is routed only to healthy instances.
+- Set up health checks to ensure traffic is routed only to healthy instances.
 
 #### 3. Set Up CloudFront
 
@@ -245,7 +247,7 @@ To add these secrets in GitHub, navigate to **Settings > Secrets > Actions** in 
 #### 4. Request SSL/TLS Certificate in ACM
 
 - In **AWS Certificate Manager (ACM)**, request an SSL certificate for your domain.
-- Ensure the domain is verified by adding a DNS record in **Route 53**.
+- Verify domain ownership by adding the required DNS records in **Route 53**.
 - Attach the certificate to the CloudFront distribution for secure HTTPS connections.
 
 #### 5. Configure Route 53
@@ -253,14 +255,18 @@ To add these secrets in GitHub, navigate to **Settings > Secrets > Actions** in 
 - In **Route 53**, create a new **A record** to route traffic to CloudFront.
 - Set the **Alias** to point to your CloudFront distribution's DNS name.
 
-#### 6. CI/CD Deployment:
+#### 6. CI/CD Deployment
 
-- Just enable the ci-cd-docker-aws-ec2.yml workflow. Not need lets-encrypt-ssl.yml workflow for this set up.
-- Now, every time you push changes to the main branch, the GitHub Actions workflow will automatically trigger the deployment.
+- Enable the `ci-cd-docker-aws-ec2.yml` workflow to trigger automatic deployments when pushing changes to the main branch. There is no need for the `lets-encrypt-ssl.yml` workflow in this setup.
 
-#### 7. Test the Deployment:
+#### 7. Test the Deployment
 
-- After everything is set up, visit your domain to ensure traffic flows correctly through CloudFront, the Load Balancer, and your EC2 instance.
+- After the setup is complete, visit your domain to verify that traffic is routed correctly through CloudFront, the Load Balancer, and your EC2 instance.
+
+---
+
+This setup ensures a secure, scalable, and automated deployment pipeline for your application on AWS. With CloudFront and ACM, you can deliver content securely with SSL/TLS, while Route 53 routes traffic to your CloudFront distribution, providing a robust infrastructure for production environments.
+
 
 ## 🖥️ Local Deployment with Kubernetes and Minikube
 
