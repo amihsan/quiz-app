@@ -26,6 +26,15 @@ jobs:
           docker build --no-cache -t ${{ secrets.DOCKER_USERNAME }}/quiz-backend:latest -f docker/backend/Dockerfile .
           docker push ${{ secrets.DOCKER_USERNAME }}/quiz-backend:latest
 
+      - name: Set up SSH key for EC2
+        run: |
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: Test SSH Connection
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ec2-user@${{ secrets.EC2_HOST_DNS }} "echo SSH connection successful"
+
       - name: SSH into EC2 Instance and deploy with Docker Compose
         uses: appleboy/ssh-action@master
         with:
@@ -33,7 +42,6 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-
             set -e  # Exit immediately if a command exits with a non-zero status
 
             # Directly export DOCKER_USERNAME in the SSH session
@@ -77,9 +85,8 @@ jobs:
                 git clone https://github.com/amihsan/quiz-app.git ${{ secrets.EC2_TARGET_DIR }}
             fi
 
-
             # Update known_hosts to prevent SSH connection issues
-            echo "Updating known_hosts..."
+            mkdir -p ~/.ssh
             ssh-keyscan -H ${{ secrets.EC2_HOST_DNS }} >> ~/.ssh/known_hosts
 
             # Check if Docker Compose is installed, if not, install it
@@ -98,7 +105,6 @@ jobs:
                 sudo yum install -y docker
                 sudo service docker start
                 sudo usermod -aG docker ${{ secrets.EC2_USERNAME }}
-
             else
                 echo "Docker is already installed."
             fi
@@ -108,7 +114,6 @@ jobs:
                 echo "Docker is installed but not running. Starting Docker..."
                 sudo service docker start
             fi
-
 
             # Deploy containers using Docker Compose
             echo "Deploying containers with Docker Compose..."
