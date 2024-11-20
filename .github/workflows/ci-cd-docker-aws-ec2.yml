@@ -19,19 +19,18 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # - name: Build and Push Docker Images
-      #   run: |
-      #     docker build --no-cache -t ${{ secrets.DOCKER_USERNAME }}/quiz-frontend:latest -f docker/frontend/Dockerfile .
-      #     docker push ${{ secrets.DOCKER_USERNAME }}/quiz-frontend:latest
-      #     docker build --no-cache -t ${{ secrets.DOCKER_USERNAME }}/quiz-backend:latest -f docker/backend/Dockerfile .
-      #     docker push ${{ secrets.DOCKER_USERNAME }}/quiz-backend:latest
+      - name: Build and Push Docker Images
+        run: |
+          docker build --no-cache -t ${{ secrets.DOCKER_USERNAME }}/quiz-frontend:latest -f docker/frontend/Dockerfile .
+          docker push ${{ secrets.DOCKER_USERNAME }}/quiz-frontend:latest
+          docker build --no-cache -t ${{ secrets.DOCKER_USERNAME }}/quiz-backend:latest -f docker/backend/Dockerfile .
+          docker push ${{ secrets.DOCKER_USERNAME }}/quiz-backend:latest
 
       - name: Set up SSH key for EC2
         run: |
           mkdir -p ~/.ssh  # Create the .ssh directory if it doesn't exist
           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa  # Set proper permissions for the SSH key
-
 
       - name: Test SSH Connection
         run: |
