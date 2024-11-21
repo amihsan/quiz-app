@@ -217,6 +217,16 @@ const Quiz = () => {
           />
           <span className="text-lg font-semibold">Loading ...</span>
         </div>
+      ) : submitted ? (
+        <div className="flex items-center bg-white rounded-lg p-12">
+          <FontAwesomeIcon
+            icon={faSpinner}
+            spin
+            size="3x"
+            className="mr-4 text-indigo-600"
+          />
+          <span className="text-lg font-semibold">Submitting ...</span>
+        </div>
       ) : (
         <div className="p-8 bg-white rounded-md shadow-lg w-full ">
           {!submitted && (
@@ -295,21 +305,6 @@ const Quiz = () => {
                 setAnsweredFirstTime={setAnsweredFirstTime}
               />
             </>
-          )}
-          {submitted && (
-            <div className="min-h-screen flex items-center justify-center bg-gray-100 ">
-              <div className="flex items-center bg-white rounded-lg p-12">
-                <FontAwesomeIcon
-                  icon={faSpinner}
-                  spin
-                  size="3x"
-                  className="mr-4 text-indigo-600"
-                />
-                <span className="text-lg font-semibold">
-                  Submitting Quiz...
-                </span>
-              </div>
-            </div>
           )}
         </div>
       )}
