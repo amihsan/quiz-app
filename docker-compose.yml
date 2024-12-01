@@ -24,7 +24,7 @@ services:
     env_file:
       - ./backend/.env
 ####################################################
-####### For lets Encrypt SSL certificate ###########
+####### For Lets Encrypt SSL certificate ###########
 ####################################################
 # services:
 #   nginx:
