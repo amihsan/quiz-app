@@ -122,18 +122,18 @@ jobs:
             # stop all running containers
             docker-compose down
 
-            # # Remove all images 
-            # echo "Removing all Docker images..."
-            # docker rmi $(docker images -q) --force
+            # Remove all images 
+            echo "Removing all Docker images..."
+            docker rmi $(docker images -q) --force
 
-            # # Run the application and force no-cache rebuild of Docker images
-            # echo "Deploying containers with Docker Compose..."
-            # docker-compose up -d 
+            # Run the application and force no-cache rebuild of Docker images
+            echo "Deploying containers with Docker Compose..."
+            docker-compose up -d 
 
-            # # List all Docker images (useful to confirm the pulled and built images)
-            # echo "Displaying all Docker images..."
-            # docker images -a
+            # List all Docker images (useful to confirm the pulled and built images)
+            echo "Displaying all Docker images..."
+            docker images -a
 
-            # # List all Docker containers (useful to verify if containers are up and running)
-            # echo "Displaying all Docker containers..."
-            # docker ps -a
+            # List all Docker containers (useful to verify if containers are up and running)
+            echo "Displaying all Docker containers..."
+            docker ps -a
