@@ -97,6 +97,12 @@ jobs:
 
             # Deploy containers using Docker Compose
             echo "Deploying containers with Docker Compose..."
+            # stop all running containers
+            docker-compose down
+
+            # Remove all images 
+            echo "Removing all Docker images..."
+            docker images -q | xargs -r docker rmi
             # For Production
             chmod +x ./init-letsencrypt.sh
             sudo ./init-letsencrypt.sh

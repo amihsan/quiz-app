@@ -128,8 +128,10 @@ jobs:
 
             # Run the application and force no-cache rebuild of Docker images
             echo "Deploying containers with Docker Compose..."
-            # docker-compose up -d 
-            docker-compose -f docker-compose-dev.yml up --build -d
+            docker-compose up -d 
+
+            # For development
+            # docker-compose -f docker-compose-dev.yml up --build -d
 
             # List all Docker images (useful to confirm the pulled and built images)
             echo "Displaying all Docker images..."
