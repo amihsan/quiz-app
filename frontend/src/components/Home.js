@@ -32,7 +32,8 @@ const Home = () => {
 
       <div className="relative z-10 p-8 md:p-16 max-w-lg mx-auto rounded-3xl shadow-xl bg-white bg-opacity-80 text-center">
         <h1 className="text-3xl md:text-4xl font-extrabold text-indigo-600 mb-4 transform transition-transform duration-300 hover:scale-105">
-          Welcome to <span className="text-green-500">Lebentest</span> Quiz
+          Welcome to <span className="text-green-500">Einbürgerungstest</span>{" "}
+          Quiz
         </h1>
 
         <p className="text-lg md:text-xl text-gray-800 mb-8">
