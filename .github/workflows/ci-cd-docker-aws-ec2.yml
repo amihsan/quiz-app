@@ -124,7 +124,7 @@ jobs:
 
             # Remove all images 
             echo "Removing all Docker images..."
-            docker rmi -f $(docker images -q)
+            docker images -q | xargs -r docker rmi
 
             # Run the application and force no-cache rebuild of Docker images
             echo "Deploying containers with Docker Compose..."
