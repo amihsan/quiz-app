@@ -54,13 +54,15 @@ fi
 # Create dummy certificate
 echo "### Creating dummy certificate for $domains ..."
 path="$data_path/conf/live/$DOMAIN"
-mkdir -p "$path"
+mkdir -p "$path" || { echo "Error: Failed to create directory $path."; exit 1; }
+
 docker-compose run --rm --entrypoint "\
   openssl req -x509 -nodes -newkey rsa:2048 -days 1 \
     -keyout '$path/privkey.pem' \
     -out '$path/fullchain.pem' \
     -subj '/CN=localhost'" certbot || { echo "Error: Failed to create dummy certificate."; exit 1; }
 echo
+
 
 # Start Nginx
 echo "### Starting nginx ..."
