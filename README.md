@@ -3,7 +3,7 @@
 
 ## 💡 About
 
-This is the main repository of the Lebentest quiz app which includes both the frontend and backend logic of the application. It is a free online learning platform for individuals preparing for German integration tests, offering a range of quizzes to enhance their language skills and cultural knowledge. It is hosted on an Amazon EC2 instance, with traffic managed by an AWS Elastic Load Balancer for reliability. AWS CloudFront speeds up content delivery, and AWS Certificate Manager (ACM) ensures secure, encrypted communication. This setup provides a fast, secure, and reliable experience for users.
+This is the main repository of the Einbürgerungstest quiz app which includes both the frontend and backend logic of the application. It is a free online learning platform for individuals preparing for German integration tests, offering a range of quizzes to enhance their language skills and cultural knowledge. It is hosted on an Amazon EC2 instance, with traffic managed by an AWS Elastic Load Balancer for reliability. AWS CloudFront speeds up content delivery, and AWS Certificate Manager (ACM) ensures secure, encrypted communication. This setup provides a fast, secure, and reliable experience for users.
 
 ## View Demo (Deployed on AWS EC2)
 
