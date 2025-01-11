@@ -7,9 +7,9 @@ This is the main repository of the Lebentest quiz app which includes both the fr
 
 ## View Demo (Deployed on AWS EC2)
 
-http://lebentest.online
+http://einburgerungstest.online
 
-http://ec2-18-198-190-227.eu-central-1.compute.amazonaws.com
+http://ec2-3-122-38-111.eu-central-1.compute.amazonaws.com
 
 ### 🧱 Built With
 
@@ -158,17 +158,21 @@ To add these secrets, navigate to **Settings > Secrets > Actions** in your repos
 #### Manual Deployment
 
 1. **Clone Repository to EC2:**
+
    - SSH into your EC2 instance and clone your repository:
+
    ```bash
    git clone <your-repository-url>
    cd <your-project-directory>
    ```
 
 2. **Create Environment Files:**
+
    - Create `.env` files in both the **frontend** and **backend** directories for environment-specific configurations.
 
 3. **Run Let's Encrypt for SSL Certificates:**
-   - Run the `init-letsencrypt.sh` script to obtain the SSL certificate from Let's Encrypt (this step is only required once).
+
+   - Run the `init-letsencrypt.sh` script to obtain the SSL certificate from Let's Encrypt (this step is only required once).Change the Domain name and email according to your own domain and email.
    - The script used: [Nginx and Let’s Encrypt with Docker in Less Than 5 Minutes](https://pentacent.medium.com/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71)
    - Grant execution permissions and run the script:
      ```bash
@@ -185,11 +189,13 @@ To add these secrets, navigate to **Settings > Secrets > Actions** in your repos
 #### CI/CD Deployment
 
 1. **Disable CI/CD Workflow:**
+
    - Temporarily disable the `ci-cd-docker-aws-ec2.yml` workflow to prevent automatic deployment during setup.
 
 2. **Run Let's Encrypt Workflow:**
+
    - Execute the `lets-encrypt-ssl.yml` workflow to obtain SSL certificates.
-   - Ensure you have a valid email and domain configured in the **frontend/.env** file.
+   - Ensure you have a valid email and domain configured in the **init-letsencrypt.sh** file.
    - After the workflow completes, disable it.
 
 3. **Enable CI/CD Workflow:**
@@ -266,7 +272,6 @@ To add these secrets, navigate to **Settings > Secrets > Actions** in your repos
 ---
 
 This setup ensures a secure, scalable, and automated deployment pipeline for your application on AWS. With CloudFront and ACM, you can deliver content securely with SSL/TLS, while Route 53 routes traffic to your CloudFront distribution, providing a robust infrastructure for production environments.
-
 
 ## 🖥️ Local Deployment with Kubernetes and Minikube
 
