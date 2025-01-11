@@ -91,51 +91,6 @@ For Docker MongoDB atlas is used. Nginx is used used to serve react build and pr
 docker-compose -f docker-compose-dev.yml up --build -d
 ```
 
-<!-- ## 🌍 Cloud Deployment on AWS EC2
-
-This project is deployed using GitHub Actions for CI/CD. For production (Let's Encrypt) certbot is used to apply ssl/tls. The app is deployed on EC2 AWS. You need a valid domain configured with Route 53. Follow the next steps bellow:
-
-### Setting Up GitHub Secrets
-
-For continuous deployment via GitHub Actions, the following GitHub secrets must be configured in your repository:
-
-- `EC2_HOST_DNS`: Your AWS EC2 public ip.
-- `EC2_USERNAME`: Your EC2 user name.
-- `EC2_SSH_KEY`: The SSH private key (PEM file) to connect to your EC2 instance
-- `EC2_TARGET_DIR`: Your project directory in EC2
-- `DOCKER_USERNAME`: Your Docker Hub username
-- `DOCKER_PASSWORD`: Your Docker Hub password
-
-You can set these in the repository by navigating to **Settings > Secrets > Actions**.
-
-### Deployment Steps
-
-#### Manual Deployment
-
-First clone the github repository to ec2 instance and then go inside the project root directory in ec2. Need to create two seperate .env in frontend and backend directory.Then
-
-1. Run init-letsencrypt to get ssl certificate from Let's Encrypt (Only one time before the deployment. Then certbot auto renews from later.)
-   The script is from: article [Nginx and Let’s Encrypt with Docker in Less Than 5 Minutes](https://pentacent.medium.com/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71)
-
-```bash
-chmod +x ./init-letsencrypt.sh
-```
-
-```bash
-sudo ./init-letsencrypt.sh
-```
-
-```bash
-docker-compose.yml up --build -d
-```
-
-#### CI/CD Deployment
-
-1. First disable the ci-cd-docker-aws-ec2.yml workflow. (for deployment)
-2. Then run the lets-encrypt-ssl.yml workflow for the first time and then diasble the workflow. (valid email and domain required which needs to be set in frontend/.env).
-3. Then enable the ci-cd-docker-aws-ec2.yml workflow again.
-   Now whenever you push to the main branch, the GitHub Actions workflow automatically triggers deployment. Both the workflow run automatically when push to main branch. Thats why lets-encrypt-ssl.yml workflow only needs to be run onetime before first deployment to collect ssl certificates and then needs to be disabled. -->
-
 ## 🌍 Cloud Deployment on AWS EC2 with SSL/TLS using Let's Encrypt (Certbot)
 
 This guide covers the manual deployment of your application on AWS EC2 with SSL/TLS certificates provided by Let's Encrypt using Certbot.
@@ -172,7 +127,7 @@ To add these secrets, navigate to **Settings > Secrets > Actions** in your repos
 
 3. **Run Let's Encrypt for SSL Certificates:**
 
-   - Run the `init-letsencrypt.sh` script to obtain the SSL certificate from Let's Encrypt (this step is only required once).Change the Domain name and email according to your own domain and email.
+   - Run the `init-letsencrypt.sh` script to obtain the SSL certificate from Let's Encrypt (this step is only required once). Change the Domain name and email according to your own domain and email.
    - The script used: [Nginx and Let’s Encrypt with Docker in Less Than 5 Minutes](https://pentacent.medium.com/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71)
    - Grant execution permissions and run the script:
      ```bash
