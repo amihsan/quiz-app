@@ -37,7 +37,7 @@ const Contact = () => {
           href="mailto:contact@lebentest.online"
           className="block text-black-700 font-bold text-center hover:text-black-800 transition-colors hover:underline focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 mb-8"
         >
-          contact@lebentest.online
+          contact@einburgerungstest.online
         </a>
         <p className="text-xs text-gray-600">
           Typical response time: 24 hours. Your feedback helps us improve and
