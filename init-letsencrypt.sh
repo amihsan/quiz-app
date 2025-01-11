@@ -1,95 +1,88 @@
-#!/bin/bash
+# !/bin/bash
 
 # Navigate to the frontend directory
-cd "$(dirname "$0")/frontend" || { echo "Error: Could not navigate to frontend directory."; exit 1; }
+cd "$(dirname "$0")"/frontend || exit
 
 # Define the path to the frontend/.env file
 ENV_FILE=".env"
 
 # Load variables from .env file
 if [ -f "$ENV_FILE" ]; then
-    export $(grep -v '^#' "$ENV_FILE" | xargs) || { echo "Error: Failed to load variables from $ENV_FILE."; exit 1; }
-else
-    echo "Error: $ENV_FILE file not found."
-    exit 1
+    export $(grep -v '^#' "$ENV_FILE" | xargs)
 fi
+
 
 # Use the variables
 echo "DOMAIN: $DOMAIN"
 echo "EMAIL: $EMAIL"
 
-# Check if docker-compose is installed
-if ! command -v docker-compose &> /dev/null; then
-  echo "Error: docker-compose is not installed." >&2
+
+if ! [ -x "$(command -v docker-compose)" ]; then
+  echo 'Error: docker-compose is not installed.' >&2
   exit 1
 fi
 
-# Define variables
-domains=("$DOMAIN" "www.$DOMAIN")
+domains=($DOMAIN www.$DOMAIN)
 rsa_key_size=4096
 data_path="./certbot"
 email="$EMAIL" # Adding a valid address is strongly recommended
 staging=1 # Set to 1 if you're testing your setup to avoid hitting request limits
 
-# Check for existing data
+
 if [ -d "$data_path" ]; then
   read -p "Existing data found for $domains. Continue and replace existing certificate? (y/N) " decision
-  if [[ "$decision" != "Y" && "$decision" != "y" ]]; then
-    echo "Exiting without changes."
+  if [ "$decision" != "Y" ] && [ "$decision" != "y" ]; then
     exit
   fi
 fi
 
-# Download recommended TLS parameters if not present
+
 if [ ! -e "$data_path/conf/options-ssl-nginx.conf" ] || [ ! -e "$data_path/conf/ssl-dhparams.pem" ]; then
   echo "### Downloading recommended TLS parameters ..."
   mkdir -p "$data_path/conf"
-  curl -s https://raw.githubusercontent.com/certbot/certbot/master/certbot-nginx/certbot_nginx/_internal/tls_configs/options-ssl-nginx.conf \
-    -o "$data_path/conf/options-ssl-nginx.conf" || { echo "Error: Failed to download options-ssl-nginx.conf."; exit 1; }
-  curl -s https://raw.githubusercontent.com/certbot/certbot/master/certbot/certbot/ssl-dhparams.pem \
-    -o "$data_path/conf/ssl-dhparams.pem" || { echo "Error: Failed to download ssl-dhparams.pem."; exit 1; }
+  curl -s https://raw.githubusercontent.com/certbot/certbot/master/certbot-nginx/certbot_nginx/_internal/tls_configs/options-ssl-nginx.conf > "$data_path/conf/options-ssl-nginx.conf"
+  curl -s https://raw.githubusercontent.com/certbot/certbot/master/certbot/certbot/ssl-dhparams.pem > "$data_path/conf/ssl-dhparams.pem"
   echo
 fi
 
-# Create dummy certificate
 echo "### Creating dummy certificate for $domains ..."
-path="$data_path/conf/live/$DOMAIN"
-mkdir -p "$path" || { echo "Error: Failed to create directory $path."; exit 1; }
-
+path="/etc/letsencrypt/live/$domains"
+mkdir -p "$data_path/conf/live/$domains"
 docker-compose run --rm --entrypoint "\
-  openssl req -x509 -nodes -newkey rsa:2048 -days 1 \
+  openssl req -x509 -nodes -newkey rsa:1024 -days 1\
     -keyout '$path/privkey.pem' \
     -out '$path/fullchain.pem' \
-    -subj '/CN=localhost'" certbot || { echo "Error: Failed to create dummy certificate."; exit 1; }
+    -subj '/CN=localhost'" certbot
 echo
 
 
-# Start Nginx
 echo "### Starting nginx ..."
-docker-compose up --force-recreate -d nginx || { echo "Error: Failed to start nginx."; exit 1; }
+docker-compose up --force-recreate -d nginx
 echo
 
-# Delete dummy certificate
 echo "### Deleting dummy certificate for $domains ..."
 docker-compose run --rm --entrypoint "\
-  rm -Rf /etc/letsencrypt/live/$DOMAIN && \
-  rm -Rf /etc/letsencrypt/archive/$DOMAIN && \
-  rm -Rf /etc/letsencrypt/renewal/$DOMAIN.conf" certbot || { echo "Error: Failed to delete dummy certificate."; exit 1; }
+  rm -Rf /etc/letsencrypt/live/$domains && \
+  rm -Rf /etc/letsencrypt/archive/$domains && \
+  rm -Rf /etc/letsencrypt/renewal/$domains.conf" certbot
 echo
 
-# Request Let's Encrypt certificate
+
 echo "### Requesting Let's Encrypt certificate for $domains ..."
+#Join $domains to -d args
 domain_args=""
 for domain in "${domains[@]}"; do
   domain_args="$domain_args -d $domain"
 done
 
+# Select appropriate email arg
 case "$email" in
   "") email_arg="--register-unsafely-without-email" ;;
   *) email_arg="--email $email" ;;
 esac
 
-[ "$staging" -ne 0 ] && staging_arg="--staging" || staging_arg=""
+# Enable staging mode if needed
+if [ $staging != "0" ]; then staging_arg="--staging"; fi
 
 docker-compose run --rm --entrypoint "\
   certbot certonly --webroot -w /var/www/certbot \
@@ -98,111 +91,8 @@ docker-compose run --rm --entrypoint "\
     $domain_args \
     --rsa-key-size $rsa_key_size \
     --agree-tos \
-    --force-renewal" certbot || { echo "Error: Failed to request certificate."; exit 1; }
+    --force-renewal" certbot
 echo
 
-# Reload Nginx
 echo "### Reloading nginx ..."
-docker-compose exec nginx nginx -s reload || { echo "Error: Failed to reload nginx."; exit 1; }
-echo "### All done!"
-
-
-
-# # !/bin/bash
-
-# # Navigate to the frontend directory
-# cd "$(dirname "$0")"/frontend || exit
-
-# # Define the path to the frontend/.env file
-# ENV_FILE=".env"
-
-# # Load variables from .env file
-# if [ -f "$ENV_FILE" ]; then
-#     export $(grep -v '^#' "$ENV_FILE" | xargs)
-# fi
-
-
-# # Use the variables
-# echo "DOMAIN: $DOMAIN"
-# echo "EMAIL: $EMAIL"
-
-
-# if ! [ -x "$(command -v docker-compose)" ]; then
-#   echo 'Error: docker-compose is not installed.' >&2
-#   exit 1
-# fi
-
-# domains=($DOMAIN www.$DOMAIN)
-# rsa_key_size=4096
-# data_path="./certbot"
-# email="$EMAIL" # Adding a valid address is strongly recommended
-# staging=1 # Set to 1 if you're testing your setup to avoid hitting request limits
-
-
-# if [ -d "$data_path" ]; then
-#   read -p "Existing data found for $domains. Continue and replace existing certificate? (y/N) " decision
-#   if [ "$decision" != "Y" ] && [ "$decision" != "y" ]; then
-#     exit
-#   fi
-# fi
-
-
-# if [ ! -e "$data_path/conf/options-ssl-nginx.conf" ] || [ ! -e "$data_path/conf/ssl-dhparams.pem" ]; then
-#   echo "### Downloading recommended TLS parameters ..."
-#   mkdir -p "$data_path/conf"
-#   curl -s https://raw.githubusercontent.com/certbot/certbot/master/certbot-nginx/certbot_nginx/_internal/tls_configs/options-ssl-nginx.conf > "$data_path/conf/options-ssl-nginx.conf"
-#   curl -s https://raw.githubusercontent.com/certbot/certbot/master/certbot/certbot/ssl-dhparams.pem > "$data_path/conf/ssl-dhparams.pem"
-#   echo
-# fi
-
-# echo "### Creating dummy certificate for $domains ..."
-# path="/etc/letsencrypt/live/$domains"
-# mkdir -p "$data_path/conf/live/$domains"
-# docker-compose run --rm --entrypoint "\
-#   openssl req -x509 -nodes -newkey rsa:1024 -days 1\
-#     -keyout '$path/privkey.pem' \
-#     -out '$path/fullchain.pem' \
-#     -subj '/CN=localhost'" certbot
-# echo
-
-
-# echo "### Starting nginx ..."
-# docker-compose up --force-recreate -d nginx
-# echo
-
-# echo "### Deleting dummy certificate for $domains ..."
-# docker-compose run --rm --entrypoint "\
-#   rm -Rf /etc/letsencrypt/live/$domains && \
-#   rm -Rf /etc/letsencrypt/archive/$domains && \
-#   rm -Rf /etc/letsencrypt/renewal/$domains.conf" certbot
-# echo
-
-
-# echo "### Requesting Let's Encrypt certificate for $domains ..."
-# #Join $domains to -d args
-# domain_args=""
-# for domain in "${domains[@]}"; do
-#   domain_args="$domain_args -d $domain"
-# done
-
-# # Select appropriate email arg
-# case "$email" in
-#   "") email_arg="--register-unsafely-without-email" ;;
-#   *) email_arg="--email $email" ;;
-# esac
-
-# # Enable staging mode if needed
-# if [ $staging != "0" ]; then staging_arg="--staging"; fi
-
-# docker-compose run --rm --entrypoint "\
-#   certbot certonly --webroot -w /var/www/certbot \
-#     $staging_arg \
-#     $email_arg \
-#     $domain_args \
-#     --rsa-key-size $rsa_key_size \
-#     --agree-tos \
-#     --force-renewal" certbot
-# echo
-
-# echo "### Reloading nginx ..."
-# docker-compose exec nginx nginx -s reload
+docker-compose exec nginx nginx -s reload
