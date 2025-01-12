@@ -133,8 +133,7 @@ def send_reset_email(email, token):
     password = os.getenv('SENDER_PASSWORD')  # Replace with your email password
     smtp_server= os.getenv('SMTP_SERVER')
     smtp_port= os.getenv('SMTP_PORT')
-
-    sender_name = "Einbürgerungstest"
+    sender_name = os.getenv('SENDER_NAME')
     sender_address = os.getenv('CUSTOM_DOMAIN_EMAIL')
 
     message = MIMEMultipart()
