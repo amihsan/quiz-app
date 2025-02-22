@@ -20,7 +20,7 @@ services:
       options:
         awslogs-group: "nginx-logs" # Replace with your log group name
         awslogs-region: "eu-central-1" # Replace with your region
-        awslogs-stream: "nginx-stream-${HOSTNAME}" # You can use a dynamic stream name like nginx-${HOSTNAME}
+        awslogs-stream: "nginx-stream" # You can use a dynamic stream name like nginx-${HOSTNAME}
 
   backend:
     restart: unless-stopped
@@ -34,7 +34,7 @@ services:
       options:
         awslogs-group: "backend-logs" # Replace with your log group name
         awslogs-region: "eu-central-1" # Replace with your region
-        awslogs-stream: "backend-stream-${HOSTNAME}" # You can use a dynamic stream name like backend-${HOSTNAME}
+        awslogs-stream: "backend-stream" # You can use a dynamic stream name like backend-${HOSTNAME}
 
   certbot:
     image: certbot/certbot
@@ -48,7 +48,7 @@ services:
       options:
         awslogs-group: "certbot-logs" # Replace with your log group name
         awslogs-region: "eu-central-1" # Replace with your region
-        awslogs-stream: "certbot-stream-${HOSTNAME}" # You can use a dynamic stream name like certbot-${HOSTNAME}
+        awslogs-stream: "certbot-stream" # You can use a dynamic stream name like certbot-${HOSTNAME}
 # ####################################################
 # ###### For using cloudfront & load balancer ########
 # ####################################################
