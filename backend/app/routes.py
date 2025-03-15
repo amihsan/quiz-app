@@ -130,7 +130,7 @@ def send_reset_email(email, token):
     # Compose the email
     sender_email = os.getenv('SENDER_EMAIL')  # Replace with your email
     receiver_email = email
-    password = os.getenv('SENDER_PASSWORD')  # Replace with your email password
+    password = os.getenv('SENDER_PASSWORD')  # Replace with your email app password
     smtp_server= os.getenv('SMTP_SERVER')
     smtp_port= os.getenv('SMTP_PORT')
     sender_name = os.getenv('SENDER_NAME')
@@ -181,6 +181,7 @@ def reset_password_email(token):
     else:
         # Handle other HTTP methods
         return jsonify({"error": "Method Not Allowed"}), 405
+
 
 # Function to change user password from profile
 @app.route('/api/reset-password', methods=['PUT'])
