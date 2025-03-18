@@ -31,6 +31,7 @@ mongodb_data/
 /server/app/quiz_img
 /frontend/node_modules
 /frontend/build
+/frontend/dist
 /backend/**/__pycache__/
 /Dockerfile
 /frontend/client.env
