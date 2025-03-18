@@ -70,7 +70,7 @@ http://ec2-3-122-38-111.eu-central-1.compute.amazonaws.com
 2. Run frontend:
 
    ```bash
-   npm start
+   npm run dev
    ```
 
 3. Run backend: after activate venv:

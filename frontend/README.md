@@ -22,5 +22,5 @@ This is the Frontend part of the Quiz App . So no business logic is here.
 
 1.  Run client:
     ```bash
-    npm start
+    npm run dev
     ```

@@ -1,4 +1,4 @@
-// src/components/QuizPrompt.js
+// src/components/QuizPrompt.jsx
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import backgroundImage from "../assets/background.jpg"; // Your local background image
