@@ -1,25 +1,25 @@
 // src/App.js
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import Home from "./components/Home";
-import Login from "./components/Login";
-import Register from "./components/Register";
-import Profile from "./components/Profile";
-import Footer from "./components/Footer";
-import { AuthProvider } from "./context/AuthContext";
-import Quiz from "./components/Quiz";
-import PasswordReset from "./components/PasswordReset";
-import Results from "./components/Results";
-import AddQuestionForm from "./components/AddQuestionForm";
-import UpdateQuestionForm from "./components/UpdateQuestionForm";
-import Contact from "./components/Contact";
-import AdminPanel from "./components/AdminPanel";
-import AdminDashboard from "./components/AdminDashboard";
-import QuestionSettings from "./components/QuestionSettings";
-import UnauthorizedPage from "./components/UnauthorizedPage";
-import PrivateRoute from "./components/PrivateRoute";
-import QuizPrompt from "./components/QuizPrompt";
+import Navbar from "./components/Navbar.jsx";
+import Home from "./components/Home.jsx";
+import Login from "./components/Login.jsx";
+import Register from "./components/Register.jsx";
+import Profile from "./components/Profile.jsx";
+import Footer from "./components/Footer.jsx";
+import { AuthProvider } from "./context/AuthContext.jsx";
+import Quiz from "./components/Quiz.jsx";
+import PasswordReset from "./components/PasswordReset.jsx";
+import Results from "./components/Results.jsx";
+import AddQuestionForm from "./components/AddQuestionForm.jsx";
+import UpdateQuestionForm from "./components/UpdateQuestionForm.jsx";
+import Contact from "./components/Contact.jsx";
+import AdminPanel from "./components/AdminPanel.jsx";
+import AdminDashboard from "./components/AdminDashboard.jsx";
+import QuestionSettings from "./components/QuestionSettings.jsx";
+import UnauthorizedPage from "./components/UnauthorizedPage.jsx";
+import PrivateRoute from "./components/PrivateRoute.jsx";
+import QuizPrompt from "./components/QuizPrompt.jsx";
 
 const App = () => {
   const isEmailLink = true;
