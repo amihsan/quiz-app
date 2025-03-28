@@ -1,6 +1,6 @@
 ## 💡 About
 
-This is the Frontend part of the Quiz App . So no business logic is here.
+This is the Frontend part of the Quiz App. It only includes the user interface components, with no application logic implemented here
 
 ### 🧱 Built With
 

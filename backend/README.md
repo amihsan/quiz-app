@@ -1,6 +1,6 @@
 ## 💡 About
 
-This is the Backend of the Quiz App. So all the application logic is here.
+This is the Backend of the Quiz App. It contains all the application logic, including API routes, database interactions, and server-side functionality.
 
 ### 🧱 Built With
 
