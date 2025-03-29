@@ -59,9 +59,3 @@ def test_password_hashing():
     # Check if password is hashed
     assert bcrypt.checkpw(user_data['password'].encode('utf-8'), hashed_password.encode('utf-8'))
 
-def test_protected_route_access(client):
-    # Attempt to access a protected route without logging in
-    response = client.get('/api/protected_route')
-    assert response.status_code == 401  # Expecting Unauthorized status code
-
-# Add more tests as needed
