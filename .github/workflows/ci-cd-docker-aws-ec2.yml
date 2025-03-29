@@ -32,8 +32,8 @@ jobs:
       - name: Install Frontend Dependencies
         run: |
           cd frontend
-          rm -rf node_modules package-lock.json
-          npm install
+          npm ci  # Clean install
+          npm install -D @vitest/coverage-v8
 
       - name: Install backend dependencies
         run: |
@@ -66,6 +66,9 @@ jobs:
           pytest --maxfail=1 --disable-warnings -q
         env:
           DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
 
       # Step 6: Build and Push Docker Images for frontend and backend
       - name: Build and Push Docker Images
