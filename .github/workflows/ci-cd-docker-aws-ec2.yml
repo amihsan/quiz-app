@@ -1,174 +1,5 @@
-# name: CI/CD for Quiz App
-
-# on:
-#   push:
-#     branches:
-#       - main
-
-# jobs:
-#   test_build_and_deploy:
-#     runs-on: ubuntu-latest
-
-#     steps:
-#       # Step 1: Checkout the code from the repository
-#       - name: Checkout Repository
-#         uses: actions/checkout@v2
-
-#       # Step 2: Set up Node.js (for frontend tests) and Python (for backend tests)
-#       - name: Set up Node.js for frontend tests
-#         uses: actions/setup-node@v2
-#         with:
-#           node-version: "22.x" # Specify the Node.js version you want to use
-
-#       - name: Set up Python for backend tests
-#         uses: actions/setup-python@v2
-#         with:
-#           python-version: "3.x"
-
-#       # Step 3: Install dependencies for frontend and backend
-#       - name: Clean npm cache
-#         run: npm cache clean --force
-
-#       - name: Install Frontend Dependencies
-#         run: |
-#           cd frontend
-#           npm ci  # Clean install
-#           npm install -D @vitest/coverage-v8
-
-#       - name: Install backend dependencies
-#         run: |
-#           cd backend
-#           pip install -r requirements.txt
-
-#       # Step 4: Set environment variables for Vite
-#       - name: Create .env.test file
-#         run: echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" > frontend/.env.test
-
-#       # Step 5: Run tests for frontend (React)
-#       - name: Run Frontend Tests
-#         run: |
-#           cd frontend
-#           npm run test -- --silent --coverage
-#         env:
-#           VITE_API_URL: ${{ secrets.VITE_API_URL }}
-
-#       # Step 5: Run tests for backend (Flask)
-#       - name: Set Environment Variables for Backend
-#         run: |
-#           echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}" >> $GITHUB_ENV
-#           echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" >> $GITHUB_ENV
-#           echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> $GITHUB_ENV
-#           echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> $GITHUB_ENV
-
-#       - name: Run Backend Tests
-#         run: |
-#           cd backend
-#           pytest --maxfail=1 --disable-warnings -q
-#         env:
-#           DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
-#           MONGODB_URI: ${{ secrets.MONGODB_URI }}
-#           SECRET_KEY: ${{ secrets.SECRET_KEY }}
-#           JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
-
-#       # Step 6: Build and Push Docker Images for frontend and backend
-#       - name: Build and Push Docker Images
-#         run: |
-#           docker build --no-cache -t ${{ secrets.DOCKER_USERNAME }}/quiz-frontend:latest -f docker/frontend/Dockerfile .
-#           docker push ${{ secrets.DOCKER_USERNAME }}/quiz-frontend:latest
-#           docker build --no-cache -t ${{ secrets.DOCKER_USERNAME }}/quiz-backend:latest -f docker/backend/Dockerfile .
-#           docker push ${{ secrets.DOCKER_USERNAME }}/quiz-backend:latest
-
-#       # Step 7: Set up SSH key for EC2 deployment
-#       - name: Set up SSH key for EC2
-#         run: |
-#           mkdir -p ~/.ssh  # Create the .ssh directory if it doesn't exist
-#           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
-#           chmod 600 ~/.ssh/id_rsa  # Set proper permissions for the SSH key
-
-#       # Step 8: Test SSH connection to EC2 instance
-#       - name: Test SSH Connection
-#         run: |
-#           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ec2-user@${{ secrets.EC2_HOST_DNS }} "echo SSH connection successful"
-
-#       # Step 9: SSH into EC2 and deploy with Docker Compose
-#       - name: SSH into EC2 Instance and deploy with Docker Compose
-#         uses: appleboy/ssh-action@master
-#         with:
-#           host: ${{ secrets.EC2_HOST_DNS }}
-#           username: ${{ secrets.EC2_USERNAME }}
-#           key: ${{ secrets.EC2_SSH_KEY }}
-#           script: |
-#             set -e  # Exit immediately if a command exits with a non-zero status
-
-#             # Directly export DOCKER_USERNAME in the SSH session
-#             export DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
-
-#             # Ensure the EC2 instance is up-to-date
-#             sudo yum update -y
-
-#             # Check if Git is installed and install if necessary
-#             if ! command -v git &> /dev/null; then
-#                 echo "Git is not installed. Installing..."
-#                 sudo yum install -y git
-#             fi
-
-#             # Clone or update the repository on the EC2 instance
-#             if [ -d "${{ secrets.EC2_TARGET_DIR }}/.git" ]; then
-#                 echo "Updating existing repository..."
-#                 cd ${{ secrets.EC2_TARGET_DIR }}
-#                 git stash
-#                 git pull origin main
-#             else
-#                 echo "Cloning repository..."
-#                 git clone https://github.com/amihsan/quiz-app.git ${{ secrets.EC2_TARGET_DIR }}
-#             fi
-
-#             # Add EC2 host to known hosts to prevent SSH issues
-#             mkdir -p ~/.ssh
-#             ssh-keyscan -H ${{ secrets.EC2_HOST_DNS }} >> ~/.ssh/known_hosts
-
-#             # Install Docker Compose if not installed
-#             if ! command -v docker-compose &> /dev/null; then
-#               echo "Installing Docker Compose..."
-#               sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-#               sudo chmod +x /usr/local/bin/docker-compose
-#             fi
-#             echo "Docker Compose version:"
-#             docker-compose version
-
-#             # Install Docker if not installed
-#             if ! command -v docker &> /dev/null; then
-#                 echo "Installing Docker..."
-#                 sudo yum install -y docker
-#                 sudo service docker start
-#                 sudo usermod -aG docker ${{ secrets.EC2_USERNAME }}
-#             fi
-
-#             # Ensure Docker service is running
-#             if ! sudo systemctl is-active --quiet docker; then
-#                 echo "Starting Docker service..."
-#                 sudo service docker start
-#             fi
-
-#             # Deploy the containers using Docker Compose
-#             echo "Stopping and removing old containers..."
-#             docker-compose down
-
-#             echo "Removing old Docker images..."
-#             docker images -q | xargs -r docker rmi
-
-#             echo "Deploying new containers with Docker Compose..."
-#             docker-compose up -d  # Use docker-compose to start the containers in detached mode
-
-#             # Display the Docker images and containers to verify everything is up
-#             echo "List of all Docker images:"
-#             docker images -a
-
-#             echo "List of all Docker containers:"
-#             docker ps -a
-
-#             # Optional: Restart or additional configuration steps as needed
-
+# This GitHub Actions workflow file automates the CI/CD process for a quiz application.
+# It builds and tests the frontend (React) and backend (Flask) applications,
 name: CI/CD for Quiz App
 
 on:
@@ -177,7 +8,7 @@ on:
       - main
 
 jobs:
-  build_and_deploy:
+  Ttest_build_and_deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -200,11 +31,11 @@ jobs:
           cd backend
           pip install -r requirements.txt
 
-      # Step 4: Set environment variables for Vite
+      # Set environment variables for Vite
       - name: Create .env.test file
         run: echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" > frontend/.env.test
 
-      # Step 5: Run tests for frontend (React)
+      # Run tests for frontend (React)
       - name: Run Frontend Tests
         run: |
           cd frontend
@@ -212,7 +43,7 @@ jobs:
         env:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
 
-      # Step 5: Run tests for backend (Flask)
+      # Run tests for backend (Flask)
       - name: Set Environment Variables for Backend
         run: |
           echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}" >> $GITHUB_ENV
