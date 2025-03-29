@@ -189,6 +189,46 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Install Frontend Dependencies
+        run: |
+          cd frontend
+          npm ci  # Clean install
+          npm install -D @vitest/coverage-v8
+
+      - name: Install backend dependencies
+        run: |
+          cd backend
+          pip install -r requirements.txt
+
+      # Step 4: Set environment variables for Vite
+      - name: Create .env.test file
+        run: echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" > frontend/.env.test
+
+      # Step 5: Run tests for frontend (React)
+      - name: Run Frontend Tests
+        run: |
+          cd frontend
+          npm run test -- --silent --coverage
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+
+      # Step 5: Run tests for backend (Flask)
+      - name: Set Environment Variables for Backend
+        run: |
+          echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}" >> $GITHUB_ENV
+          echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" >> $GITHUB_ENV
+          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> $GITHUB_ENV
+          echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> $GITHUB_ENV
+
+      - name: Run Backend Tests
+        run: |
+          cd backend
+          pytest --maxfail=1 --disable-warnings -q
+        env:
+          DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
 
       - name: Build and Push Docker Images
         run: |
