@@ -26,11 +26,14 @@ jobs:
           python-version: "3.x"
 
       # Step 3: Install dependencies for frontend and backend
-      - name: Install frontend dependencies
+      - name: Clean npm cache
+        run: npm cache clean --force
+
+      - name: Install Frontend Dependencies
         run: |
           cd frontend
+          rm -rf node_modules package-lock.json
           npm install
-          npm install -D @vitest/coverage-v8  # Install missing dependency
 
       - name: Install backend dependencies
         run: |
@@ -48,7 +51,7 @@ jobs:
           npm run test -- --silent --coverage
         env:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
-          
+
       # Step 5: Run tests for backend (Flask)
       - name: Set Environment Variables for Backend
         run: echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}" >> $GITHUB_ENV
@@ -59,7 +62,6 @@ jobs:
           pytest --maxfail=1 --disable-warnings -q
         env:
           DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
-
 
       # Step 6: Build and Push Docker Images for frontend and backend
       - name: Build and Push Docker Images
