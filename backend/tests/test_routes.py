@@ -12,7 +12,6 @@ load_dotenv()
 
 from app import app
 from app.database import db
-from app.models import User
 
 @pytest.fixture
 def client():
@@ -21,9 +20,9 @@ def client():
     app.config['DATABASE_NAME'] = "test_db"  # Use a test database
 
     with app.test_client() as client:
-        # Drop the entire test database to ensure a clean state
+        # Access the database and drop it to ensure a clean state
         test_db = db.client[app.config['DATABASE_NAME']]
-        test_db.drop_database(app.config['DATABASE_NAME'])
+        db.client.drop_database(app.config['DATABASE_NAME'])  # Drop the test database
         yield client
 
 def test_index_route(client):
