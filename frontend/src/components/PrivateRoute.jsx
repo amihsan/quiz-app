@@ -6,13 +6,6 @@ import { useAuth } from "../context/AuthContext.jsx";
 const PrivateRoute = ({ children, requiredRole }) => {
   const { isAuthenticated, role } = useAuth();
 
-  // console.log(
-  //   "PrivateRoute - isAuthenticated:",
-  //   isAuthenticated,
-  //   "role:",
-  //   role
-  // ); // Debug logs
-
   // Check if the user is authenticated; if not, redirect to /login
   if (!isAuthenticated) {
     console.log("User is not authenticated. Redirecting to /login.");
