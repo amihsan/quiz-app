@@ -40,7 +40,7 @@ jobs:
       - name: Run frontend tests
         run: |
           cd frontend
-          npm run test -- --ci --silent --coverage
+          npm run test -- --silent --coverage
 
       # Step 5: Run tests for backend (Flask)
       - name: Run backend tests
