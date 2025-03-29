@@ -30,6 +30,7 @@ jobs:
         run: |
           cd frontend
           npm install
+          npm install -D @vitest/coverage-v8  # Install missing dependency
 
       - name: Install backend dependencies
         run: |
