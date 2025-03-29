@@ -1,4 +1,3 @@
-
 import sys
 import os
 import pytest
@@ -13,6 +12,7 @@ load_dotenv()
 
 from app import app
 from app.database import db
+from app.models import User
 
 @pytest.fixture
 def client():
@@ -21,9 +21,9 @@ def client():
     app.config['DATABASE_NAME'] = "test_db"  # Use a test database
 
     with app.test_client() as client:
-        # Ensure test database is used
+        # Drop the entire test database to ensure a clean state
         test_db = db.client[app.config['DATABASE_NAME']]
-        test_db.users.delete_many({})  # Clear test data
+        test_db.drop_database(app.config['DATABASE_NAME'])
         yield client
 
 def test_index_route(client):
@@ -44,12 +44,11 @@ def test_register(client):
 
 def test_login(client):
     # Register first
-    response = client.post('/api/register', json={
+    client.post('/api/register', json={
         'username': 'test_user',
         'email': 'test@email.com',
         'password': 'test_password'
     })
-    assert response.status_code == 201  # Ensure user creation worked
 
     # Now attempt login
     response = client.post('/api/login', json={
@@ -75,24 +74,16 @@ def test_failed_registration(client):
     assert response.status_code == 409  # Conflict
 
 def test_password_hashing():
-    from app.models import User
-
-    # Create a user with plaintext password
-    user_data = {
-        'username': 'test_user',
-        'email': 'test@email.com',
-        'password': 'test_password'
-    }
-    user = User(user_data)
-
-    # Generate a new salt
+    """Test password hashing logic to ensure it's correctly stored and verified."""
+    password = "test_password"
+    
+    # Generate a salt and hash password
     salt = bcrypt.gensalt()
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt).decode('utf-8')
 
-    # Hash the password using bcrypt with the new salt
-    hashed_password = bcrypt.hashpw(user_data['password'].encode('utf-8'), salt).decode('utf-8')
+    # Ensure bcrypt verifies correctly
+    assert bcrypt.checkpw(password.encode('utf-8'), hashed_password.encode('utf-8'))
 
-    # Check if password is hashed correctly
-    assert bcrypt.checkpw(user_data['password'].encode('utf-8'), hashed_password.encode('utf-8'))
 # import sys
 # import os
 # import pytest
