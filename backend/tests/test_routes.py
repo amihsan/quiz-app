@@ -20,10 +20,15 @@ def client():
     app.config['DATABASE_NAME'] = "test_db"  # Use a test database
 
     with app.test_client() as client:
-        # Access the database and drop it to ensure a clean state
+        # Access the database
         test_db = db.client[app.config['DATABASE_NAME']]
-        db.client.drop_database(app.config['DATABASE_NAME'])  # Drop the test database
+        
+        # Clean collections instead of dropping the database
+        for collection in test_db.list_collection_names():
+            test_db[collection].delete_many({})  # Clear all documents in each collection
+            
         yield client
+
 
 def test_index_route(client):
     response = client.get('/')
