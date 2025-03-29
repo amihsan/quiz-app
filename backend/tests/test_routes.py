@@ -12,6 +12,7 @@ load_dotenv()
 
 from app import app
 from app.database import db
+from app.models import User  # Assuming this is where your User model is defined
 
 @pytest.fixture
 def client():
@@ -25,34 +26,48 @@ def client():
         
         # Clean collections instead of dropping the database
         for collection in test_db.list_collection_names():
+            print(f"Clearing collection: {collection}")
             test_db[collection].delete_many({})  # Clear all documents in each collection
             
         yield client
 
-
 def test_index_route(client):
+    """Test the index route for status code 200"""
     response = client.get('/')
     assert response.status_code == 200
 
 def test_template_rendering(client):
+    """Test that the template rendering works correctly."""
     response = client.get('/')
     assert b"Hello From Lebentest Quiz App" in response.data
 
 def test_register(client):
+    """Test user registration"""
+    # First registration attempt
     response = client.post('/api/register', json={
         'username': 'test_user',
         'email': 'test@email.com',
         'password': 'test_password'
     })
-    assert response.status_code == 201  # 201 Created
+    assert response.status_code == 201  # 201 Created on first successful registration
 
-def test_login(client):
-    # Register first
-    client.post('/api/register', json={
+    # Second registration attempt with the same details (should fail)
+    response = client.post('/api/register', json={
         'username': 'test_user',
         'email': 'test@email.com',
         'password': 'test_password'
     })
+    assert response.status_code == 409  # 409 CONFLICT on duplicate user registration
+
+def test_login(client):
+    """Test user login"""
+    # Register first
+    response = client.post('/api/register', json={
+        'username': 'test_user',
+        'email': 'test@email.com',
+        'password': 'test_password'
+    })
+    assert response.status_code == 201  # Ensure user creation worked
 
     # Now attempt login
     response = client.post('/api/login', json={
@@ -63,19 +78,22 @@ def test_login(client):
     assert b'Login successful' in response.data
 
 def test_failed_registration(client):
+    """Test failed registration due to duplicate user"""
     # Register a user
-    client.post('/api/register', json={
+    response = client.post('/api/register', json={
         'username': 'test_user',
         'email': 'test@email.com',
         'password': 'test_password'
     })
+    assert response.status_code == 201  # First registration attempt
+
     # Try to register the same user again
     response = client.post('/api/register', json={
         'username': 'test_user',
         'email': 'test@email.com',
         'password': 'test_password'
     })
-    assert response.status_code == 409  # Conflict
+    assert response.status_code == 409  # Should return 409 CONFLICT for duplicate user registration
 
 def test_password_hashing():
     """Test password hashing logic to ensure it's correctly stored and verified."""
@@ -87,6 +105,7 @@ def test_password_hashing():
 
     # Ensure bcrypt verifies correctly
     assert bcrypt.checkpw(password.encode('utf-8'), hashed_password.encode('utf-8'))
+
 
 # import sys
 # import os
