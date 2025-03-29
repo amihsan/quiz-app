@@ -9,4 +9,3 @@ class User(UserMixin):
         self.email = user_data.get('email', '')
         self.password = user_data.get('password', '')
         self.role = user_data.get('role', 'user')  # Default to 'user' if role is missing
-
