@@ -37,11 +37,17 @@ jobs:
           cd backend
           pip install -r requirements.txt
 
-      # Step 4: Run tests for frontend (React)
-      - name: Run frontend tests
+      # Step 4: Set environment variables for Vite
+      - name: Create .env.test file
+        run: echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" > frontend/.env.test
+
+      # Step 5: Run tests for frontend (React)
+      - name: Run Frontend Tests
         run: |
           cd frontend
           npm run test -- --silent --coverage
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
 
       # Step 5: Run tests for backend (Flask)
       - name: Run backend tests
