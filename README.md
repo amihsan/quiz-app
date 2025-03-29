@@ -19,9 +19,8 @@ http://ec2-3-122-38-111.eu-central-1.compute.amazonaws.com
 4. npm
 5. MongoDB
 6. AWS EC2
-7. AWS CloudFront
-8. AWS Elastic Load Balancer (ELB)
-9. AWS Certificate Manager (ACM)
+7. Pytest (Backend)
+8. Vitest (Frontend)
 
 ## ⚡ Getting Started
 
