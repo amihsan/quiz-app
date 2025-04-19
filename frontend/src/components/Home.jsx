@@ -40,7 +40,7 @@ const Home = () => {
           This is a free online learning platform for the German Integration (
           <strong>Einbürgerungs</strong>) Test. Take the quiz to test your
           knowledge! We offer different categories to help you learn and
-          prepare. Choose a category and start learning today!
+          prepare. Choose a category and start learning today! Hello
         </p>
 
         <p className="text-lg md:text-xl text-gray-600 mb-8">
