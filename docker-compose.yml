@@ -53,7 +53,7 @@ services:
     #     awslogs-region: "eu-central-1" # Replace with your region
     #     awslogs-stream: "certbot-stream" # You can use a dynamic stream name like certbot-${HOSTNAME}
 # ####################################################
-# ###### For using cloudfront & load balancer ########
+# ######## For using cloudfront & load balancer ######
 # ####################################################
 # services:
 #   nginx:
