@@ -63,9 +63,9 @@ jobs:
 
       - name: Build and Push Docker Images
         run: |
-          docker build --no-cache -t ${{ secrets.DOCKER_USERNAME }}/quiz-frontend:latest -f docker/frontend/Dockerfile .
+          docker build --no-cache -t ${{ secrets.DOCKER_USERNAME }}/quiz-frontend:latest -f ./frontend
           docker push ${{ secrets.DOCKER_USERNAME }}/quiz-frontend:latest
-          docker build --no-cache -t ${{ secrets.DOCKER_USERNAME }}/quiz-backend:latest -f docker/backend/Dockerfile .
+          docker build --no-cache -t ${{ secrets.DOCKER_USERNAME }}/quiz-backend:latest -f ./backend
           docker push ${{ secrets.DOCKER_USERNAME }}/quiz-backend:latest
 
       - name: Set up SSH key for EC2
