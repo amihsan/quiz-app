@@ -26,7 +26,10 @@ RUN npx update-browserslist-db@latest
 FROM nginx:alpine
 
 # Copy the built static files from the build stage to the nginx directory
-COPY --from=build /app/frontend/dist /usr/share/nginx/html
+# COPY --from=build /app/frontend/dist /usr/share/nginx/html
+
+# Multiapp on same ec2 instance
+COPY --from=build /app/frontend/dist /usr/share/nginx/quiz-frontend
 
 # Copy the entrypoint script (if any)
 COPY ./frontend/entrypoint.sh /entrypoint.sh
@@ -35,5 +38,5 @@ RUN chmod +x /entrypoint.sh
 # Set the entrypoint
 ENTRYPOINT ["/entrypoint.sh"]
 
-# Expose the default nginx port
-EXPOSE 80
+# # Expose the default nginx port
+# EXPOSE 80
