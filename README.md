@@ -126,9 +126,9 @@ To add these secrets, navigate to **Settings > Secrets > Actions** in your repos
 
 3. **Run Let's Encrypt for SSL Certificates:**
 
-### **1️⃣ Obtain SSL Certificates (First Time)**
+- **Obtain SSL Certificates (First Time)**
 
-Replace `your-email@example.com` with a real email for expiration notifications, and update domains.
+- Replace `your-email@example.com` with a real email for expiration notifications, and update domains.
 
 ````bash
 
@@ -148,19 +148,7 @@ docker run -it --rm \
 
 #### CI/CD Deployment
 
-1. **Disable CI/CD Workflow:**
-
-   - Temporarily disable the `ci-cd-docker-aws-ec2.yml` workflow to prevent automatic deployment during setup.
-
-2. **Run Let's Encrypt Workflow:**
-
-   - Execute the `lets-encrypt-ssl.yml` workflow to obtain SSL certificates.
-   - Ensure you have a valid email and domain configured in the **init-letsencrypt.sh** file.
-   - After the workflow completes, disable it.
-
-3. **Enable CI/CD Workflow:**
-   - Re-enable the `ci-cd-docker-aws-ec2.yml` workflow.
-   - From this point onward, every time changes are pushed to the main branch, the GitHub Actions workflow will automatically deploy the application to your EC2 instance.
+3. - From this point onward, every time changes are pushed to the main branch, the GitHub Actions workflow will automatically deploy the application to your EC2 instance.
 
 ---
 
