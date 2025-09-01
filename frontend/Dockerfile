@@ -1,19 +1,24 @@
+# Stage 1: Build
 FROM node:22-alpine AS build
 WORKDIR /app
 
-# Copy only dependencies first
+# Copy dependencies
 COPY package*.json ./
 RUN npm install
 
-# Copy rest of frontend
+# Copy the rest of the frontend code
 COPY . .
+
+# Build the project
 RUN npm run build
 
+# Stage 2: Serve with Nginx
 FROM nginx:alpine
-# Copy build output to nginx folder
-COPY --from=build /app/dist /usr/share/nginx/html
 
-# Entrypoint script
+# Copy build output to the folder for reverse-proxy
+COPY --from=build /app/dist /usr/share/nginx/quiz-frontend
+
+# Optional entrypoint script
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
