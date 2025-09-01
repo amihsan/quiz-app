@@ -8,6 +8,9 @@ RUN npm run build
 
 # Nginx stage
 FROM nginx:alpine
+
+# Create app directory inside nginx
+RUN mkdir -p /usr/share/nginx/quiz-frontend
 COPY --from=build /app/dist /usr/share/nginx/quiz-frontend
 
 # Entrypoint (optional)
