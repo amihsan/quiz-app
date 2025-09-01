@@ -126,29 +126,31 @@ To add these secrets, navigate to **Settings > Secrets > Actions** in your repos
 
 3. **Run Let's Encrypt for SSL Certificates:**
 
-- **Obtain SSL Certificates (First Time)**
+   - Obtain SSL Certificates (First Time)
+   - Run the below command only one time from root directory to collect lets encrypt certificate. After that it will be automatically updated via cicd workflow and docker-compose.
 
-- Replace `your-email@example.com` with a real email for expiration notifications, and update domains.
+   - Replace `your-email@example.com` with a real email for expiration notifications, and update domains.
 
-````bash
+     ```bash
 
-docker run -it --rm \
-  -p 80:80 \
-  -v $(pwd)/ssl/certbot/conf:/etc/letsencrypt \
-  -v $(pwd)/ssl/certbot/www:/var/www/certbot \
-  certbot/certbot certonly --standalone \
-  -d your-other-domain.com -d www.your-other-domain.com \
-  --email your-email@example.com --agree-tos --no-eff-email
+     docker run -it --rm \
+     -p 80:80 \
+     -v $(pwd)/ssl/certbot/conf:/etc/letsencrypt \
+     -v $(pwd)/ssl/certbot/www:/var/www/certbot \
+     certbot/certbot certonly --standalone \
+     -d your-other-domain.com -d www.your-other-domain.com \
+     --email your-email@example.com --agree-tos --no-eff-email
+     ```
 
 4. **Build and Start Docker Containers:**
    - Use Docker Compose to build and start your application containers:
      ```bash
-     docker-compose up --build -d
+     docker-compose up  -d
      ```
 
 #### CI/CD Deployment
 
-3.From this point onward, every time changes are pushed to the main branch, the GitHub Actions workflow will automatically deploy the application to your EC2 instance.
+- From this point onward, every time changes are pushed to the main branch, the GitHub Actions workflow will automatically deploy the application to your EC2 instance.
 
 ---
 
@@ -237,6 +239,8 @@ Once you have the required tools installed, follow these steps to deploy your ap
 1. **Start Minikube**:
    ```bash
    minikube start
+   ```
+
 ````
 
 2. **Apply the Kubernetes configurations**: Deploy the backend and frontend services using the following commands:
@@ -256,3 +260,4 @@ To access the frontend service, use the following command:
 ```bash
 minikube service frontend-service
 ```
+````
