@@ -17,4 +17,4 @@ EXPOSE 5001
 
 # Run with Gunicorn (bind to 0.0.0.0 so container is reachable)
 # Replace 'app:app' with 'module_name:app_variable'
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5001", "run:app"]
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "run:app"]
