@@ -2,10 +2,10 @@ services:
   nginx:
     restart: unless-stopped
     build:
-      context: .
-      dockerfile: ./docker/frontend/Dockerfile
+      context: ./frontend
+      dockerfile: Dockerfile
     ports:
-      - 80:80
+      - "80:80"
     env_file:
       - ./frontend/.env
     volumes:
@@ -16,9 +16,9 @@ services:
   backend:
     restart: unless-stopped
     build:
-      context: .
-      dockerfile: ./docker/backend/Dockerfile
+      context: ./backend
+      dockerfile: Dockerfile
     ports:
-      - 5000:5000
+      - "5000:5000"
     env_file:
       - ./backend/.env

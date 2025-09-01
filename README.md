@@ -148,7 +148,7 @@ docker run -it --rm \
 
 #### CI/CD Deployment
 
-3. - From this point onward, every time changes are pushed to the main branch, the GitHub Actions workflow will automatically deploy the application to your EC2 instance.
+3.From this point onward, every time changes are pushed to the main branch, the GitHub Actions workflow will automatically deploy the application to your EC2 instance.
 
 ---
 
