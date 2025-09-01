@@ -158,6 +158,14 @@ jobs:
                 sudo service docker start
             fi
 
+            # # For Multi-App on same Ec2
+            docker-compose -f ../docker-compose.yml down
+            docker system prune -f
+            docker-compose -f ../docker-compose.yml up -d --remove-orphans
+
+            # # Pull new images and recreate changed services
+            # # For Single App on Ec2
+
             # # Deploy containers using Docker Compose
             # echo "Deploying containers with Docker Compose..."
             # # For Production
