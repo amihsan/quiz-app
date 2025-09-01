@@ -126,13 +126,19 @@ To add these secrets, navigate to **Settings > Secrets > Actions** in your repos
 
 3. **Run Let's Encrypt for SSL Certificates:**
 
-   - Run the `init-letsencrypt.sh` script to obtain the SSL certificate from Let's Encrypt (this step is only required once). Change the Domain name and email according to your own domain and email.
-   - The script used: [Nginx and Let’s Encrypt with Docker in Less Than 5 Minutes](https://pentacent.medium.com/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71)
-   - Grant execution permissions and run the script:
-     ```bash
-     chmod +x ./init-letsencrypt.sh
-     sudo ./init-letsencrypt.sh
-     ```
+### **1️⃣ Obtain SSL Certificates (First Time)**
+
+Replace `your-email@example.com` with a real email for expiration notifications, and update domains.
+
+````bash
+
+docker run -it --rm \
+  -p 80:80 \
+  -v $(pwd)/ssl/certbot/conf:/etc/letsencrypt \
+  -v $(pwd)/ssl/certbot/www:/var/www/certbot \
+  certbot/certbot certonly --standalone \
+  -d your-other-domain.com -d www.your-other-domain.com \
+  --email your-email@example.com --agree-tos --no-eff-email
 
 4. **Build and Start Docker Containers:**
    - Use Docker Compose to build and start your application containers:
@@ -243,7 +249,8 @@ Once you have the required tools installed, follow these steps to deploy your ap
 1. **Start Minikube**:
    ```bash
    minikube start
-   ```
+````
+
 2. **Apply the Kubernetes configurations**: Deploy the backend and frontend services using the following commands:
    ```bash
    kubectl apply -f backend-config.yaml
