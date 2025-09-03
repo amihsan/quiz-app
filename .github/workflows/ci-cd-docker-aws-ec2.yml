@@ -159,16 +159,26 @@ jobs:
             fi
 
             # # For Multi-App on same EC2
+            # Stop all running containers
             docker-compose -f ../docker-compose.yml down
+
+            # Clean up dangling images of your app only
+            for image in ***-nginx ***-quiz-backend ***-money-tracker-backend; do
+              docker images "$image" -f "dangling=true" -q | xargs -r docker rmi -f
+            done
+
+            # Optional: also clean up stopped containers and unused networks
             docker system prune -f
-            # Get latest images
+
+            # Pull latest images from registry
             docker-compose -f ../docker-compose.yml pull
 
             # Rebuild Nginx with new React frontend
             docker-compose -f ../docker-compose.yml build --no-cache nginx
 
-            # Restart everything
+            # Restart all services
             docker-compose -f ../docker-compose.yml up -d --remove-orphans
+
 
 
             # Verify Docker images and containers
