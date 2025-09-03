@@ -8,8 +8,6 @@ RUN npm install
 # Copy rest of frontend
 COPY . .
 RUN npm run build
-# Update Browserslist: caniuse-lite
-RUN npx update-browserslist-db@latest
 
 
 FROM nginx:alpine
