@@ -163,9 +163,8 @@ jobs:
             docker-compose -f ../docker-compose.yml down
 
             # Clean up dangling images of your app only
-            for image in ***-nginx ***-quiz-backend ***-money-tracker-backend; do
-              docker images "$image" -f "dangling=true" -q | xargs -r docker rmi -f
-            done
+            docker image prune -a -f
+
 
             # Optional: also clean up stopped containers and unused networks
             docker system prune -f
