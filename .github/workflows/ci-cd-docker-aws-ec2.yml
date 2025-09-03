@@ -158,10 +158,25 @@ jobs:
                 sudo service docker start
             fi
 
-            # # For Multi-App on same Ec2
+            # # For Multi-App on same EC2
             docker-compose -f ../docker-compose.yml down
             docker system prune -f
+            # Get latest images
+            docker-compose -f ../docker-compose.yml pull
+
+            # Rebuild Nginx with new React frontend
+            docker-compose -f ../docker-compose.yml build --no-cache nginx
+
+            # Restart everything
             docker-compose -f ../docker-compose.yml up -d --remove-orphans
+
+
+            # Verify Docker images and containers
+            echo "Docker images:"
+            docker images -a
+            echo "Docker containers:"
+            docker ps -a
+            echo "Deployment completed successfully!"
 
             # # Pull new images and recreate changed services
             # # For Single App on Ec2
