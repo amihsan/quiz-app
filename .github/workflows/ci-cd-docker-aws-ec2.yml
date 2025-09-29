@@ -158,59 +158,33 @@ jobs:
                 sudo service docker start
             fi
 
-            # # For Multi-App on same EC2
-            # Stop all running containers
-            docker-compose -f ../docker-compose.yml down
+            
 
-            # Clean up dangling images of your app only
-            docker image prune -a -f
+            # Pull new images and recreate changed services
+            # For Single App on Ec2
 
+            # Deploy containers using Docker Compose
+            echo "Deploying containers with Docker Compose..."
+            # For Production
+            # stop all running containers
+            docker-compose down
 
-            # Optional: also clean up stopped containers and unused networks
-            docker system prune -f
+            # Remove all images
+            echo "Removing all Docker images..."
+            docker images -q | xargs -r docker rmi
 
-            # Pull latest images from registry
-            docker-compose -f ../docker-compose.yml pull
+            # Run the application and force no-cache rebuild of Docker images
+            echo "Deploying containers with Docker Compose..."
+            docker-compose up -d
 
-            # Rebuild Nginx with new React frontend
-            docker-compose -f ../docker-compose.yml build --no-cache nginx
+            # For development
+            # docker-compose -f docker-compose-dev.yml up --build -d
 
-            # Restart all services
-            docker-compose -f ../docker-compose.yml up -d --remove-orphans
-
-
-
-            # Verify Docker images and containers
-            echo "Docker images:"
+            # List all Docker images (useful to confirm the pulled and built images)
+            echo "Displaying all Docker images..."
             docker images -a
-            echo "Docker containers:"
+
+            # List all Docker containers (useful to verify if containers are up and running)
+            echo "Displaying all Docker containers..."
             docker ps -a
             echo "Deployment completed successfully!"
-
-            # # Pull new images and recreate changed services
-            # # For Single App on Ec2
-
-            # # Deploy containers using Docker Compose
-            # echo "Deploying containers with Docker Compose..."
-            # # For Production
-            # # stop all running containers
-            # docker-compose down
-
-            # # Remove all images
-            # echo "Removing all Docker images..."
-            # docker images -q | xargs -r docker rmi
-
-            # # Run the application and force no-cache rebuild of Docker images
-            # echo "Deploying containers with Docker Compose..."
-            # docker-compose up -d
-
-            # # For development
-            # # docker-compose -f docker-compose-dev.yml up --build -d
-
-            # # List all Docker images (useful to confirm the pulled and built images)
-            # echo "Displaying all Docker images..."
-            # docker images -a
-
-            # # List all Docker containers (useful to verify if containers are up and running)
-            # echo "Displaying all Docker containers..."
-            # docker ps -a
