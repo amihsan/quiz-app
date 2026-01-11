@@ -5,7 +5,7 @@ if ! [ -x "$(command -v docker-compose)" ]; then
   exit 1
 fi
 
-domains=(einburgerungstest.online www.einburgerungstest.online)
+domains=(einburgertest.online www.einburgertest.online)
 rsa_key_size=4096
 data_path="./data/certbot"
 email="rumi.others@gmail.com" # Adding a valid address is strongly recommended
